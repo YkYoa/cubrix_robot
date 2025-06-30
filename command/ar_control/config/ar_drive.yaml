@@ -7,64 +7,64 @@ port_info:
 use_torque_offset: false
 
 port_id: 
-  drive_1: 
-  drive_2:
-  drive_3:
-  drive_4:
-  drive_5:
-  drive_6:
+  drive_1: 0
+  drive_2: 0
+  drive_3: 0
+  drive_4: 0
+  drive_5: 0
+  drive_6: 0
 
 
 drives:
   drive_1:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_1:
         gear_ratio:
         encoder_res:
         encoder_offset:
         torque_gamma:
         log_joint:
   drive_2:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_2:
         gear_ratio:
         encoder_res:
         encoder_offset:
         torque_gamma:
         log_joint:
   drive_3:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_3:
         gear_ratio:
         encoder_res:
         encoder_offset:
         torque_gamma:
         log_joint:
   drive_4:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_4:
         gear_ratio:
         encoder_res:
         encoder_offset:
         torque_gamma:
         log_joint:
   drive_5:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_5:
         gear_ratio:
         encoder_res:
         encoder_offset:
         torque_gamma:
         log_joint:
   drive_6:
-    driver_brand:
-    jonits:
-      Left_arm_joint_1:
+    driver_brand: 'ar'
+    joints:
+      Arm_joint_6:
         gear_ratio:
         encoder_res:
         encoder_offset:

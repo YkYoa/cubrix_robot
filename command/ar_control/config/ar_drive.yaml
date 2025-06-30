@@ -1,0 +1,73 @@
+
+
+
+port_info:
+  port_name: 
+
+use_torque_offset: false
+
+port_id: 
+  drive_1: 
+  drive_2:
+  drive_3:
+  drive_4:
+  drive_5:
+  drive_6:
+
+
+drives:
+  drive_1:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+  drive_2:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+  drive_3:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+  drive_4:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+  drive_5:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+  drive_6:
+    driver_brand:
+    jonits:
+      Left_arm_joint_1:
+        gear_ratio:
+        encoder_res:
+        encoder_offset:
+        torque_gamma:
+        log_joint:
+    

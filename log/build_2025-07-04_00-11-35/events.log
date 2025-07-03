@@ -1,0 +1,14 @@
+[0.000000] (-) TimerEvent: {}
+[0.000096] (-) JobUnselected: {'identifier': 'ar_comm'}
+[0.000112] (-) JobUnselected: {'identifier': 'ar_conputation'}
+[0.000391] (-) JobUnselected: {'identifier': 'ar_control'}
+[0.000409] (-) JobUnselected: {'identifier': 'ar_motion_planner'}
+[0.000420] (-) JobUnselected: {'identifier': 'ar_moveit_config'}
+[0.000429] (-) JobUnselected: {'identifier': 'ar_msgs'}
+[0.000438] (-) JobUnselected: {'identifier': 'ar_planner_interface'}
+[0.000446] (-) JobUnselected: {'identifier': 'ar_scene'}
+[0.000454] (-) JobUnselected: {'identifier': 'ar_srv'}
+[0.000461] (-) JobUnselected: {'identifier': 'ar_utils'}
+[0.000469] (-) JobUnselected: {'identifier': 'devices'}
+[0.000477] (-) JobUnselected: {'identifier': 'master'}
+[0.000562] (-) EventReactorShutdown: {}

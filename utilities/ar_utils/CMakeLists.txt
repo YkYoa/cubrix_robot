@@ -11,7 +11,7 @@ option(BUILD_TESTING "Enable building of tests" OFF)
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
-find_package(yaml-cpp REQUIRED)  # <-- Explicitly find yaml-cpp
+find_package(yaml-cpp REQUIRED)  
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(Boost REQUIRED system filesystem date_time thread)
@@ -29,7 +29,7 @@ set(SRC_FILES
 set(DEPENDS
 	ament_cmake
 	yaml_cpp_vendor
-	yaml-cpp  # <-- Add yaml-cpp here
+	yaml-cpp
 	rclcpp
 	rclcpp_lifecycle
 	Boost
@@ -67,6 +67,13 @@ install(
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
     )
+
+add_executable(test_log test/test_log.cpp)
+target_link_libraries(test_log ${PROJECT_NAME})
+ament_target_dependencies(test_log ${DEPENDS})
+install(TARGETS test_log DESTINATION lib/${PROJECT_NAME})
+
+
 
 if(BUILD_TESTING)
 	message(STATUS "Building tests...")

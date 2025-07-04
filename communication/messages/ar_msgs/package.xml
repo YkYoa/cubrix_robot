@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>ar_msg</name> 
+  <name>ar_msgs</name> 
   <version>0.0.0</version>
   <description>Message definitions for AR project</description>
   <maintainer email="luong@example.com">luong</maintainer>

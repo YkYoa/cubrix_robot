@@ -3,14 +3,15 @@
 <package format="3">
   <name>devices</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Package for handling device communication with ESP32 via UART</description>
   <maintainer email="hoanghuypham6801@gmail.com">hans</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>std_msgs</depend>
+  <depend>std_msg</depend>
+  <depend>ar_msg</depend> <!-- Thêm dependency tới ar_msgs -->
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

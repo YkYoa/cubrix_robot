@@ -1,0 +1,254 @@
+[0.000000] (-) TimerEvent: {}
+[0.000164] (-) JobUnselected: {'identifier': 'ar_comm'}
+[0.000200] (-) JobUnselected: {'identifier': 'ar_conputation'}
+[0.000224] (-) JobUnselected: {'identifier': 'ar_control'}
+[0.000247] (-) JobUnselected: {'identifier': 'ar_motion_planner'}
+[0.000266] (-) JobUnselected: {'identifier': 'ar_moveit_config'}
+[0.000285] (-) JobUnselected: {'identifier': 'ar_planner_interface'}
+[0.000303] (-) JobUnselected: {'identifier': 'ar_scene'}
+[0.000323] (-) JobUnselected: {'identifier': 'ar_utils'}
+[0.000341] (-) JobUnselected: {'identifier': 'devices'}
+[0.000359] (-) JobUnselected: {'identifier': 'master'}
+[0.000380] (ar_msgs) JobQueued: {'identifier': 'ar_msgs', 'dependencies': OrderedDict()}
+[0.000403] (ar_msgs) JobStarted: {'identifier': 'ar_msgs'}
+[0.005913] (ar_msgs) JobProgress: {'identifier': 'ar_msgs', 'progress': 'cmake'}
+[0.006542] (ar_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/hans/ar/communication/messages/ar_msgs', '-DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_msgs'], 'cwd': '/home/hans/ar/build/ar_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'hans'), ('LC_TIME', 'vi_VN'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/hans'), ('OLDPWD', '/home/hans'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'vi_VN'), ('SYSTEMD_EXEC_PID', '1965'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'hans'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'hans'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/home/hans/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/hans-Nitro-AN16-41:@/tmp/.ICE-unix/1933,unix/hans-Nitro-AN16-41:/tmp/.ICE-unix/1933'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'vi_VN'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/0ced61a9_9ac9_4315_ba2f_f7d0c8a39941'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'vi_VN'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.LLSE92'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.121'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'vi_VN'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'vi_VN'), ('LC_IDENTIFICATION', 'vi_VN'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/hans/ar/build/ar_msgs'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'vi_VN'), ('LC_PAPER', 'vi_VN'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.017407] (ar_msgs) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.091581] (ar_msgs) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)\n'}
+[0.092299] (ar_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.093662] (ar_msgs) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.099473] (-) TimerEvent: {}
+[0.110354] (ar_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.125807] (ar_msgs) StdoutLine: {'line': b'-- Found std_msgs: 4.8.0 (/opt/ros/humble/share/std_msgs/cmake)\n'}
+[0.138730] (ar_msgs) StdoutLine: {'line': b'-- Found geometry_msgs: 4.8.0 (/opt/ros/humble/share/geometry_msgs/cmake)\n'}
+[0.145254] (ar_msgs) StdoutLine: {'line': b'-- Found sensor_msgs: 4.8.0 (/opt/ros/humble/share/sensor_msgs/cmake)\n'}
+[0.154679] (ar_msgs) StdoutLine: {'line': b'-- Found trajectory_msgs: 4.8.0 (/opt/ros/humble/share/trajectory_msgs/cmake)\n'}
+[0.163711] (ar_msgs) StdoutLine: {'line': b'-- Found actionlib_msgs: 4.8.0 (/opt/ros/humble/share/actionlib_msgs/cmake)\n'}
+[0.199594] (-) TimerEvent: {}
+[0.299844] (-) TimerEvent: {}
+[0.360425] (ar_msgs) StdoutLine: {'line': b'-- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)\n'}
+[0.399953] (-) TimerEvent: {}
+[0.500230] (-) TimerEvent: {}
+[0.547004] (ar_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.600353] (-) TimerEvent: {}
+[0.700637] (-) TimerEvent: {}
+[0.780180] (ar_msgs) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.795672] (ar_msgs) StdoutLine: {'line': b'-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") \n'}
+[0.797071] (ar_msgs) StdoutLine: {'line': b'-- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)\n'}
+[0.800694] (-) TimerEvent: {}
+[0.814666] (ar_msgs) StdoutLine: {'line': b'-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") \n'}
+[0.814827] (ar_msgs) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /usr/bin/python3\n'}
+[0.814921] (ar_msgs) StdoutLine: {'line': b'-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10\n'}
+[0.815001] (ar_msgs) StdoutLine: {'line': b'-- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so\n'}
+[0.828022] (ar_msgs) StdoutLine: {'line': b'-- Found PythonExtra: .so  \n'}
+[0.879314] (ar_msgs) StdoutLine: {'line': b'-- Configuring done\n'}
+[0.900819] (-) TimerEvent: {}
+[0.903464] (ar_msgs) StdoutLine: {'line': b'-- Generating done\n'}
+[0.910750] (ar_msgs) StdoutLine: {'line': b'-- Build files have been written to: /home/hans/ar/build/ar_msgs\n'}
+[0.916057] (ar_msgs) CommandEnded: {'returncode': 0}
+[0.917284] (ar_msgs) JobProgress: {'identifier': 'ar_msgs', 'progress': 'build'}
+[0.917298] (ar_msgs) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/hans/ar/build/ar_msgs', '--', '-j12', '-l12'], 'cwd': '/home/hans/ar/build/ar_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'hans'), ('LC_TIME', 'vi_VN'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/hans'), ('OLDPWD', '/home/hans'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'vi_VN'), ('SYSTEMD_EXEC_PID', '1965'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'hans'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'hans'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/home/hans/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/hans-Nitro-AN16-41:@/tmp/.ICE-unix/1933,unix/hans-Nitro-AN16-41:/tmp/.ICE-unix/1933'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'vi_VN'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/0ced61a9_9ac9_4315_ba2f_f7d0c8a39941'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'vi_VN'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.LLSE92'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.121'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'vi_VN'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'vi_VN'), ('LC_IDENTIFICATION', 'vi_VN'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/hans/ar/build/ar_msgs'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'vi_VN'), ('LC_PAPER', 'vi_VN'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.949923] (ar_msgs) StdoutLine: {'line': b'[  3%] \x1b[34m\x1b[1mGenerating C code for ROS interfaces\x1b[0m\n'}
+[0.956022] (ar_msgs) StdoutLine: {'line': b'[  6%] \x1b[34m\x1b[1mGenerating C++ code for ROS interfaces\x1b[0m\n'}
+[0.962318] (ar_msgs) StdoutLine: {'line': b'[  6%] Built target ament_cmake_python_copy_ar_msgs\n'}
+[1.000945] (-) TimerEvent: {}
+[1.090186] (ar_msgs) StdoutLine: {'line': b'[  6%] Built target ar_msgs__cpp\n'}
+[1.097151] (ar_msgs) StdoutLine: {'line': b'[ 16%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_generator_c.dir/rosidl_generator_c/ar_msgs/msg/detail/joy__functions.c.o\x1b[0m\n'}
+[1.097316] (ar_msgs) StdoutLine: {'line': b'[ 16%] \x1b[34m\x1b[1mGenerating C++ type support for eProsima Fast-RTPS\x1b[0m\n'}
+[1.097366] (ar_msgs) StdoutLine: {'line': b'[ 16%] \x1b[34m\x1b[1mGenerating C++ type support dispatch for ROS interfaces\x1b[0m\n'}
+[1.097407] (ar_msgs) StdoutLine: {'line': b'[ 19%] \x1b[34m\x1b[1mGenerating C++ introspection for ROS interfaces\x1b[0m\n'}
+[1.101020] (-) TimerEvent: {}
+[1.102876] (ar_msgs) StdoutLine: {'line': b'running egg_info\n'}
+[1.103302] (ar_msgs) StdoutLine: {'line': b'creating ar_msgs.egg-info\n'}
+[1.103456] (ar_msgs) StdoutLine: {'line': b'writing ar_msgs.egg-info/PKG-INFO\n'}
+[1.103587] (ar_msgs) StdoutLine: {'line': b'writing dependency_links to ar_msgs.egg-info/dependency_links.txt\n'}
+[1.103697] (ar_msgs) StdoutLine: {'line': b'writing top-level names to ar_msgs.egg-info/top_level.txt\n'}
+[1.103900] (ar_msgs) StdoutLine: {'line': b"writing manifest file 'ar_msgs.egg-info/SOURCES.txt'\n"}
+[1.106197] (ar_msgs) StdoutLine: {'line': b"reading manifest file 'ar_msgs.egg-info/SOURCES.txt'\n"}
+[1.106476] (ar_msgs) StdoutLine: {'line': b"writing manifest file 'ar_msgs.egg-info/SOURCES.txt'\n"}
+[1.135918] (ar_msgs) StdoutLine: {'line': b'[ 19%] Built target ament_cmake_python_build_ar_msgs_egg\n'}
+[1.137813] (ar_msgs) StdoutLine: {'line': b'[ 22%] \x1b[32m\x1b[1mLinking C shared library libar_msgs__rosidl_generator_c.so\x1b[0m\n'}
+[1.177149] (ar_msgs) StdoutLine: {'line': b'[ 22%] Built target ar_msgs__rosidl_generator_c\n'}
+[1.184814] (ar_msgs) StdoutLine: {'line': b'[ 29%] \x1b[34m\x1b[1mGenerating C type support dispatch for ROS interfaces\x1b[0m\n'}
+[1.184978] (ar_msgs) StdoutLine: {'line': b'[ 29%] \x1b[34m\x1b[1mGenerating C type support for eProsima Fast-RTPS\x1b[0m\n'}
+[1.185062] (ar_msgs) StdoutLine: {'line': b'[ 32%] \x1b[34m\x1b[1mGenerating C introspection for ROS interfaces\x1b[0m\n'}
+[1.201139] (-) TimerEvent: {}
+[1.240499] (ar_msgs) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/ar_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/ar_msgs/msg/joy__type_support.cpp.o\x1b[0m\n'}
+[1.252648] (ar_msgs) StdoutLine: {'line': b'[ 38%] \x1b[32mBuilding CXX object CMakeFiles/ar_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/ar_msgs/msg/detail/joy__type_support.cpp.o\x1b[0m\n'}
+[1.252849] (ar_msgs) StdoutLine: {'line': b'[ 41%] \x1b[32mBuilding CXX object CMakeFiles/ar_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/ar_msgs/msg/detail/dds_fastrtps/joy__type_support.cpp.o\x1b[0m\n'}
+[1.301236] (-) TimerEvent: {}
+[1.317372] (ar_msgs) StdoutLine: {'line': b'[ 45%] \x1b[32mBuilding CXX object CMakeFiles/ar_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/ar_msgs/msg/joy__type_support.cpp.o\x1b[0m\n'}
+[1.324562] (ar_msgs) StdoutLine: {'line': b'[ 51%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/ar_msgs/msg/detail/joy__type_support.c.o\x1b[0m\n'}
+[1.324750] (ar_msgs) StdoutLine: {'line': b'[ 51%] \x1b[32mBuilding CXX object CMakeFiles/ar_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/ar_msgs/msg/detail/joy__type_support_c.cpp.o\x1b[0m\n'}
+[1.342395] (ar_msgs) StdoutLine: {'line': b'[ 54%] \x1b[32m\x1b[1mLinking CXX shared library libar_msgs__rosidl_typesupport_c.so\x1b[0m\n'}
+[1.350508] (ar_msgs) StdoutLine: {'line': b'[ 58%] \x1b[32m\x1b[1mLinking C shared library libar_msgs__rosidl_typesupport_introspection_c.so\x1b[0m\n'}
+[1.373743] (ar_msgs) StdoutLine: {'line': b'[ 58%] Built target ar_msgs__rosidl_typesupport_c\n'}
+[1.375340] (ar_msgs) StdoutLine: {'line': b'[ 58%] Built target ar_msgs__rosidl_typesupport_introspection_c\n'}
+[1.401346] (-) TimerEvent: {}
+[1.405113] (ar_msgs) StdoutLine: {'line': b'[ 61%] \x1b[32m\x1b[1mLinking CXX shared library libar_msgs__rosidl_typesupport_cpp.so\x1b[0m\n'}
+[1.438763] (ar_msgs) StdoutLine: {'line': b'[ 61%] Built target ar_msgs__rosidl_typesupport_cpp\n'}
+[1.479368] (ar_msgs) StdoutLine: {'line': b'[ 64%] \x1b[32m\x1b[1mLinking CXX shared library libar_msgs__rosidl_typesupport_introspection_cpp.so\x1b[0m\n'}
+[1.482913] (ar_msgs) StdoutLine: {'line': b'[ 67%] \x1b[32m\x1b[1mLinking CXX shared library libar_msgs__rosidl_typesupport_fastrtps_cpp.so\x1b[0m\n'}
+[1.501448] (-) TimerEvent: {}
+[1.512638] (ar_msgs) StdoutLine: {'line': b'[ 67%] Built target ar_msgs__rosidl_typesupport_introspection_cpp\n'}
+[1.519393] (ar_msgs) StdoutLine: {'line': b'[ 70%] \x1b[32m\x1b[1mLinking CXX shared library libar_msgs__rosidl_typesupport_fastrtps_c.so\x1b[0m\n'}
+[1.535585] (ar_msgs) StdoutLine: {'line': b'[ 70%] Built target ar_msgs__rosidl_typesupport_fastrtps_cpp\n'}
+[1.573111] (ar_msgs) StdoutLine: {'line': b'[ 70%] Built target ar_msgs__rosidl_typesupport_fastrtps_c\n'}
+[1.587677] (ar_msgs) StdoutLine: {'line': b'[ 70%] Built target ar_msgs\n'}
+[1.601573] (-) TimerEvent: {}
+[1.602966] (ar_msgs) StdoutLine: {'line': b'[ 74%] \x1b[34m\x1b[1mGenerating Python code for ROS interfaces\x1b[0m\n'}
+[1.701677] (-) TimerEvent: {}
+[1.756963] (ar_msgs) StdoutLine: {'line': b'[ 74%] Built target ar_msgs__py\n'}
+[1.772613] (ar_msgs) StdoutLine: {'line': b'[ 77%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_generator_py.dir/rosidl_generator_py/ar_msgs/msg/_joy_s.c.o\x1b[0m\n'}
+[1.801806] (-) TimerEvent: {}
+[1.853957] (ar_msgs) StdoutLine: {'line': b'[ 80%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/ar_msgs/libar_msgs__rosidl_generator_py.so\x1b[0m\n'}
+[1.888888] (ar_msgs) StdoutLine: {'line': b'[ 80%] Built target ar_msgs__rosidl_generator_py\n'}
+[1.901915] (-) TimerEvent: {}
+[1.902973] (ar_msgs) StdoutLine: {'line': b'[ 83%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_introspection_c.c.o\x1b[0m\n'}
+[1.903097] (ar_msgs) StdoutLine: {'line': b'[ 87%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_c.c.o\x1b[0m\n'}
+[1.903154] (ar_msgs) StdoutLine: {'line': b'[ 90%] \x1b[32mBuilding C object CMakeFiles/ar_msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o\x1b[0m\n'}
+[1.969576] (ar_msgs) StdoutLine: {'line': b'[ 96%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[1.969814] (ar_msgs) StdoutLine: {'line': b'[ 96%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[1.970640] (ar_msgs) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking C shared library rosidl_generator_py/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\x1b[0m\n'}
+[1.997724] (ar_msgs) StdoutLine: {'line': b'[100%] Built target ar_msgs__rosidl_typesupport_introspection_c__pyext\n'}
+[1.998011] (ar_msgs) StdoutLine: {'line': b'[100%] Built target ar_msgs__rosidl_typesupport_fastrtps_c__pyext\n'}
+[2.000275] (ar_msgs) StdoutLine: {'line': b'[100%] Built target ar_msgs__rosidl_typesupport_c__pyext\n'}
+[2.001965] (-) TimerEvent: {}
+[2.008379] (ar_msgs) CommandEnded: {'returncode': 0}
+[2.009138] (ar_msgs) JobProgress: {'identifier': 'ar_msgs', 'progress': 'install'}
+[2.014340] (ar_msgs) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/hans/ar/build/ar_msgs'], 'cwd': '/home/hans/ar/build/ar_msgs', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'hans'), ('LC_TIME', 'vi_VN'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/hans'), ('OLDPWD', '/home/hans'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'vi_VN'), ('SYSTEMD_EXEC_PID', '1965'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'hans'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'hans'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/home/hans/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/hans-Nitro-AN16-41:@/tmp/.ICE-unix/1933,unix/hans-Nitro-AN16-41:/tmp/.ICE-unix/1933'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'vi_VN'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/0ced61a9_9ac9_4315_ba2f_f7d0c8a39941'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'vi_VN'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.LLSE92'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.121'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'vi_VN'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'vi_VN'), ('LC_IDENTIFICATION', 'vi_VN'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/hans/ar/build/ar_msgs'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'vi_VN'), ('LC_PAPER', 'vi_VN'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[2.019360] (ar_msgs) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[2.019505] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/rosidl_interfaces/ar_msgs\n'}
+[2.019623] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.019730] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.019887] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.019970] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__struct.h\n'}
+[2.020087] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.h\n'}
+[2.020152] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__functions.c\n'}
+[2.020228] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__functions.h\n'}
+[2.020339] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_generator_c__visibility_control.h\n'}
+[2.020411] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/joy.h\n'}
+[2.020483] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/library_path.sh\n'}
+[2.020539] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/library_path.dsv\n'}
+[2.020615] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_c.so\n'}
+[2.020779] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_c.so" to ""\n'}
+[2.020823] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.020873] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.020905] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.020949] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_fastrtps_c.h\n'}
+[2.020986] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h\n'}
+[2.021094] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_c.so\n'}
+[2.021296] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_c.so" to ""\n'}
+[2.021329] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.021364] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.021418] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.021444] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_introspection_c.h\n'}
+[2.021488] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.c\n'}
+[2.021579] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h\n'}
+[2.021680] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_c.so\n'}
+[2.021926] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_c.so" to ""\n'}
+[2.021980] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_c.so\n'}
+[2.022173] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_c.so" to ""\n'}
+[2.022222] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.022261] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.022309] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.022336] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__struct.hpp\n'}
+[2.022390] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__traits.hpp\n'}
+[2.022449] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.hpp\n'}
+[2.022524] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__builder.hpp\n'}
+[2.022598] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_generator_cpp__visibility_control.hpp\n'}
+[2.022672] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/joy.hpp\n'}
+[2.022764] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.022802] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.022842] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.022886] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/dds_fastrtps\n'}
+[2.022930] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_fastrtps_cpp.hpp\n'}
+[2.022986] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h\n'}
+[2.023090] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_cpp.so\n'}
+[2.023327] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""\n'}
+[2.023360] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs\n'}
+[2.023417] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg\n'}
+[2.023454] (ar_msgs) StdoutLine: {'line': b'-- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail\n'}
+[2.023513] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.cpp\n'}
+[2.023558] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_introspection_cpp.hpp\n'}
+[2.023629] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_cpp.so\n'}
+[2.023867] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_cpp.so" to ""\n'}
+[2.023921] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_cpp.so\n'}
+[2.024135] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_cpp.so" to ""\n'}
+[2.024172] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/pythonpath.sh\n'}
+[2.024272] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/pythonpath.dsv\n'}
+[2.024360] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info\n'}
+[2.024481] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/top_level.txt\n'}
+[2.024563] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/PKG-INFO\n'}
+[2.024662] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/SOURCES.txt\n'}
+[2.024719] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/dependency_links.txt\n'}
+[2.024818] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs\n'}
+[2.024875] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.024968] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_c.c\n'}
+[2.025047] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/__init__.py\n'}
+[2.025121] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.025211] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/libar_msgs__rosidl_generator_py.so\n'}
+[2.025298] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg\n'}
+[2.025354] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy_s.c\n'}
+[2.025436] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/__init__.py\n'}
+[2.025514] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy.py\n'}
+[2.025596] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.025690] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_introspection_c.c\n'}
+[2.025772] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_fastrtps_c.c\n'}
+[2.049974] (ar_msgs) StdoutLine: {'line': b"Listing '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs'...\n"}
+[2.050146] (ar_msgs) StdoutLine: {'line': b"Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/__init__.py'...\n"}
+[2.050218] (ar_msgs) StdoutLine: {'line': b"Listing '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg'...\n"}
+[2.050290] (ar_msgs) StdoutLine: {'line': b"Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/__init__.py'...\n"}
+[2.050347] (ar_msgs) StdoutLine: {'line': b"Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy.py'...\n"}
+[2.052818] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.053069] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""\n'}
+[2.053212] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.053429] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""\n'}
+[2.053552] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so\n'}
+[2.053770] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""\n'}
+[2.053899] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_py.so\n'}
+[2.054066] (ar_msgs) StdoutLine: {'line': b'-- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_py.so" to ""\n'}
+[2.054156] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/msg/Joy.idl\n'}
+[2.054244] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/msg/Joy.msg\n'}
+[2.054359] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/package_run_dependencies/ar_msgs\n'}
+[2.054493] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/parent_prefix_path/ar_msgs\n'}
+[2.054590] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/ament_prefix_path.sh\n'}
+[2.054688] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/ament_prefix_path.dsv\n'}
+[2.054792] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/path.sh\n'}
+[2.054893] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/path.dsv\n'}
+[2.054996] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.bash\n'}
+[2.055090] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.sh\n'}
+[2.055192] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.zsh\n'}
+[2.055284] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.dsv\n'}
+[2.055377] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/package.dsv\n'}
+[2.055511] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/packages/ar_msgs\n'}
+[2.055645] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cExport.cmake\n'}
+[2.055752] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cExport-noconfig.cmake\n'}
+[2.055864] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cExport.cmake\n'}
+[2.055967] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake\n'}
+[2.056071] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cExport.cmake\n'}
+[2.056172] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake\n'}
+[2.056278] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cExport.cmake\n'}
+[2.056378] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cExport-noconfig.cmake\n'}
+[2.056482] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cppExport.cmake\n'}
+[2.056585] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cppExport.cmake\n'}
+[2.056690] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake\n'}
+[2.056803] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cppExport.cmake\n'}
+[2.056910] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake\n'}
+[2.057014] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cppExport.cmake\n'}
+[2.057118] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cppExport-noconfig.cmake\n'}
+[2.057225] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_pyExport.cmake\n'}
+[2.057326] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_pyExport-noconfig.cmake\n'}
+[2.057421] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake-extras.cmake\n'}
+[2.057517] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_dependencies-extras.cmake\n'}
+[2.057615] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_include_directories-extras.cmake\n'}
+[2.057709] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_libraries-extras.cmake\n'}
+[2.057817] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_targets-extras.cmake\n'}
+[2.057915] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake\n'}
+[2.058014] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake\n'}
+[2.058108] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgsConfig.cmake\n'}
+[2.058191] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgsConfig-version.cmake\n'}
+[2.058282] (ar_msgs) StdoutLine: {'line': b'-- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/package.xml\n'}
+[2.060244] (ar_msgs) CommandEnded: {'returncode': 0}
+[2.071161] (ar_msgs) JobEnded: {'identifier': 'ar_msgs', 'rc': 0}
+[2.071828] (-) EventReactorShutdown: {}

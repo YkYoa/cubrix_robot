@@ -17,6 +17,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 find_package(actionlib_msgs REQUIRED)
 
+file(GLOB_RECURSE MSG_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "msg/*.msg")
+
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${MSG_FILES}  # Now contains relative paths

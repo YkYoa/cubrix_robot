@@ -1,0 +1,2 @@
+Invoking command in '/home/hans/ar/build/ar_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/communication/messages/ar_msgs -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_msgs
+Invoked command in '/home/hans/ar/build/ar_msgs' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/communication/messages/ar_msgs -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_msgs

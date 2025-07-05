@@ -1,0 +1,91 @@
+[0.000000] (-) TimerEvent: {}
+[0.000226] (-) JobUnselected: {'identifier': 'ar_comm'}
+[0.000268] (-) JobUnselected: {'identifier': 'ar_conputation'}
+[0.000294] (-) JobUnselected: {'identifier': 'ar_control'}
+[0.000347] (-) JobUnselected: {'identifier': 'ar_motion_planner'}
+[0.000380] (-) JobUnselected: {'identifier': 'ar_moveit_config'}
+[0.000398] (-) JobUnselected: {'identifier': 'ar_msgs'}
+[0.000415] (-) JobUnselected: {'identifier': 'ar_planner_interface'}
+[0.000431] (-) JobUnselected: {'identifier': 'ar_scene'}
+[0.000446] (-) JobUnselected: {'identifier': 'devices'}
+[0.000479] (-) JobUnselected: {'identifier': 'master'}
+[0.000522] (ar_utils) JobQueued: {'identifier': 'ar_utils', 'dependencies': OrderedDict()}
+[0.000546] (ar_utils) JobStarted: {'identifier': 'ar_utils'}
+[0.005503] (ar_utils) JobProgress: {'identifier': 'ar_utils', 'progress': 'cmake'}
+[0.005876] (ar_utils) JobProgress: {'identifier': 'ar_utils', 'progress': 'build'}
+[0.006341] (ar_utils) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/hans/ar/build/ar_utils', '--', '-j12', '-l12'], 'cwd': '/home/hans/ar/build/ar_utils', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'hans'), ('LC_TIME', 'vi_VN'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/hans'), ('OLDPWD', '/home/hans'), ('DESKTOP_SESSION', 'ubuntu'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/terminator.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'vi_VN'), ('MANAGERPID', '1792'), ('SYSTEMD_EXEC_PID', '1962'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('TERMINATOR_DBUS_NAME', 'net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '4565'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'hans'), ('JOURNAL_STREAM', '8:18631'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'hans'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/home/hans/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/hans-Nitro-AN16-41:@/tmp/.ICE-unix/1930,unix/hans-Nitro-AN16-41:/tmp/.ICE-unix/1930'), ('INVOCATION_ID', '184563ad5d64442ea4cabebf640dcfdf'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'vi_VN'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('TERMINATOR_DBUS_PATH', '/net/tenshu/Terminator2'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('IBUS_DISABLE_SNOOPER', '1'), ('LC_TELEPHONE', 'vi_VN'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.5BSW82'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'vi_VN'), ('TERMINATOR_UUID', 'urn:uuid:da3f6baa-6333-4744-a783-4b4749769df1'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'vi_VN'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('LC_IDENTIFICATION', 'vi_VN'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/hans/ar/build/ar_utils'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'vi_VN'), ('LC_PAPER', 'vi_VN'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.041372] (ar_utils) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target ar_utils\x1b[0m\n'}
+[0.054616] (ar_utils) StdoutLine: {'line': b'[ 16%] \x1b[32mBuilding CXX object CMakeFiles/ar_utils.dir/src/ar_serializer.cpp.o\x1b[0m\n'}
+[0.099484] (-) TimerEvent: {}
+[0.199919] (-) TimerEvent: {}
+[0.300300] (-) TimerEvent: {}
+[0.400586] (-) TimerEvent: {}
+[0.500911] (-) TimerEvent: {}
+[0.601168] (-) TimerEvent: {}
+[0.701447] (-) TimerEvent: {}
+[0.801767] (-) TimerEvent: {}
+[0.902177] (-) TimerEvent: {}
+[1.002562] (-) TimerEvent: {}
+[1.102987] (-) TimerEvent: {}
+[1.203288] (-) TimerEvent: {}
+[1.303574] (-) TimerEvent: {}
+[1.403946] (-) TimerEvent: {}
+[1.504228] (-) TimerEvent: {}
+[1.604513] (-) TimerEvent: {}
+[1.704801] (-) TimerEvent: {}
+[1.805106] (-) TimerEvent: {}
+[1.905408] (-) TimerEvent: {}
+[2.005730] (-) TimerEvent: {}
+[2.106070] (-) TimerEvent: {}
+[2.206405] (-) TimerEvent: {}
+[2.306724] (-) TimerEvent: {}
+[2.407058] (-) TimerEvent: {}
+[2.507368] (-) TimerEvent: {}
+[2.607693] (-) TimerEvent: {}
+[2.708005] (-) TimerEvent: {}
+[2.808302] (-) TimerEvent: {}
+[2.908591] (-) TimerEvent: {}
+[3.008874] (-) TimerEvent: {}
+[3.109185] (-) TimerEvent: {}
+[3.209461] (-) TimerEvent: {}
+[3.309731] (-) TimerEvent: {}
+[3.410017] (-) TimerEvent: {}
+[3.510350] (-) TimerEvent: {}
+[3.610722] (-) TimerEvent: {}
+[3.711009] (-) TimerEvent: {}
+[3.811295] (-) TimerEvent: {}
+[3.911602] (-) TimerEvent: {}
+[4.011948] (-) TimerEvent: {}
+[4.112279] (-) TimerEvent: {}
+[4.212569] (-) TimerEvent: {}
+[4.312965] (-) TimerEvent: {}
+[4.413293] (-) TimerEvent: {}
+[4.513601] (-) TimerEvent: {}
+[4.613932] (-) TimerEvent: {}
+[4.714240] (-) TimerEvent: {}
+[4.814572] (-) TimerEvent: {}
+[4.914918] (-) TimerEvent: {}
+[5.015246] (-) TimerEvent: {}
+[5.115587] (-) TimerEvent: {}
+[5.215927] (-) TimerEvent: {}
+[5.316271] (-) TimerEvent: {}
+[5.416605] (-) TimerEvent: {}
+[5.516973] (-) TimerEvent: {}
+[5.617278] (-) TimerEvent: {}
+[5.717632] (-) TimerEvent: {}
+[5.767452] (ar_utils) StdoutLine: {'line': b'[ 33%] \x1b[32m\x1b[1mLinking CXX shared library libar_utils.so\x1b[0m\n'}
+[5.817765] (-) TimerEvent: {}
+[5.918128] (-) TimerEvent: {}
+[5.994656] (ar_utils) StdoutLine: {'line': b'[ 66%] Built target ar_utils\n'}
+[6.009810] (ar_utils) StdoutLine: {'line': b'[ 83%] \x1b[32mBuilding CXX object CMakeFiles/test_log.dir/test/test_log.cpp.o\x1b[0m\n'}
+[6.017690] (ar_utils) StderrLine: {'line': b'\x1b[01m\x1b[K/home/hans/ar/utilities/ar_utils/test/test_log.cpp:1:10:\x1b[m\x1b[K \x1b[01;31m\x1b[Kfatal error: \x1b[m\x1b[Kar_utils/ar_logging.h: No such file or directory\n'}
+[6.017827] (ar_utils) StderrLine: {'line': b'    1 | #include \x1b[01;31m\x1b[K"ar_utils/ar_logging.h"\x1b[m\x1b[K\n'}
+[6.017866] (ar_utils) StderrLine: {'line': b'      |          \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[6.017898] (ar_utils) StderrLine: {'line': b'compilation terminated.\n'}
+[6.018173] (-) TimerEvent: {}
+[6.018493] (ar_utils) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/test_log.dir/build.make:76: CMakeFiles/test_log.dir/test/test_log.cpp.o] Error 1\n'}
+[6.018718] (ar_utils) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/test_log.dir/all] Error 2\n'}
+[6.018882] (ar_utils) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[6.020639] (ar_utils) CommandEnded: {'returncode': 2}
+[6.025405] (ar_utils) JobEnded: {'identifier': 'ar_utils', 'rc': 2}
+[6.035860] (-) EventReactorShutdown: {}

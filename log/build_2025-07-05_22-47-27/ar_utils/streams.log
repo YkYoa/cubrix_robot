@@ -1,0 +1,14 @@
+[0.007s] Invoking command in '/home/hans/ar/build/ar_utils': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_utils -- -j12 -l12
+[0.041s] [35m[1mConsolidate compiler generated dependencies of target ar_utils[0m
+[0.054s] [ 16%] [32mBuilding CXX object CMakeFiles/ar_utils.dir/src/ar_serializer.cpp.o[0m
+[5.767s] [ 33%] [32m[1mLinking CXX shared library libar_utils.so[0m
+[5.994s] [ 66%] Built target ar_utils
+[6.009s] [ 83%] [32mBuilding CXX object CMakeFiles/test_log.dir/test/test_log.cpp.o[0m
+[6.017s] [01m[K/home/hans/ar/utilities/ar_utils/test/test_log.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_utils/ar_logging.h: No such file or directory
+[6.017s]     1 | #include [01;31m[K"ar_utils/ar_logging.h"[m[K
+[6.017s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~[m[K
+[6.017s] compilation terminated.
+[6.018s] gmake[2]: *** [CMakeFiles/test_log.dir/build.make:76: CMakeFiles/test_log.dir/test/test_log.cpp.o] Error 1
+[6.018s] gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/test_log.dir/all] Error 2
+[6.018s] gmake: *** [Makefile:146: all] Error 2
+[6.020s] Invoked command in '/home/hans/ar/build/ar_utils' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_utils -- -j12 -l12

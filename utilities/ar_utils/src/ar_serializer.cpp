@@ -9,13 +9,12 @@
 #include <string>
 #include <vector>
 
-#include "tomo_utils/tomo_serializer.h"
+#include "ar_serializer.h"
 
-#include "tomo_utils/tomo_utils.h"
+#include "ar_utils.h"
+auto SERIAL_LOGGER = rclcpp::get_logger("ar_serializer");
 
-auto SERIAL_LOGGER = rclcpp::get_logger("tomo_serializer");
-
-namespace tomo_utils
+namespace ar_utils
 {
 	YAML::Node pose_data_sm;
 	std::string pose_path_sm;

@@ -1,0 +1,2 @@
+Invoking command in '/home/hans/ar/build/ar_utils': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/utilities/ar_utils -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_utils
+Invoked command in '/home/hans/ar/build/ar_utils' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/utilities/ar_utils -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_utils

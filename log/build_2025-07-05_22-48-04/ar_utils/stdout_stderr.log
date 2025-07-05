@@ -1,0 +1,36 @@
+[35m[1mConsolidate compiler generated dependencies of target ar_utils[0m
+[ 66%] Built target ar_utils
+[ 83%] [32mBuilding CXX object CMakeFiles/test_log.dir/test/test_log.cpp.o[0m
+[100%] [32m[1mLinking CXX executable test_log[0m
+[100%] Built target test_log
+-- Install configuration: ""
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/library_path.sh
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/library_path.dsv
+-- Installing: /home/hans/ar/install/ar_utils/include
+-- Installing: /home/hans/ar/install/ar_utils/include/ar_utils.h
+-- Installing: /home/hans/ar/install/ar_utils/include/ar_logging.h
+-- Installing: /home/hans/ar/install/ar_utils/include/ar_serializer.h
+-- Installing: /home/hans/ar/install/ar_utils/lib/libar_utils.so
+-- Set runtime path of "/home/hans/ar/install/ar_utils/lib/libar_utils.so" to ""
+-- Installing: /home/hans/ar/install/ar_utils/lib/ar_utils/test_log
+-- Set runtime path of "/home/hans/ar/install/ar_utils/lib/ar_utils/test_log" to ""
+-- Installing: /home/hans/ar/install/ar_utils/share/ament_index/resource_index/package_run_dependencies/ar_utils
+-- Installing: /home/hans/ar/install/ar_utils/share/ament_index/resource_index/parent_prefix_path/ar_utils
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/ament_prefix_path.sh
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/ament_prefix_path.dsv
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/path.sh
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/environment/path.dsv
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/local_setup.bash
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/local_setup.sh
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/local_setup.zsh
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/local_setup.dsv
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/package.dsv
+-- Installing: /home/hans/ar/install/ar_utils/share/ament_index/resource_index/packages/ar_utils
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ar_utilsExport.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ar_utilsExport-noconfig.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ar_utilsConfig.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/cmake/ar_utilsConfig-version.cmake
+-- Installing: /home/hans/ar/install/ar_utils/share/ar_utils/package.xml

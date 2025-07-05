@@ -1,5 +1,5 @@
-#include "ar_utils/ar_logging.h"
-#include <ar_utils/ar_utils.h>
+#include "ar_logging.h"
+#include "ar_utils.h"
 
 #define NSECS_PER_SECOND 1000000000.0
 auto LOGGER = rclcpp::get_logger("ar_logging");

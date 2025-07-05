@@ -22,8 +22,8 @@ set(SRC_FILES
 	src/ar_utils.cpp
 	src/ar_logging.cpp
 	src/ar_serializer.cpp
-	src/ar_event.cpp
-	src/ar_debug.cpp
+	# src/ar_event.cpp
+	# src/ar_debug.cpp
 )
 
 set(DEPENDS

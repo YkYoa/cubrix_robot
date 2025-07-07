@@ -40,23 +40,16 @@ namespace ar_control
 			return CallbackReturn::ERROR;
 		}
 
-		robot_desc_ = info_.hardware_parameters["desc"];
 		is_simulation  = info_.hardware_parameters["sim"] == "False" ? false : true;
 		is_ui  = info_.hardware_parameters["ui"] == "False" ? false : true;
 
 		// hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 		// hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
-		comm_mutex.push_back(std::make_shared<boost::mutex>());
-		comm_mutex.push_back(std::make_shared<boost::mutex>());
-		comm_mutex.push_back(std::make_shared<boost::mutex>());
-		g_quit		= false;
-		is_parallel = false;
-
-		RCLCPP_WARN(rclcpp::get_logger("ArSystemHardware"), "Init robot: %s, sim: %s (is_simulation=%d), ui: %s (is_ui=%d)", robot_desc_.c_str(),
+		RCLCPP_WARN(rclcpp::get_logger("ArSystemHardware"), "Init robot: %s, sim: %s (is_simulation=%d), ui: %s (is_ui=%d)",
 				info_.hardware_parameters["sim"].c_str(), is_simulation, info_.hardware_parameters["ui"].c_str(), is_ui);
 
-		robot = std::make_shared<ArHardwareInterface>(comm_mutex, cond, lock, robot_desc_, g_quit, is_simulation, is_ui, is_parallel);
+		robot = std::make_shared<ArHardwareInterface>(is_simulation, is_ui);
 
 		for(const hardware_interface::ComponentInfo& joint : info_.joints) {
 			if(joint.command_interfaces.size() != 1) {
@@ -181,7 +174,6 @@ namespace ar_control
 		robot->write();
 
 		/// Control loop waits in this write function - to sync with the comm loop
-		/// Udupa; 12Jan'23
 		if(robot->soem_drives)
 			pthread_cond_wait(&cond, &lock);
 
@@ -192,13 +184,6 @@ namespace ar_control
 	{
 		robot->shutdown();
 		usleep(1000);
-
-		pthread_cond_destroy(&cond);
-		pthread_mutex_destroy(&lock);
-
-		for(auto& mutex : comm_mutex) {
-			mutex.reset();	// reset shared_ptr to release ownership
-		}
 	}
 
 }  // namespace ar_control

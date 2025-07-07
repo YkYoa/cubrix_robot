@@ -65,19 +65,12 @@ namespace ar_control
 
 	private:
         // Parameters for the Ar robot
-        std::string robot_desc_;
         bool is_ui;
 		bool is_simulation;
 
 		// Store the command for robot
         std::shared_ptr<ArHardwareInterface> robot;
 
-        std::vector<std::shared_ptr<boost::mutex>> comm_mutex;
-        boost::mutex control_mutex;
-        pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-        pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-        bool g_quit;
-        bool is_parallel;
     };
 
 }  // namespace ar_control

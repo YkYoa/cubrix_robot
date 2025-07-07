@@ -37,4 +37,15 @@ namespace ar_utils{
 		}
 		return home_dir;
 	}
+
+	int stringToId(std::string str)
+    {
+        int index;
+        size_t pos = str.find("_");
+        if(pos != std::string::npos && pos + 1 < str.length()){
+            std::string id_str = str.substr(pos + 1);
+            index = std::stoi(id_str);        
+        }
+        return index;
+    }
 }

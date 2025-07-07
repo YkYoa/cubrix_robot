@@ -35,7 +35,6 @@ namespace ar_utils
 	}
 
 	/// Read file sequence one time to fetch goal or something from file quickly
-	/// Yugi, Jan 2024
 	void readFileSm(std::string pose_path)
 	{
 		pose_data_sm = YAML::LoadFile(pose_path);

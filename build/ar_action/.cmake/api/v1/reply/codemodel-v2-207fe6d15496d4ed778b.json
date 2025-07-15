@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-RelWithDebInfo-33d98d58e032872cd171.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "ar_action__py",
+					"jsonFile" : "directory-ar_action__py-RelWithDebInfo-c0303c593731acbe2394.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/hans/ar/build/ar_action/ar_action__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "RelWithDebInfo",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "ar_action",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_ar_action_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_ar_action_egg-RelWithDebInfo-a5e1a388052d7e6b1559.json",
+					"name" : "ament_cmake_python_build_ar_action_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_ar_action::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_ar_action-RelWithDebInfo-8e07311d4d67525d68a5.json",
+					"name" : "ament_cmake_python_copy_ar_action",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action-RelWithDebInfo-ed260ab585fdbbda39f1.json",
+					"name" : "ar_action",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__cpp-RelWithDebInfo-3f05bcba3bf73a2ebaa3.json",
+					"name" : "ar_action__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ar_action__py::@9a75bce35a83bd79e1ad",
+					"jsonFile" : "target-ar_action__py-RelWithDebInfo-bd1b0ddcdd7b66e9508a.json",
+					"name" : "ar_action__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_generator_c-RelWithDebInfo-7c8c7cccb231513d09a3.json",
+					"name" : "ar_action__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_generator_py-RelWithDebInfo-6508adca8d50c626c1f5.json",
+					"name" : "ar_action__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_c-RelWithDebInfo-612518a7b5a1cde2d019.json",
+					"name" : "ar_action__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_c__pyext-RelWithDebInfo-6dd83046bd30cf899ad3.json",
+					"name" : "ar_action__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_cpp-RelWithDebInfo-81bdeb1d893cce79c6ea.json",
+					"name" : "ar_action__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_fastrtps_c-RelWithDebInfo-6a8021dbcb563fed1792.json",
+					"name" : "ar_action__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_fastrtps_c__pyext-RelWithDebInfo-d6ceb679124817a00087.json",
+					"name" : "ar_action__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_fastrtps_cpp-RelWithDebInfo-21bfeadc3e68a15cb3d9.json",
+					"name" : "ar_action__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_introspection_c-RelWithDebInfo-7ab840674274af98a9d9.json",
+					"name" : "ar_action__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_introspection_c__pyext-RelWithDebInfo-5a78fe77b12681fe4415.json",
+					"name" : "ar_action__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action__rosidl_typesupport_introspection_cpp-RelWithDebInfo-95727eda1f07b9122838.json",
+					"name" : "ar_action__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ar_action_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ar_action_uninstall-RelWithDebInfo-8633b5d11fb1856f8231.json",
+					"name" : "ar_action_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-RelWithDebInfo-3d32fca1d113f49e8a1d.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/hans/ar/build/ar_action",
+		"source" : "/home/hans/ar/ar_src/communication/messages/ar_action"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

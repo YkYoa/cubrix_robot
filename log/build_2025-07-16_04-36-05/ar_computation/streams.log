@@ -1,0 +1,32 @@
+[0.026s] Invoking command in '/home/hans/ar/build/ar_computation': CMAKE_PREFIX_PATH=/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_msgs:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_computation -- -j12 -l12
+[0.161s] [ 12%] [32mBuilding CXX object gtest/CMakeFiles/gtest.dir/src/gtest-all.cc.o[0m
+[0.164s] [ 25%] [32mBuilding CXX object gtest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o[0m
+[0.181s] [ 37%] [32mBuilding CXX object CMakeFiles/ar_conversion.dir/src/ar_conversion.cpp.o[0m
+[0.906s] [ 50%] [32m[1mLinking CXX static library libgtest_main.a[0m
+[0.992s] [ 50%] Built target gtest_main
+[1.105s] [ 62%] [32m[1mLinking CXX static library libar_conversion.a[0m
+[1.183s] [ 62%] Built target ar_conversion
+[2.427s] [ 75%] [32m[1mLinking CXX static library libgtest.a[0m
+[2.534s] [ 75%] Built target gtest
+[2.568s] [ 87%] [32mBuilding CXX object CMakeFiles/test_ar_conversion.dir/test/test_ar_conversion.cpp.o[0m
+[3.847s] [100%] [32m[1mLinking CXX executable test_ar_conversion[0m
+[3.977s] [100%] Built target test_ar_conversion
+[3.991s] Invoked command in '/home/hans/ar/build/ar_computation' returned '0': CMAKE_PREFIX_PATH=/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_msgs:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_computation -- -j12 -l12
+[3.992s] Invoking command in '/home/hans/ar/build/ar_computation': CMAKE_PREFIX_PATH=/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_msgs:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_computation
+[4.002s] -- Install configuration: ""
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ament_index/resource_index/package_run_dependencies/ar_computation
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ament_index/resource_index/parent_prefix_path/ar_computation
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/environment/ament_prefix_path.sh
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/environment/ament_prefix_path.dsv
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/environment/path.sh
+[4.002s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/environment/path.dsv
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/local_setup.bash
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/local_setup.sh
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/local_setup.zsh
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/local_setup.dsv
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/package.dsv
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ament_index/resource_index/packages/ar_computation
+[4.003s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/cmake/ar_computationConfig.cmake
+[4.004s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/cmake/ar_computationConfig-version.cmake
+[4.004s] -- Installing: /home/hans/ar/install/ar_computation/share/ar_computation/package.xml
+[4.006s] Invoked command in '/home/hans/ar/build/ar_computation' returned '0': CMAKE_PREFIX_PATH=/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_msgs:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_computation

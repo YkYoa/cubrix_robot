@@ -1,0 +1,1 @@
+Invoking command in '/home/hans/ar/build/ar_planner_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/command/ar_planner_interface -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_planner_interface

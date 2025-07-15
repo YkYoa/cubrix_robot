@@ -1,0 +1,169 @@
+[0.027s] Invoking command in '/home/hans/ar/build/ar_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_msgs -- -j12 -l12
+[0.141s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_generator_c[0m
+[0.180s] [  3%] Built target ar_msgs__cpp
+[0.187s] [ 12%] Built target ar_msgs__rosidl_generator_c
+[0.241s] [ 12%] Built target ament_cmake_python_copy_ar_msgs
+[0.268s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_cpp[0m
+[0.268s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_fastrtps_cpp[0m
+[0.275s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_fastrtps_c[0m
+[0.278s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_introspection_cpp[0m
+[0.285s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_introspection_c[0m
+[0.293s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_c[0m
+[0.392s] [ 22%] Built target ar_msgs__rosidl_typesupport_fastrtps_cpp
+[0.403s] [ 32%] Built target ar_msgs__rosidl_typesupport_cpp
+[0.411s] [ 41%] Built target ar_msgs__rosidl_typesupport_introspection_c
+[0.413s] [ 51%] Built target ar_msgs__rosidl_typesupport_c
+[0.415s] [ 61%] Built target ar_msgs__rosidl_typesupport_fastrtps_c
+[0.426s] [ 70%] Built target ar_msgs__rosidl_typesupport_introspection_cpp
+[0.481s] [ 70%] Built target ar_msgs
+[0.530s] [ 74%] Built target ar_msgs__py
+[0.552s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_generator_py[0m
+[0.578s] [ 80%] Built target ar_msgs__rosidl_generator_py
+[0.617s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_introspection_c__pyext[0m
+[0.618s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_fastrtps_c__pyext[0m
+[0.620s] [35m[1mConsolidate compiler generated dependencies of target ar_msgs__rosidl_typesupport_c__pyext[0m
+[0.642s] running egg_info
+[0.642s] writing ar_msgs.egg-info/PKG-INFO
+[0.643s] writing dependency_links to ar_msgs.egg-info/dependency_links.txt
+[0.643s] writing top-level names to ar_msgs.egg-info/top_level.txt
+[0.647s] reading manifest file 'ar_msgs.egg-info/SOURCES.txt'
+[0.647s] writing manifest file 'ar_msgs.egg-info/SOURCES.txt'
+[0.677s] [ 87%] Built target ar_msgs__rosidl_typesupport_introspection_c__pyext
+[0.683s] [ 93%] Built target ar_msgs__rosidl_typesupport_fastrtps_c__pyext
+[0.688s] [100%] Built target ar_msgs__rosidl_typesupport_c__pyext
+[0.700s] [100%] Built target ament_cmake_python_build_ar_msgs_egg
+[0.718s] Invoked command in '/home/hans/ar/build/ar_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_msgs -- -j12 -l12
+[0.720s] Invoking command in '/home/hans/ar/build/ar_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_msgs
+[0.734s] -- Install configuration: ""
+[0.734s] -- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/rosidl_interfaces/ar_msgs
+[0.734s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.734s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__struct.h
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.h
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__functions.c
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__functions.h
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_generator_c__visibility_control.h
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/joy.h
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/library_path.sh
+[0.735s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/library_path.dsv
+[0.736s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_c.so
+[0.736s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_c.so" to ""
+[0.736s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.736s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.736s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.736s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_fastrtps_c.h
+[0.736s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[0.737s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_c.so
+[0.737s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_c.so" to ""
+[0.737s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.739s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.739s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.739s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_introspection_c.h
+[0.739s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.c
+[0.739s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[0.740s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_c.so
+[0.740s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_c.so" to ""
+[0.740s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_c.so
+[0.740s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_c.so" to ""
+[0.740s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.740s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.740s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.740s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__struct.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__traits.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__builder.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/joy.hpp
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/dds_fastrtps
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_fastrtps_cpp.hpp
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_cpp.so
+[0.741s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg
+[0.741s] -- Up-to-date: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail
+[0.741s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__type_support.cpp
+[0.742s] -- Installing: /home/hans/ar/install/ar_msgs/include/ar_msgs/ar_msgs/msg/detail/joy__rosidl_typesupport_introspection_cpp.hpp
+[0.743s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_cpp.so
+[0.744s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_introspection_cpp.so" to ""
+[0.744s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_cpp.so
+[0.744s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_typesupport_cpp.so" to ""
+[0.744s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/pythonpath.sh
+[0.744s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/pythonpath.dsv
+[0.744s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info
+[0.744s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/top_level.txt
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/PKG-INFO
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/SOURCES.txt
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs-0.0.0-py3.10.egg-info/dependency_links.txt
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_c.c
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/__init__.py
+[0.745s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/libar_msgs__rosidl_generator_py.so
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy_s.c
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/__init__.py
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy.py
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_introspection_c.c
+[0.746s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/_ar_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+[0.785s] Listing '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs'...
+[0.785s] Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/__init__.py'...
+[0.785s] Listing '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg'...
+[0.785s] Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/__init__.py'...
+[0.785s] Compiling '/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/msg/_joy.py'...
+[0.791s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[0.791s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+[0.791s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[0.792s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+[0.792s] -- Installing: /home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[0.792s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/local/lib/python3.10/dist-packages/ar_msgs/ar_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+[0.792s] -- Installing: /home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_py.so
+[0.792s] -- Set runtime path of "/home/hans/ar/install/ar_msgs/lib/libar_msgs__rosidl_generator_py.so" to ""
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/msg/Joy.idl
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/msg/Joy.msg
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/package_run_dependencies/ar_msgs
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/parent_prefix_path/ar_msgs
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/ament_prefix_path.sh
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/ament_prefix_path.dsv
+[0.793s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/path.sh
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/environment/path.dsv
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.bash
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.sh
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.zsh
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/local_setup.dsv
+[0.794s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/package.dsv
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ament_index/resource_index/packages/ar_msgs
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cExport.cmake
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cExport-noconfig.cmake
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[0.795s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cExport.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cExport.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_cppExport.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+[0.796s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cppExport.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_pyExport.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/export_ar_msgs__rosidl_generator_pyExport-noconfig.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake-extras.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[0.797s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgsConfig.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/cmake/ar_msgsConfig-version.cmake
+[0.798s] -- Installing: /home/hans/ar/install/ar_msgs/share/ar_msgs/package.xml
+[0.802s] Invoked command in '/home/hans/ar/build/ar_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_msgs

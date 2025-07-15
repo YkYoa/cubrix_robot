@@ -54,7 +54,7 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hans/ar/utilities/ar_utils
+CMAKE_SOURCE_DIR = /home/hans/ar/ar_src/utilities/ar_utils
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/hans/ar/build/ar_utils

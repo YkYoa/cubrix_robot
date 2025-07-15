@@ -24,9 +24,9 @@ typedef std::vector<bool> tVectorB;
 #define COLOR_CYAN		 "\033[96m"
 #define COLOR_RESET		 "\033[0m"
 
-#define NULL_UINT16 0xFFFF
 
 namespace ar_utils{
 	std::string getCurrentTime(bool includeDate = false, bool timeSinceEpoch = true);
 	std::string getHomeDirectory();
+	int stringToId(std::string str);
 }

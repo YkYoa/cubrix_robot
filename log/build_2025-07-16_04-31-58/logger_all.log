@@ -1,0 +1,575 @@
+[0.069s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--base-paths', 'ar_src']
+[0.069s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=12, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['ar_src'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7a2c8c353940>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7a2c8c3533d0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7a2c8c3533d0>>, mixin_verb=('build',))
+[0.175s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.175s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.175s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.175s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.175s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.176s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/hans/ar/ar_src'
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['ignore', 'ignore_ament_install']
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'ignore'
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'ignore_ament_install'
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['colcon_pkg']
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'colcon_pkg'
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['colcon_meta']
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'colcon_meta'
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['ros']
+[0.176s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'ros'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['cmake', 'python']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'cmake'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'python'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extensions ['python_setup_py']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src) by extension 'python_setup_py'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['ignore', 'ignore_ament_install']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'ignore'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'ignore_ament_install'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['colcon_pkg']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'colcon_pkg'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['colcon_meta']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'colcon_meta'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['ros']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'ros'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['cmake', 'python']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'cmake'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'python'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extensions ['python_setup_py']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command) by extension 'python_setup_py'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extensions ['ignore', 'ignore_ament_install']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extension 'ignore'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extension 'ignore_ament_install'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extensions ['colcon_pkg']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extension 'colcon_pkg'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extensions ['colcon_meta']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extension 'colcon_meta'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extensions ['ros']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_control) by extension 'ros'
+[0.196s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/command/ar_control' with type 'ros.ament_cmake' and name 'ar_control'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extensions ['ignore', 'ignore_ament_install']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'ignore'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'ignore_ament_install'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extensions ['colcon_pkg']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'colcon_pkg'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extensions ['colcon_meta']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'colcon_meta'
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extensions ['ros']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'ros'
+[0.197s] DEBUG:colcon.colcon_core.package_identification:Failed to parse potential ROS package manifest in'ar_src/command/ar_motion_planner': Error(s) in package 'ar_src/command/ar_motion_planner/package.xml':
+The manifest contains invalid XML:
+no element found: line 1, column 0
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extensions ['cmake', 'python']
+[0.197s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'cmake'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_motion_planner) by extension 'python'
+[0.198s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/command/ar_motion_planner' with type 'cmake' and name 'ar_motion_planner'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extensions ['ignore', 'ignore_ament_install']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extension 'ignore'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extension 'ignore_ament_install'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extensions ['colcon_pkg']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extension 'colcon_pkg'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extensions ['colcon_meta']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extension 'colcon_meta'
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extensions ['ros']
+[0.198s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_planner_interface) by extension 'ros'
+[0.198s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/command/ar_planner_interface' with type 'ros.ament_cmake' and name 'ar_planner_interface'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extensions ['ignore', 'ignore_ament_install']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extension 'ignore'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extension 'ignore_ament_install'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extensions ['colcon_pkg']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extension 'colcon_pkg'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extensions ['colcon_meta']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extension 'colcon_meta'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extensions ['ros']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_scene) by extension 'ros'
+[0.199s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/command/ar_scene' with type 'ros.ament_cmake' and name 'ar_scene'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_servo) by extensions ['ignore', 'ignore_ament_install']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_servo) by extension 'ignore'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/command/ar_servo) ignored
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'ignore_ament_install'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['colcon_pkg']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'colcon_pkg'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['colcon_meta']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'colcon_meta'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['ros']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'ros'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['cmake', 'python']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'cmake'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'python'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extensions ['python_setup_py']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication) by extension 'python_setup_py'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'ignore_ament_install'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['colcon_pkg']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'colcon_pkg'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['colcon_meta']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'colcon_meta'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['ros']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'ros'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['cmake', 'python']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'cmake'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'python'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extensions ['python_setup_py']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs) by extension 'python_setup_py'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extensions ['ignore', 'ignore_ament_install']
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extension 'ignore'
+[0.200s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extension 'ignore_ament_install'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extensions ['colcon_pkg']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extension 'colcon_pkg'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extensions ['colcon_meta']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extension 'colcon_meta'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extensions ['ros']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_comm) by extension 'ros'
+[0.201s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/commlibs/ar_comm' with type 'ros.ament_cmake' and name 'ar_comm'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['ignore', 'ignore_ament_install']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'ignore'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'ignore_ament_install'
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['colcon_pkg']
+[0.201s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'colcon_pkg'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['colcon_meta']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'colcon_meta'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['ros']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'ros'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['cmake', 'python']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'cmake'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'python'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extensions ['python_setup_py']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial) by extension 'python_setup_py'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['ignore', 'ignore_ament_install']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'ignore'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'ignore_ament_install'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['colcon_pkg']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'colcon_pkg'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['colcon_meta']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'colcon_meta'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['ros']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'ros'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['cmake', 'python']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'cmake'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'python'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extensions ['python_setup_py']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/include) by extension 'python_setup_py'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['ignore', 'ignore_ament_install']
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'ignore'
+[0.202s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'ignore_ament_install'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['colcon_pkg']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'colcon_pkg'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['colcon_meta']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'colcon_meta'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['ros']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'ros'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['cmake', 'python']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'cmake'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'python'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extensions ['python_setup_py']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/commlibs/ar_serial/src) by extension 'python_setup_py'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extensions ['ignore', 'ignore_ament_install']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extension 'ignore'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extension 'ignore_ament_install'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extensions ['colcon_pkg']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extension 'colcon_pkg'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extensions ['colcon_meta']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extension 'colcon_meta'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extensions ['ros']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/devices) by extension 'ros'
+[0.204s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/devices' with type 'ros.ament_cmake' and name 'devices'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extensions ['ignore', 'ignore_ament_install']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extension 'ignore'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extension 'ignore_ament_install'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extensions ['colcon_pkg']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extension 'colcon_pkg'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extensions ['colcon_meta']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extension 'colcon_meta'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extensions ['ros']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/master) by extension 'ros'
+[0.205s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/master' with type 'ros.ament_cmake' and name 'master'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'ignore_ament_install'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['colcon_pkg']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'colcon_pkg'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['colcon_meta']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'colcon_meta'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['ros']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'ros'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['cmake', 'python']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'cmake'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'python'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extensions ['python_setup_py']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages) by extension 'python_setup_py'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extension 'ignore_ament_install'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extensions ['colcon_pkg']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extension 'colcon_pkg'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extensions ['colcon_meta']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extension 'colcon_meta'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extensions ['ros']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_action) by extension 'ros'
+[0.206s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/messages/ar_action' with type 'ros.ament_cmake' and name 'ar_action'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extension 'ignore'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extension 'ignore_ament_install'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extensions ['colcon_pkg']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extension 'colcon_pkg'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extensions ['colcon_meta']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extension 'colcon_meta'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extensions ['ros']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_msgs) by extension 'ros'
+[0.207s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/messages/ar_msgs' with type 'ros.ament_cmake' and name 'ar_msgs'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extensions ['ignore', 'ignore_ament_install']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'ignore'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'ignore_ament_install'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extensions ['colcon_pkg']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'colcon_pkg'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extensions ['colcon_meta']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'colcon_meta'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extensions ['ros']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'ros'
+[0.207s] DEBUG:colcon.colcon_core.package_identification:Failed to parse potential ROS package manifest in'ar_src/communication/messages/ar_srv': Error(s) in package 'ar_src/communication/messages/ar_srv/package.xml':
+The manifest contains invalid XML:
+no element found: line 1, column 0
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extensions ['cmake', 'python']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'cmake'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/communication/messages/ar_srv) by extension 'python'
+[0.207s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/communication/messages/ar_srv' with type 'cmake' and name 'ar_srv'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['ignore', 'ignore_ament_install']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'ignore'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'ignore_ament_install'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['colcon_pkg']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'colcon_pkg'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['colcon_meta']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'colcon_meta'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['ros']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'ros'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['cmake', 'python']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'cmake'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'python'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extensions ['python_setup_py']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration) by extension 'python_setup_py'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extensions ['ignore', 'ignore_ament_install']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extension 'ignore'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extension 'ignore_ament_install'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extensions ['colcon_pkg']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extension 'colcon_pkg'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extensions ['colcon_meta']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extension 'colcon_meta'
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extensions ['ros']
+[0.208s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/ar) by extension 'ros'
+[0.208s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/configuration/ar' with type 'ros.ament_cmake' and name 'ar_moveit_config'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['ignore', 'ignore_ament_install']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'ignore'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'ignore_ament_install'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['colcon_pkg']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'colcon_pkg'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['colcon_meta']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'colcon_meta'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['ros']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'ros'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['cmake', 'python']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'cmake'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'python'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extensions ['python_setup_py']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/configuration/backup) by extension 'python_setup_py'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['ignore', 'ignore_ament_install']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'ignore'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'ignore_ament_install'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['colcon_pkg']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'colcon_pkg'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['colcon_meta']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'colcon_meta'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['ros']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'ros'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['cmake', 'python']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'cmake'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'python'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extensions ['python_setup_py']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities) by extension 'python_setup_py'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extensions ['ignore', 'ignore_ament_install']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extension 'ignore'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extension 'ignore_ament_install'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extensions ['colcon_pkg']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extension 'colcon_pkg'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extensions ['colcon_meta']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extension 'colcon_meta'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extensions ['ros']
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_computation) by extension 'ros'
+[0.210s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/utilities/ar_computation' with type 'ros.ament_cmake' and name 'ar_computation'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extensions ['ignore', 'ignore_ament_install']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extension 'ignore'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extension 'ignore_ament_install'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extensions ['colcon_pkg']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extension 'colcon_pkg'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extensions ['colcon_meta']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extension 'colcon_meta'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extensions ['ros']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(ar_src/utilities/ar_utils) by extension 'ros'
+[0.211s] DEBUG:colcon.colcon_core.package_identification:Package 'ar_src/utilities/ar_utils' with type 'ros.ament_cmake' and name 'ar_utils'
+[0.211s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.225s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.225s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/hans/ar/install/ar_computation' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/hans/ar/install/ar_utils' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/hans/ar/install/ar_msgs' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/hans/ar/install/ar_computation' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/hans/ar/install/ar_utils' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.226s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/hans/ar/install/ar_msgs' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.226s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 0 installed packages in /home/hans/ar/install
+[0.227s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 380 installed packages in /opt/ros/humble
+[0.229s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.257s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_target' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_clean_cache' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_clean_first' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'cmake_force_configure' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'ament_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'catkin_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_action' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.258s] DEBUG:colcon.colcon_core.verb:Building package 'ar_action' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_action', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_action', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/messages/ar_action', 'symlink_install': False, 'test_result_base': None}
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_target' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_clean_cache' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_clean_first' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'cmake_force_configure' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'ament_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'catkin_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_comm' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.258s] DEBUG:colcon.colcon_core.verb:Building package 'ar_comm' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_comm', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_comm', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/commlibs/ar_comm', 'symlink_install': False, 'test_result_base': None}
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_target' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_clean_cache' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_clean_first' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'cmake_force_configure' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'ament_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'catkin_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_motion_planner' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.258s] DEBUG:colcon.colcon_core.verb:Building package 'ar_motion_planner' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_motion_planner', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_motion_planner', 'merge_install': False, 'path': '/home/hans/ar/ar_src/command/ar_motion_planner', 'symlink_install': False, 'test_result_base': None}
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_target' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_clean_cache' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_clean_first' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'cmake_force_configure' from command line to 'False'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'ament_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'catkin_cmake_args' from command line to 'None'
+[0.258s] Level 5:colcon.colcon_core.verb:set package 'ar_moveit_config' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.259s] DEBUG:colcon.colcon_core.verb:Building package 'ar_moveit_config' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_moveit_config', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_moveit_config', 'merge_install': False, 'path': '/home/hans/ar/ar_src/configuration/ar', 'symlink_install': False, 'test_result_base': None}
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_target' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.259s] DEBUG:colcon.colcon_core.verb:Building package 'ar_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_msgs', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/messages/ar_msgs', 'symlink_install': False, 'test_result_base': None}
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_target' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_clean_cache' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_clean_first' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'cmake_force_configure' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'ament_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'catkin_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_planner_interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.259s] DEBUG:colcon.colcon_core.verb:Building package 'ar_planner_interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_planner_interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_planner_interface', 'merge_install': False, 'path': '/home/hans/ar/ar_src/command/ar_planner_interface', 'symlink_install': False, 'test_result_base': None}
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_target' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_clean_cache' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_clean_first' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'cmake_force_configure' from command line to 'False'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'ament_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'catkin_cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_scene' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.259s] DEBUG:colcon.colcon_core.verb:Building package 'ar_scene' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_scene', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_scene', 'merge_install': False, 'path': '/home/hans/ar/ar_src/command/ar_scene', 'symlink_install': False, 'test_result_base': None}
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_args' from command line to 'None'
+[0.259s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_target' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_clean_cache' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_clean_first' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'cmake_force_configure' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'ament_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'catkin_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_srv' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.260s] DEBUG:colcon.colcon_core.verb:Building package 'ar_srv' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_srv', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_srv', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/messages/ar_srv', 'symlink_install': False, 'test_result_base': None}
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_target' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_clean_cache' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_clean_first' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'cmake_force_configure' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'ament_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'catkin_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'ar_utils' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.260s] DEBUG:colcon.colcon_core.verb:Building package 'ar_utils' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_utils', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_utils', 'merge_install': False, 'path': '/home/hans/ar/ar_src/utilities/ar_utils', 'symlink_install': False, 'test_result_base': None}
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_target' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_clean_cache' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_clean_first' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'cmake_force_configure' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'ament_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'catkin_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'devices' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.260s] DEBUG:colcon.colcon_core.verb:Building package 'devices' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/devices', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/devices', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/devices', 'symlink_install': False, 'test_result_base': None}
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_target' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_clean_cache' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_clean_first' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'cmake_force_configure' from command line to 'False'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'ament_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'catkin_cmake_args' from command line to 'None'
+[0.260s] Level 5:colcon.colcon_core.verb:set package 'master' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.260s] DEBUG:colcon.colcon_core.verb:Building package 'master' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/master', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/master', 'merge_install': False, 'path': '/home/hans/ar/ar_src/communication/master', 'symlink_install': False, 'test_result_base': None}
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_target' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_clean_cache' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_clean_first' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'cmake_force_configure' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'ament_cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'catkin_cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_computation' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.261s] DEBUG:colcon.colcon_core.verb:Building package 'ar_computation' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_computation', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_computation', 'merge_install': False, 'path': '/home/hans/ar/ar_src/utilities/ar_computation', 'symlink_install': False, 'test_result_base': None}
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_target' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_clean_cache' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_clean_first' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'cmake_force_configure' from command line to 'False'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'ament_cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'catkin_cmake_args' from command line to 'None'
+[0.261s] Level 5:colcon.colcon_core.verb:set package 'ar_control' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.261s] DEBUG:colcon.colcon_core.verb:Building package 'ar_control' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/hans/ar/build/ar_control', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/hans/ar/install/ar_control', 'merge_install': False, 'path': '/home/hans/ar/ar_src/command/ar_control', 'symlink_install': False, 'test_result_base': None}
+[0.261s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.262s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.262s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/utilities/ar_utils' with build type 'ament_cmake'
+[0.262s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/utilities/ar_utils'
+[0.264s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.264s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.264s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.266s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/communication/commlibs/ar_comm' with build type 'ament_cmake'
+[0.266s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/commlibs/ar_comm'
+[0.266s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.266s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.268s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/communication/devices' with build type 'ament_cmake'
+[0.269s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/devices'
+[0.269s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.269s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.271s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/communication/master' with build type 'ament_cmake'
+[0.271s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/master'
+[0.271s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.271s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.274s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/communication/messages/ar_action' with build type 'ament_cmake'
+[0.274s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/messages/ar_action'
+[0.274s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.274s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.277s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/command/ar_motion_planner'
+[0.278s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.278s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.281s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/configuration/ar' with build type 'ament_cmake'
+[0.281s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/configuration/ar'
+[0.281s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.281s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.284s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/communication/messages/ar_msgs' with build type 'ament_cmake'
+[0.284s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/messages/ar_msgs'
+[0.284s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.284s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.287s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/command/ar_planner_interface' with build type 'ament_cmake'
+[0.287s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/command/ar_planner_interface'
+[0.287s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.287s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.291s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/hans/ar/ar_src/command/ar_scene' with build type 'ament_cmake'
+[0.291s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/command/ar_scene'
+[0.291s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.291s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.294s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/hans/ar/ar_src/communication/messages/ar_srv'
+[0.294s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.294s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.302s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_utils': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/utilities/ar_utils -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_utils
+[0.304s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_comm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/commlibs/ar_comm -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_comm
+[0.305s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/devices': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/devices -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/devices
+[0.307s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/master': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/master -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/master
+[0.309s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_action': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/messages/ar_action -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_action
+[0.310s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
+[0.312s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/configuration/ar -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_moveit_config
+[0.314s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/messages/ar_msgs -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_msgs
+[0.320s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_scene': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/command/ar_scene -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_scene
+[0.323s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_srv': /usr/bin/cmake /home/hans/ar/ar_src/communication/messages/ar_srv -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_srv
+[0.325s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_planner_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/command/ar_planner_interface -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_planner_interface
+[1.666s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
+[1.666s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12
+[2.134s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/configuration/ar -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_moveit_config
+[2.140s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[2.141s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_srv' returned '0': /usr/bin/cmake /home/hans/ar/ar_src/communication/messages/ar_srv -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_srv
+[2.141s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_srv': /usr/bin/cmake --build /home/hans/ar/build/ar_srv -- -j12 -l12
+[3.052s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/devices' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/devices -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/devices
+[3.054s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12
+[3.054s] WARNING:colcon.colcon_cmake.task.cmake.build:Could not run installation step for package 'ar_motion_planner' because it has no 'install' target
+[3.054s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ar_motion_planner)
+[3.056s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner' for CMake module files
+[3.057s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner' for CMake config files
+[3.057s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner/bin'
+[3.057s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner/lib/pkgconfig/ar_motion_planner.pc'
+[3.058s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner/lib/python3.10/site-packages'
+[3.058s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_motion_planner/bin'
+[3.058s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_motion_planner/share/ar_motion_planner/package.ps1'
+[3.059s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/hans/ar/install/ar_motion_planner/share/ar_motion_planner/package.dsv'
+[3.059s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_motion_planner/share/ar_motion_planner/package.sh'
+[3.060s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_motion_planner/share/ar_motion_planner/package.bash'
+[3.061s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_motion_planner/share/ar_motion_planner/package.zsh'
+[3.061s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/hans/ar/install/ar_motion_planner/share/colcon-core/packages/ar_motion_planner)
+[3.063s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[3.087s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_moveit_config
+[3.087s] WARNING:colcon.colcon_cmake.task.cmake.build:Could not run installation step for package 'ar_srv' because it has no 'install' target
+[3.087s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ar_srv)
+[3.088s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv' for CMake module files
+[3.088s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/hans/ar/build/ar_srv' returned '0': /usr/bin/cmake --build /home/hans/ar/build/ar_srv -- -j12 -l12
+[3.088s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv' for CMake config files
+[3.088s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv/bin'
+[3.089s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv/lib/pkgconfig/ar_srv.pc'
+[3.089s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv/lib/python3.10/site-packages'
+[3.089s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/ar_srv/bin'
+[3.089s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_srv/share/ar_srv/package.ps1'
+[3.091s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/hans/ar/install/ar_srv/share/ar_srv/package.dsv'
+[3.091s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_srv/share/ar_srv/package.sh'
+[3.092s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_srv/share/ar_srv/package.bash'
+[3.093s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/ar_srv/share/ar_srv/package.zsh'
+[3.093s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/hans/ar/install/ar_srv/share/colcon-core/packages/ar_srv)
+[3.095s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(devices)
+[3.095s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices' for CMake module files
+[3.096s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices' for CMake config files
+[3.096s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices/bin'
+[3.096s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices/lib/pkgconfig/devices.pc'
+[3.096s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices/lib/python3.10/site-packages'
+[3.096s] Level 1:colcon.colcon_core.environment:checking '/home/hans/ar/install/devices/bin'
+[3.097s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/devices/share/devices/package.ps1'
+[3.098s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/hans/ar/install/devices/share/devices/package.dsv'
+[3.098s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/devices/share/devices/package.sh'
+[3.098s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/devices/share/devices/package.bash'
+[3.099s] INFO:colcon.colcon_core.shell:Creating package script '/home/hans/ar/install/devices/share/devices/package.zsh'
+[3.099s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/hans/ar/install/devices/share/colcon-core/packages/devices)
+[3.816s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[3.817s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[3.817s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '1'
+[3.817s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[3.821s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[3.821s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[3.821s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[3.830s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[3.831s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/hans/ar/install/local_setup.ps1'
+[3.832s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/hans/ar/install/_local_setup_util_ps1.py'
+[3.832s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/hans/ar/install/setup.ps1'
+[3.833s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/hans/ar/install/local_setup.sh'
+[3.834s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/hans/ar/install/_local_setup_util_sh.py'
+[3.834s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/hans/ar/install/setup.sh'
+[3.834s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/hans/ar/install/local_setup.bash'
+[3.835s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/hans/ar/install/setup.bash'
+[3.835s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/hans/ar/install/local_setup.zsh'
+[3.835s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/hans/ar/install/setup.zsh'

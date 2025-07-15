@@ -1,0 +1,35 @@
+// generated from rosidl_adapter/resource/action.idl.em
+// with input from ar_action/action/ArControl.action
+// generated code does not contain a copyright notice
+
+#include "trajectory_msgs/msg/JointTrajectory.idl"
+
+module ar_action {
+  module action {
+    @verbatim (language="comment", text=
+      "Imaging Action definition")
+    struct ArControl_Goal {
+      uint8 action;
+
+      string planning_group;
+
+      trajectory_msgs::msg::JointTrajectory trajectory;
+
+      @verbatim (language="comment", text=
+        "For ui command on off servo")
+      sequence<string> joint_names;
+
+      int32 drive_id;
+
+      int32 client_id;
+    };
+    @verbatim (language="comment", text=
+      "result definition")
+    struct ArControl_Result {
+      int32 status;
+    };
+    struct ArControl_Feedback {
+      uint8 structure_needs_at_least_one_member;
+    };
+  };
+};

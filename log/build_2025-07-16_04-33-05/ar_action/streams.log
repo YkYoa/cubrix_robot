@@ -1,0 +1,56 @@
+[0.028s] Invoking command in '/home/hans/ar/build/ar_action': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_action -- -j12 -l12
+[0.160s] [  3%] [34m[1mGenerating C code for ROS interfaces[0m
+[0.204s] [  6%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[0.232s] [  6%] Built target ament_cmake_python_copy_ar_action
+[0.576s] running egg_info
+[0.576s] creating ar_action.egg-info
+[0.576s] writing ar_action.egg-info/PKG-INFO
+[0.576s] writing dependency_links to ar_action.egg-info/dependency_links.txt
+[0.576s] writing top-level names to ar_action.egg-info/top_level.txt
+[0.577s] writing manifest file 'ar_action.egg-info/SOURCES.txt'
+[0.580s] reading manifest file 'ar_action.egg-info/SOURCES.txt'
+[0.581s] writing manifest file 'ar_action.egg-info/SOURCES.txt'
+[0.659s] [  6%] Built target ament_cmake_python_build_ar_action_egg
+[0.740s] [  9%] [32mBuilding C object CMakeFiles/ar_action__rosidl_generator_c.dir/rosidl_generator_c/ar_action/action/detail/ar_control__functions.c.o[0m
+[0.747s] [  9%] Built target ar_action__cpp
+[0.804s] [ 12%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[0.805s] [ 16%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[0.820s] [ 19%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[1.324s] [ 22%] [32mBuilding CXX object CMakeFiles/ar_action__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/ar_action/action/ar_control__type_support.cpp.o[0m
+[1.447s] [ 25%] [32m[1mLinking C shared library libar_action__rosidl_generator_c.so[0m
+[1.530s] [ 29%] [32mBuilding CXX object CMakeFiles/ar_action__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/ar_action/action/detail/ar_control__type_support.cpp.o[0m
+[1.571s] [ 32%] [32mBuilding CXX object CMakeFiles/ar_action__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/ar_action/action/detail/dds_fastrtps/ar_control__type_support.cpp.o[0m
+[1.655s] [ 32%] Built target ar_action__rosidl_generator_c
+[1.765s] [ 35%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[1.774s] [ 38%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[1.800s] [ 41%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[2.029s] [ 45%] [32m[1mLinking CXX shared library libar_action__rosidl_typesupport_cpp.so[0m
+[2.146s] [ 45%] Built target ar_action__rosidl_typesupport_cpp
+[2.235s] [ 48%] [32mBuilding CXX object CMakeFiles/ar_action__rosidl_typesupport_c.dir/rosidl_typesupport_c/ar_action/action/ar_control__type_support.cpp.o[0m
+[2.335s] [ 51%] [32mBuilding CXX object CMakeFiles/ar_action__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/ar_action/action/detail/ar_control__type_support_c.cpp.o[0m
+[2.347s] [ 54%] [32m[1mLinking CXX shared library libar_action__rosidl_typesupport_c.so[0m
+[2.356s] [ 58%] [32mBuilding C object CMakeFiles/ar_action__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/ar_action/action/detail/ar_control__type_support.c.o[0m
+[2.441s] [ 58%] Built target ar_action__rosidl_typesupport_c
+[2.484s] [ 61%] [32m[1mLinking C shared library libar_action__rosidl_typesupport_introspection_c.so[0m
+[2.545s] [ 64%] [32m[1mLinking CXX shared library libar_action__rosidl_typesupport_introspection_cpp.so[0m
+[2.558s] [ 64%] Built target ar_action__rosidl_typesupport_introspection_c
+[2.627s] [ 67%] [32m[1mLinking CXX shared library libar_action__rosidl_typesupport_fastrtps_cpp.so[0m
+[2.666s] [ 67%] Built target ar_action__rosidl_typesupport_introspection_cpp
+[2.740s] [ 67%] Built target ar_action__rosidl_typesupport_fastrtps_cpp
+[2.914s] [ 70%] [32m[1mLinking CXX shared library libar_action__rosidl_typesupport_fastrtps_c.so[0m
+[3.024s] [ 70%] Built target ar_action__rosidl_typesupport_fastrtps_c
+[3.076s] [ 70%] Built target ar_action
+[3.129s] [ 74%] [34m[1mGenerating Python code for ROS interfaces[0m
+[3.641s] [ 74%] Built target ar_action__py
+[3.675s] [ 77%] [32mBuilding C object CMakeFiles/ar_action__rosidl_generator_py.dir/rosidl_generator_py/ar_action/action/_ar_control_s.c.o[0m
+[3.908s] [ 80%] [32m[1mLinking C shared library rosidl_generator_py/ar_action/libar_action__rosidl_generator_py.so[0m
+[3.965s] [ 80%] Built target ar_action__rosidl_generator_py
+[4.005s] [ 83%] [32mBuilding C object CMakeFiles/ar_action__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/ar_action/_ar_action_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[4.006s] [ 87%] [32mBuilding C object CMakeFiles/ar_action__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/ar_action/_ar_action_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[4.011s] [ 90%] [32mBuilding C object CMakeFiles/ar_action__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/ar_action/_ar_action_s.ep.rosidl_typesupport_c.c.o[0m
+[4.201s] [ 93%] [32m[1mLinking C shared library rosidl_generator_py/ar_action/ar_action_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[4.205s] [ 96%] [32m[1mLinking C shared library rosidl_generator_py/ar_action/ar_action_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[4.207s] [100%] [32m[1mLinking C shared library rosidl_generator_py/ar_action/ar_action_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[4.269s] [100%] Built target ar_action__rosidl_typesupport_fastrtps_c__pyext
+[4.271s] [100%] Built target ar_action__rosidl_typesupport_introspection_c__pyext
+[4.271s] [100%] Built target ar_action__rosidl_typesupport_c__pyext

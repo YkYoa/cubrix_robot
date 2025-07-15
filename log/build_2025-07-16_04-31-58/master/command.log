@@ -1,0 +1,1 @@
+Invoking command in '/home/hans/ar/build/master': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/communication/master -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/master

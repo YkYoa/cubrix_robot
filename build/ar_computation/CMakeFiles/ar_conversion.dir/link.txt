@@ -1,0 +1,2 @@
+/usr/bin/ar qc libar_conversion.a CMakeFiles/ar_conversion.dir/src/ar_conversion.cpp.o
+/usr/bin/ranlib libar_conversion.a

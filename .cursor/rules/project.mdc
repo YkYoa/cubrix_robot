@@ -1,0 +1,80 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# .cursor/rules
+
+[project]
+name = "AR4_MK_Robot"
+description = "AR4 MK 6-DOF Robot: simulation + real robot integration with ROS 2, EtherCAT, and MoveIt"
+language = "cpp"
+
+[context]
+# Folders with important roles
+include = [
+  "builds/**",
+  "command/**",
+  "communication/**",
+  "configuration/**",
+  "utilities/**"
+]
+
+[roles]
+# Define rules for major components in your project
+
+# 1. Build Sequences
+[[roles]]
+name = "SequenceExecutor"
+path_pattern = "builds/**"
+description = "Build-specific robot task sequences (like calibration, welding, pick-place)."
+
+# 2. Hardware Control
+[[roles]]
+name = "HardwareControl"
+path_pattern = "command/control/**"
+description = "Handles hardware interface, trajectory execution, motor control, EtherCAT manager."
+
+# 3. Motion Planner
+[[roles]]
+name = "MotionPlanner"
+path_pattern = "command/motion_planner/**"
+description = "Manages planner pipeline, request queue, and scene interaction."
+
+# 4. Planner Interface
+[[roles]]
+name = "PlannerInterface"
+path_pattern = "command/planner_interface/**"
+description = "Configures planning behavior, velocity/acceleration scaling, planner settings."
+
+# 5. Scene Management
+[[roles]]
+name = "SceneManager"
+path_pattern = "command/scene/**"
+description = "Handles 3D meshes, adds/moves/attaches objects in the planning scene."
+
+# 6. Communication Layer
+[[roles]]
+name = "CommunicationLayer"
+path_pattern = "communication/**"
+description = "Handles messages (srv, msg, action), and manages master interface for EtherCAT."
+
+# 7. Configuration Files
+[[roles]]
+name = "RobotConfiguration"
+path_pattern = "configuration/**"
+description = "YAML config for joints, limits, MoveIt, URDF, ROS 2 Control, and mesh files."
+
+# 8. Utilities
+[[roles]]
+name = "Utilities"
+path_pattern = "utilities/**"
+description = "Pose calculation, math conversions, and helper data structures."
+
+[refactor]
+# Prevent auto-refactor in config/mesh
+exclude = [
+  "configuration/meshes/**",
+  "**/*.xacro",
+  "**/*.yaml"
+]

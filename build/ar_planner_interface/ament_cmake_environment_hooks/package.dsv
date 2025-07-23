@@ -1,4 +1,0 @@
-source;share/ar_planner_interface/local_setup.bash
-source;share/ar_planner_interface/local_setup.dsv
-source;share/ar_planner_interface/local_setup.sh
-source;share/ar_planner_interface/local_setup.zsh

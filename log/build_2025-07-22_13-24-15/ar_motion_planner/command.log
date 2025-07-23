@@ -1,4 +1,0 @@
-Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
-Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
-Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12
-Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12

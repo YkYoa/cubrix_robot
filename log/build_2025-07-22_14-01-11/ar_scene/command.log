@@ -1,4 +1,0 @@
-Invoking command in '/home/hans/ar/build/ar_scene': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_scene -- -j12 -l12
-Invoked command in '/home/hans/ar/build/ar_scene' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_scene -- -j12 -l12
-Invoking command in '/home/hans/ar/build/ar_scene': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_scene
-Invoked command in '/home/hans/ar/build/ar_scene' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_scene

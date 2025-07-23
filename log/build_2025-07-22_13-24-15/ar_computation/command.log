@@ -1,6 +1,0 @@
-Invoking command in '/home/hans/ar/build/ar_computation': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/utilities/ar_computation -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_computation
-Invoked command in '/home/hans/ar/build/ar_computation' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/utilities/ar_computation -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_computation
-Invoking command in '/home/hans/ar/build/ar_computation': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_computation -- -j12 -l12
-Invoked command in '/home/hans/ar/build/ar_computation' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_computation -- -j12 -l12
-Invoking command in '/home/hans/ar/build/ar_computation': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_computation
-Invoked command in '/home/hans/ar/build/ar_computation' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_computation

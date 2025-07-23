@@ -1,4 +1,0 @@
-srv/Device.idl
-srv/Device.srv
-srv/Device_Request.msg
-srv/Device_Response.msg

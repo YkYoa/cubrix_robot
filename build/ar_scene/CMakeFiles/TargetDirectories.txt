@@ -1,9 +1,0 @@
-/home/hans/ar/build/ar_scene/CMakeFiles/uninstall.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/ar_scene_uninstall.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/test.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/edit_cache.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/rebuild_cache.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/list_install_components.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/install.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/install/local.dir
-/home/hans/ar/build/ar_scene/CMakeFiles/install/strip.dir

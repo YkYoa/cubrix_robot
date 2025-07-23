@@ -152,32 +152,32 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_endlink:
+        Arm_endlink:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_link1:
+        Arm_link1:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_link2:
+        Arm_link2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_link3:
+        Arm_link3:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_link4:
+        Arm_link4:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        Left_arm_link5:
+        Arm_link5:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -370,32 +370,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_endlink:
+          Arm_endlink:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link1:
+          Arm_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link2:
+          Arm_link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link3:
+          Arm_link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link4:
+          Arm_link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link5:
+          Arm_link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -588,32 +588,32 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_endlink:
+          Arm_endlink:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link1:
+          Arm_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link2:
+          Arm_link2:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link3:
+          Arm_link3:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link4:
+          Arm_link4:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          Left_arm_link5:
+          Arm_link5:
             Alpha: 1
             Show Axes: false
             Show Trail: false

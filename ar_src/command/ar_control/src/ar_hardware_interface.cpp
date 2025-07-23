@@ -12,6 +12,14 @@ namespace ar_control
         rclcpp::spin(ar_control_server);
     }
 
+    void ArHardwareInterface::InitializeDrives(std::vector<ArDriveControl*>& drives)
+    {
+        for(auto drive : drives){
+            if(drive->jointCount() == 1)
+                drive->InitializeDrive();
+        }
+    }
+
     ArHardwareInterface::ArHardwareInterface(bool isSimulation, bool isUI)
     {
         // Initialize the hardware interface
@@ -40,7 +48,22 @@ namespace ar_control
 
         // RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing PROTOCOL manager, drives and joints");
 
+        for(auto& driveParm : ar_drives.drive_parameters){
+            drives[driveParm.drive_id] = new ArDriveControl(driveParm, is_ui);
+            drives[driveParm.drive_id]->InitializeDriveClient(driveParm.port_id);
 
+            for(auto& jointParm : driveParm.joint_paramters){
+                auto urdf_joint = urdf_model.getJoint(jointParm.joint_name);
+                drives[driveParm.drive_id]->AddJoint(jointParm);
+            }
+        }
+
+        std::vector<ArDriveControl*> drives_ptr;
+
+        for(auto& drive : drives){
+            if(drive.second)
+                drives_ptr.push_back(drive.second);
+        }
 
     }
 
@@ -137,6 +160,20 @@ namespace ar_control
                   {
                       return a.drive_id < b.drive_id;
                   });
+
+        // Print out all loaded drive and joint parameters
+        std::cout << "Loaded drive parameters:\n";
+        for (const auto& drive : ar_drives.drive_parameters) {
+            std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Drive Mode: " << drive.drive_mode << std::endl;
+            for (const auto& joint : drive.joint_paramters) {
+                std::cout << "  Joint Name: " << joint.joint_name
+                          << ", Client ID: " << joint.client_id
+                          << ", Gear Ratio: " << joint.gear_ratio
+                          << ", Encoder Res: " << joint.encoder_res
+                          << ", Encoder Offset: " << joint.encoder_offset
+                          << ", Log Joint: " << joint.log_joint << std::endl;
+            }
+        }
     }
 
     std::map<int, ArDriveControl *> ArHardwareInterface::getDrives()
@@ -157,7 +194,4 @@ namespace ar_control
             drive.second->write();
         }
     }
-
-
-
 } // namespace ar_control

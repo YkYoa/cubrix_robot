@@ -15,6 +15,8 @@ namespace ar_control
         // This function will be implemented later
         // Initialize the drive client with the given slave ID
         // protocol_manager_->initializeClient(slaveId);
+
+        return;
     }
 
     void ArDriveControl::AddJoint(JointParameter& jointParam)

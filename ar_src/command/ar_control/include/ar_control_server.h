@@ -32,7 +32,6 @@ namespace ar_control
         explicit ArControlServer(ArHardwareInterface* robotArg = nullptr, const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
         ~ArControlServer();
     	void startActionServer();
-		void createExecutionListener();
 
 	private:
         rclcpp_action::Server<ArControlAction>::SharedPtr action_server;

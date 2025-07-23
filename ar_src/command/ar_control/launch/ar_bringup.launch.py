@@ -205,6 +205,13 @@ def generate_launch_description():
 			robotStatePublisher,
 			ros2ControlNode,
 			delayJointStateBroadcasterSpawnerAfterRos2ControlNode,
+			Node(
+				package='ar_control',
+				executable='ar_control_server',
+				name='ar_control_server',
+				output='screen',
+				parameters=[],
+			),
 		]
 		+ delayRobotControllerSpawnersAfterJointStateBroadcasterSpawner
 	)

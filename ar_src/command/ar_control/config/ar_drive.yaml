@@ -23,50 +23,50 @@ port_ids:
 drives:
   drive_1:
     joints:
-      Arm_joint_1:
+      Arm_joint1:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
   drive_2:
     joints:
-      Arm_joint_2:
+      Arm_joint2:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
   drive_3:
     joints:
-      Arm_joint_3:
+      Arm_joint3:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
   drive_4:
     joints:
-      Arm_joint_4:
+      Arm_joint4:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
   drive_5:
     joints:
-      Arm_joint_5:
+      Arm_joint5:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
   drive_6:
     joints:
-      Arm_joint_6:
+      Arm_joint6:
         gear_ratio: 16
         encoder_res: 256
-        encoder_offset: 10000
+        encoder_offset: 4000
         # torque_gamma:
         log_joint: false
     

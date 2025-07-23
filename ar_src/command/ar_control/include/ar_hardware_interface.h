@@ -48,7 +48,7 @@ namespace ar_control
 		std::shared_ptr<rclcpp::Node> ar_hardware_interface_node_;  ///< Node for the hardware interface
 
 
-
+    	void InitializeDrives(std::vector<ArDriveControl*>& drives);
 		void readConfigFromYaml(std::string yaml_path);
 		void launchControlServer();
 

@@ -36,8 +36,6 @@ namespace ar_control
 		bool sendGoal(const ArControlAction::Goal& goal, bool waitServer = false);
 		int actionCommand(ControlCommandType commandType, int timeoutSec, const ArControlAction::Goal& goal);
 
-		int move(const std::string& planningGroup, const trajectory_msgs::msg::JointTrajectory& trajectory,
-				 ControlCommandType commandType = ar_control::CTR_CMD_SEND_WAIT, int timeoutSec = -1);
 		int setPlanningState(const std::string& planningGroup = "", ControlCommandType commandType = ar_control::CTR_CMD_SEND_WAIT,
 							 int timeoutSec = 5);
 

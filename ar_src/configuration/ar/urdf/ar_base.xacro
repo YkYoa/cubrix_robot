@@ -30,7 +30,7 @@
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 	</joint>
 
-	<link name="Left_arm_link1">
+	<link name="Arm_link1">
 		<inertial>
         	<origin rpy="0 0 0" xyz="-0.022706 0.04294 -0.12205"/>
         	<mass value="0.88065"/>
@@ -53,10 +53,10 @@
       	</collision>
 	</link>
 
-	<joint name="Left_arm_joint1" type="revolute">
+	<joint name="Arm_joint1" type="revolute">
     	<origin rpy="3.1415 0 0" xyz="0 0 0"/>
     	<parent link="Base"/>
-    	<child link="Left_arm_link1"/>
+    	<child link="Arm_link1"/>
     	<axis xyz="0 0 1"/>
     	<limit
         	lower="-2.967059728"
@@ -66,7 +66,7 @@
     	/>
     </joint>
 
-	<link name="Left_arm_link2">
+	<link name="Arm_link2">
       <inertial>
         <origin rpy="0 0 0" xyz="0.064818 -0.11189 -0.038671"/>
         <mass value="0.57738"/>
@@ -88,10 +88,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="Left_arm_joint2" type="revolute">
+    <joint name="Arm_joint2" type="revolute">
     	<origin rpy="1.5708 0 -1.5708" xyz="0 0.0642 -0.16977"/>
-    	<parent link="Left_arm_link1"/>
-    	<child link="Left_arm_link2"/>
+    	<parent link="Arm_link1"/>
+    	<child link="Arm_link2"/>
     	<axis xyz="0 0 -1"/>
     	<limit 
         	lower="-0.733038286"
@@ -101,7 +101,7 @@
     	/>
     </joint>
 
-    <link name="Left_arm_link3">
+    <link name="Arm_link3">
       <inertial>
         <origin rpy="0 0 0" xyz="-0.00029765 -0.023661 -0.0019125"/>
         <mass value="0.1787"/>
@@ -123,10 +123,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="Left_arm_joint3" type="revolute">
+    <joint name="Arm_joint3" type="revolute">
       <origin rpy="0 0 3.1416" xyz="0 -0.305 0.007"/>
-      <parent link="Left_arm_link2"/>
-      <child link="Left_arm_link3"/>
+      <parent link="Arm_link2"/>
+      <child link="Arm_link3"/>
       <axis xyz="0 0 -1"/>
       <limit
         lower="-1.5533"
@@ -136,7 +136,7 @@
       />
     </joint>
 
-    <link name="Left_arm_link4">
+    <link name="Arm_link4">
       <inertial>
         <origin rpy="0 0 0" xyz="-0.0016798 -0.00057319 -0.074404"/>
         <mass value="0.34936"/>
@@ -158,10 +158,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="Left_arm_joint4" type="revolute">
+    <joint name="Arm_joint4" type="revolute">
       <origin rpy="1.5708 0 -1.5708" xyz="0 0 0.0"/>
-      <parent link="Left_arm_link3"/>
-      <child link="Left_arm_link4"/>
+      <parent link="Arm_link3"/>
+      <child link="Arm_link4"/>
       <axis xyz="0 0 -1"/>
       <limit
         lower="-3.14159"
@@ -171,7 +171,7 @@
       />
     </joint>
 
-    <link name="Left_arm_link5">
+    <link name="Arm_link5">
       <inertial>
         <origin rpy="0 0 0" xyz="0.0015066 -1.3102E-05 -0.012585"/>
         <mass value="0.11562"/>
@@ -193,10 +193,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="Left_arm_joint5" type="revolute">
+    <joint name="Arm_joint5" type="revolute">
       <origin rpy="3.1415 0 -1.5708" xyz="0 0 -0.22263"/>
-      <parent link="Left_arm_link4"/>
-      <child link="Left_arm_link5"/>
+      <parent link="Arm_link4"/>
+      <child link="Arm_link5"/>
       <axis xyz="1 0 0"/>
       <limit
         lower="-1.832595715"
@@ -206,7 +206,7 @@
       />
     </joint>
 
-    <link name="Left_arm_endlink">
+    <link name="Arm_endlink">
       <inertial>
         <origin rpy="0 0 0" xyz="2.9287E-10 -1.6472E-09 0.0091432"/>
         <mass value="0.013863"/>
@@ -228,10 +228,10 @@
         </geometry>
       </collision>
     </link>
-    <joint name="Left_arm_joint6" type="revolute">
+    <joint name="Arm_joint6" type="revolute">
       <origin rpy="0 0 3.1416" xyz="0.000 0 0.041"/>
-      <parent link="Left_arm_link5"/>
-      <child link="Left_arm_endlink"/>
+      <parent link="Arm_link5"/>
+      <child link="Arm_endlink"/>
       <axis xyz="0 0 1"/>
       <limit
         lower="-3.1415"
@@ -242,10 +242,5 @@
     </joint>
 
     <!-- center of the end effector mounting surface on link_6 -->
-    <!-- <link name="Left_arm_eelink" />
-    <joint name="Left_arm_eejoint" type="fixed">
-      <parent link="Left_arm_link_6" />
-      <child link="Left_arm_ee_link" />
-      <origin xyz="0 0 0.0" rpy="0 0 0" />
-    </joint> -->
+
 </robot>

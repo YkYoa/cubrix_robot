@@ -1,0 +1,15 @@
+/home/hans/ar/install/ar_comm/share/ament_index/resource_index/package_run_dependencies/ar_comm
+/home/hans/ar/install/ar_comm/share/ament_index/resource_index/parent_prefix_path/ar_comm
+/home/hans/ar/install/ar_comm/share/ar_comm/environment/ament_prefix_path.sh
+/home/hans/ar/install/ar_comm/share/ar_comm/environment/ament_prefix_path.dsv
+/home/hans/ar/install/ar_comm/share/ar_comm/environment/path.sh
+/home/hans/ar/install/ar_comm/share/ar_comm/environment/path.dsv
+/home/hans/ar/install/ar_comm/share/ar_comm/local_setup.bash
+/home/hans/ar/install/ar_comm/share/ar_comm/local_setup.sh
+/home/hans/ar/install/ar_comm/share/ar_comm/local_setup.zsh
+/home/hans/ar/install/ar_comm/share/ar_comm/local_setup.dsv
+/home/hans/ar/install/ar_comm/share/ar_comm/package.dsv
+/home/hans/ar/install/ar_comm/share/ament_index/resource_index/packages/ar_comm
+/home/hans/ar/install/ar_comm/share/ar_comm/cmake/ar_commConfig.cmake
+/home/hans/ar/install/ar_comm/share/ar_comm/cmake/ar_commConfig-version.cmake
+/home/hans/ar/install/ar_comm/share/ar_comm/package.xml

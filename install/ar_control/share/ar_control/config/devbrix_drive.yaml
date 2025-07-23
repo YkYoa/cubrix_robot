@@ -1,0 +1,72 @@
+
+###  ar_drive.yaml 
+### This file defines the configuration for the AR drive system, including port information, drive IDs, and joint specifications.
+### It is used to set up the hardware interface for the AR robot arm.
+### Set up the port information, drive IDs, and joint specifications for the AR robot arm.
+### 0 > simulation, 1 > real robot
+
+port_info:
+  port_name: tty/USB0
+  baud_rate: 115200
+
+use_torque_offset: false
+
+port_ids: 
+  drive_1: 0
+  drive_2: 0
+  drive_3: 0
+  drive_4: 0
+  drive_5: 0
+  drive_6: 0
+
+
+drives:
+  drive_1:
+    joints:
+      Arm_joint_1:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+  drive_2:
+    joints:
+      Arm_joint_2:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+  drive_3:
+    joints:
+      Arm_joint_3:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+  drive_4:
+    joints:
+      Arm_joint_4:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+  drive_5:
+    joints:
+      Arm_joint_5:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+  drive_6:
+    joints:
+      Arm_joint_6:
+        gear_ratio: 16
+        encoder_res: 256
+        encoder_offset: 10000
+        # torque_gamma:
+        log_joint: false
+    

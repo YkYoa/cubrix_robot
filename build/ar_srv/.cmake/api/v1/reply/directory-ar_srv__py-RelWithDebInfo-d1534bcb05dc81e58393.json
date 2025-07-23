@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "ar_srv__py",
+		"source" : "/home/hans/ar/build/ar_srv/ar_srv__py"
+	}
+}

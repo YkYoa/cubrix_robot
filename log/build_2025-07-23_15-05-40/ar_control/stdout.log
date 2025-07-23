@@ -1,0 +1,10 @@
+[35m[1mConsolidate compiler generated dependencies of target ar_control_client[0m
+[35m[1mConsolidate compiler generated dependencies of target ar_control_client_server_test[0m
+[35m[1mConsolidate compiler generated dependencies of target ar_control_server[0m
+[35m[1mConsolidate compiler generated dependencies of target ar_control[0m
+[  5%] [32m[1mLinking CXX executable ar_control_client_server_test[0m
+[ 15%] Built target ar_control_client
+[ 25%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o[0m
+[ 25%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_system.cpp.o[0m

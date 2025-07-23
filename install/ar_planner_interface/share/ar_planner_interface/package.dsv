@@ -1,0 +1,8 @@
+source;share/ar_planner_interface/hook/cmake_prefix_path.ps1
+source;share/ar_planner_interface/hook/cmake_prefix_path.dsv
+source;share/ar_planner_interface/hook/cmake_prefix_path.sh
+source;share/ar_planner_interface/local_setup.bash
+source;share/ar_planner_interface/local_setup.dsv
+source;share/ar_planner_interface/local_setup.ps1
+source;share/ar_planner_interface/local_setup.sh
+source;share/ar_planner_interface/local_setup.zsh

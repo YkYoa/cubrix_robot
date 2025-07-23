@@ -1,0 +1,10 @@
+[ 21%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_client.cpp.o[0m
+[ 28%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_client.cpp.o[0m
+[ 28%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o[0m
+[ 28%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o[0m
+[ 35%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_server.cpp.o[0m
+[ 42%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_system.cpp.o[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o[0m
+[ 64%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_control_client.cpp.o[0m
+[ 71%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_server.cpp.o[0m

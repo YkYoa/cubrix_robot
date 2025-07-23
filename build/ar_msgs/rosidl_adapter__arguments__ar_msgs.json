@@ -1,6 +1,6 @@
 {
   "package_name": "ar_msgs",
   "non_idl_tuples": [
-    "/home/hans/ar/communication/messages/ar_msgs:msg/Joy.msg"
+    "/home/hans/ar/ar_src/communication/messages/ar_msgs:msg/Joy.msg"
   ]
 }

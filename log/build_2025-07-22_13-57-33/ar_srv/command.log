@@ -1,0 +1,4 @@
+Invoking command in '/home/hans/ar/build/ar_srv': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_srv -- -j12 -l12
+Invoked command in '/home/hans/ar/build/ar_srv' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_srv -- -j12 -l12
+Invoking command in '/home/hans/ar/build/ar_srv': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_srv
+Invoked command in '/home/hans/ar/build/ar_srv' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_srv

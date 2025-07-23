@@ -1,0 +1,54 @@
+[35m[1mConsolidate compiler generated dependencies of target ar_control_client_server_test[0m
+[35m[1mConsolidate compiler generated dependencies of target ar_control_server[0m
+[35m[1mConsolidate compiler generated dependencies of target ar_control[0m
+[ 10%] Built target ar_control_client
+[ 15%] [32mBuilding CXX object CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o[0m
+[ 90%] Built target ar_control_server
+[ 95%] Built target ar_control
+[100%] [32m[1mLinking CXX executable ar_control_client_server_test[0m
+[100%] Built target ar_control_client_server_test
+-- Install configuration: "Release"
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/ar_control.xml
+-- Up-to-date: /home/hans/ar/install/ar_control/lib/libar_control.so
+-- Up-to-date: /home/hans/ar/install/ar_control/lib/ar_control/ar_control_server
+-- Up-to-date: /home/hans/ar/install/ar_control/include
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_hardware_interface.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_control_client.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_drive_config.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_joint_control.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_system.hpp
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_control_server.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/control_def.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_drive_client.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/ar_drive_control.h
+-- Up-to-date: /home/hans/ar/install/ar_control/include/visibility_control.h
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/config
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/config/devbrix_drive.yaml
+-- Up-to-date: /home/hans/ar/install/ar_control/lib/libar_control_client.so
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_simualtion.launch.py
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch/view_robot.launch.py
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch/moveit_empty.rviz
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_moveit.launch.py
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_bringup.launch.py
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/library_path.sh
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/library_path.dsv
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ament_index/resource_index/package_run_dependencies/ar_control
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ament_index/resource_index/parent_prefix_path/ar_control
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/ament_prefix_path.sh
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/ament_prefix_path.dsv
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/path.sh
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/environment/path.dsv
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/local_setup.bash
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/local_setup.sh
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/local_setup.zsh
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/local_setup.dsv
+-- Installing: /home/hans/ar/install/ar_control/share/ar_control/package.dsv
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ament_index/resource_index/packages/ar_control
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/ar_control
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_libraries-extras.cmake
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/cmake/ar_controlConfig.cmake
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/cmake/ar_controlConfig-version.cmake
+-- Up-to-date: /home/hans/ar/install/ar_control/share/ar_control/package.xml

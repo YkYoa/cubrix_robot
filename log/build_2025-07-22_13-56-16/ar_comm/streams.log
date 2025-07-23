@@ -1,0 +1,20 @@
+[0.037s] Invoking command in '/home/hans/ar/build/ar_comm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_comm -- -j12 -l12
+[0.080s] Invoked command in '/home/hans/ar/build/ar_comm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_comm -- -j12 -l12
+[0.088s] Invoking command in '/home/hans/ar/build/ar_comm': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_comm
+[0.096s] -- Install configuration: ""
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ament_index/resource_index/package_run_dependencies/ar_comm
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ament_index/resource_index/parent_prefix_path/ar_comm
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/environment/ament_prefix_path.sh
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/environment/ament_prefix_path.dsv
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/environment/path.sh
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/environment/path.dsv
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/local_setup.bash
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/local_setup.sh
+[0.096s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/local_setup.zsh
+[0.097s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/local_setup.dsv
+[0.097s] -- Installing: /home/hans/ar/install/ar_comm/share/ar_comm/package.dsv
+[0.104s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ament_index/resource_index/packages/ar_comm
+[0.105s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/cmake/ar_commConfig.cmake
+[0.105s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/cmake/ar_commConfig-version.cmake
+[0.105s] -- Up-to-date: /home/hans/ar/install/ar_comm/share/ar_comm/package.xml
+[0.157s] Invoked command in '/home/hans/ar/build/ar_comm' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_comm

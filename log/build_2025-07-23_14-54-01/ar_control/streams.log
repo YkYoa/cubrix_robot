@@ -1,0 +1,374 @@
+[0.010s] Invoking command in '/home/hans/ar/build/ar_control': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12
+[0.048s] [35m[1mConsolidate compiler generated dependencies of target ar_control_client[0m
+[0.051s] [35m[1mConsolidate compiler generated dependencies of target ar_control_client_server_test[0m
+[0.055s] [35m[1mConsolidate compiler generated dependencies of target ar_control[0m
+[0.055s] [35m[1mConsolidate compiler generated dependencies of target ar_control_server[0m
+[0.066s] [  5%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_control_client.cpp.o[0m
+[0.071s] [ 10%] [32m[1mLinking CXX executable ar_control_client_server_test[0m
+[0.088s] [ 15%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_client.cpp.o[0m
+[0.091s] [ 25%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o[0m
+[0.091s] [ 25%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_server.cpp.o[0m
+[0.095s] [ 35%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_system.cpp.o[0m
+[0.095s] [ 30%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_client.cpp.o[0m
+[0.097s] [ 40%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o[0m
+[0.101s] [ 45%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o[0m
+[0.101s] [ 50%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_server.cpp.o[0m
+[0.257s] /usr/bin/ld: CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o: in function `main':
+[0.257s] ar_control_client_server_test.cpp:(.text.startup+0x228): undefined reference to `ar_control::ArControlServer::ArControlServer(ar_control::ArHardwareInterface*, rclcpp::NodeOptions const&)'
+[0.257s] /usr/bin/ld: ar_control_client_server_test.cpp:(.text.startup+0x564): undefined reference to `ar_control::ArControlServer::startActionServer()'
+[0.257s] /usr/bin/ld: ar_control_client_server_test.cpp:(.text.startup+0x65b): undefined reference to `ar_control::ArControlClient::ArControlClient(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, rclcpp::NodeOptions const&)'
+[0.257s] /usr/bin/ld: ar_control_client_server_test.cpp:(.text.startup+0x8c9): undefined reference to `ar_control::ArControlClient::sendGoal(ar_action::action::ArControl_Goal_<std::allocator<void> > const&, bool)'
+[0.262s] collect2: error: ld returned 1 exit status
+[0.266s] gmake[2]: *** [CMakeFiles/ar_control_client_server_test.dir/build.make:337: ar_control_client_server_test] Error 1
+[0.267s] gmake[1]: *** [CMakeFiles/Makefile2:221: CMakeFiles/ar_control_client_server_test.dir/all] Error 2
+[0.267s] gmake[1]: *** Waiting for unfinished jobs....
+[4.943s] [ 55%] [32m[1mLinking CXX shared library libar_control_client.so[0m
+[5.105s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual CallbackReturn ar_control::ArSystemHardware::on_configure(const rclcpp_lifecycle::State&)[m[K’:
+[5.105s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:88:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.105s]    88 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.105s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.109s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual std::vector<hardware_interface::StateInterface> ar_control::ArSystemHardware::export_state_interfaces()[m[K’:
+[5.109s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:103:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.109s]   103 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.109s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.112s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual std::vector<hardware_interface::CommandInterface> ar_control::ArSystemHardware::export_command_interfaces()[m[K’:
+[5.113s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:120:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.113s]   120 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.113s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.113s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual CallbackReturn ar_control::ArSystemHardware::on_activate(const rclcpp_lifecycle::State&)[m[K’:
+[5.113s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:137:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.113s]   137 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.113s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.115s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type ar_control::ArSystemHardware::write(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[5.115s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:178:27:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[Ksoem_drives[m[K’; did you mean ‘[01m[KArDrives ar_control::ArHardwareInterface::ar_drives[m[K’? (not accessible from this context)
+[5.115s]   178 |                 if(robot->[01;31m[Ksoem_drives[m[K)
+[5.115s]       |                           [01;31m[K^~~~~~~~~~~[m[K
+[5.115s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_system.hpp:30[m[K,
+[5.115s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15[m[K:
+[5.115s] [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:39:26:[m[K [01;36m[Knote: [m[Kdeclared private here
+[5.115s]    39 |                 ArDrives [01;36m[Kar_drives[m[K;                                             ///< Holds all drive parameters and joint names
+[5.115s]       |                          [01;36m[K^~~~~~~~~[m[K
+[5.123s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:179:44:[m[K [01;31m[Kerror: [m[K‘[01m[Kcond[m[K’ was not declared in this scope
+[5.123s]   179 |                         pthread_cond_wait(&[01;31m[Kcond[m[K, &lock);
+[5.123s]       |                                            [01;31m[K^~~~[m[K
+[5.125s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:179:51:[m[K [01;31m[Kerror: [m[K‘[01m[Klock[m[K’ was not declared in this scope; did you mean ‘[01m[Kstd::lock[m[K’?
+[5.125s]   179 |                         pthread_cond_wait(&cond, &[01;31m[Klock[m[K);
+[5.125s]       |                                                   [01;31m[K^~~~[m[K
+[5.125s]       |                                                   [32m[Kstd::lock[m[K
+[5.125s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:10[m[K,
+[5.125s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.125s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_system.hpp:30[m[K,
+[5.125s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15[m[K:
+[5.125s] [01m[K/usr/include/c++/11/mutex:591:5:[m[K [01;36m[Knote: [m[K‘[01m[Kstd::lock[m[K’ declared here
+[5.125s]   591 |     [01;36m[Klock[m[K(_L1& __l1, _L2& __l2, _L3&... __l3)
+[5.125s]       |     [01;36m[K^~~~[m[K
+[5.204s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In constructor ‘[01m[Kar_control::ArHardwareInterface::ArHardwareInterface(bool, bool)[m[K’:
+[5.204s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:25:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kar_hardware_interface_node_[m[K’ was not declared in this scope; did you mean ‘[01m[KArHardwareInterface[m[K’?
+[5.204s]    25 |         [01;31m[Kar_hardware_interface_node_[m[K = rclcpp::Node::make_shared("ar_hardware_interface_node",
+[5.204s]       |         [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.204s]       |         [32m[KArHardwareInterface[m[K
+[5.225s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:26:88:[m[K [01;31m[Kerror: [m[K‘[01m[Kautomatically_declare_parameters_from_overrides[m[K’ was not declared in this scope
+[5.225s]    26 |                                                                 rclcpp::NodeOptions(), [01;31m[Kautomatically_declare_parameters_from_overrides[m[K(true));
+[5.225s]       |                                                                                        [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.226s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[5.226s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[5.226s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:12[m[K,
+[5.226s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.226s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.226s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.226s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.226s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.226s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.226s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.226s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.226s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.226s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.226s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.226s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.227s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.227s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.227s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.227s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.227s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.227s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.227s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.227s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.234s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArHardwareInterface::shutdown()[m[K’:
+[5.234s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:54:27:[m[K [01;31m[Kerror: [m[K‘[01m[KgetDrives[m[K’ was not declared in this scope; did you mean ‘[01m[KArDrives[m[K’?
+[5.234s]    54 |         for (auto drive : [01;31m[KgetDrives[m[K)
+[5.234s]       |                           [01;31m[K^~~~~~~~~[m[K
+[5.234s]       |                           [32m[KArDrives[m[K
+[5.243s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArHardwareInterface::readConfigFromYaml(std::string)[m[K’:
+[5.243s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:95:13:[m[K [01;31m[Kerror: [m[K‘[01m[KDriveParameters[m[K’ was not declared in this scope; did you mean ‘[01m[KDriveParameter[m[K’?
+[5.244s]    95 |             [01;31m[KDriveParameters[m[K driveParams;
+[5.244s]       |             [01;31m[K^~~~~~~~~~~~~~~[m[K
+[5.244s]       |             [32m[KDriveParameter[m[K
+[5.251s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:97:13:[m[K [01;31m[Kerror: [m[K‘[01m[KdriveParams[m[K’ was not declared in this scope; did you mean ‘[01m[KDriveParameter[m[K’?
+[5.251s]    97 |             [01;31m[KdriveParams[m[K.drive_id = stringToId(drive_id);
+[5.251s]       |             [01;31m[K^~~~~~~~~~~[m[K
+[5.251s]       |             [32m[KDriveParameter[m[K
+[5.253s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:97:36:[m[K [01;31m[Kerror: [m[K‘[01m[KstringToId[m[K’ was not declared in this scope; did you mean ‘[01m[Kar_utils::stringToId[m[K’?
+[5.253s]    97 |             driveParams.drive_id = [01;31m[KstringToId[m[K(drive_id);
+[5.253s]       |                                    [01;31m[K^~~~~~~~~~[m[K
+[5.253s]       |                                    [32m[Kar_utils::stringToId[m[K
+[5.253s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:19[m[K,
+[5.253s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.253s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.253s] [01m[K/home/hans/ar/install/ar_utils/include/ar_utils.h:31:13:[m[K [01;36m[Knote: [m[K‘[01m[Kar_utils::stringToId[m[K’ declared here
+[5.253s]    31 |         int [01;36m[KstringToId[m[K(std::string str);
+[5.253s]       |             [01;36m[K^~~~~~~~~~[m[K
+[5.259s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:103:45:[m[K [01;31m[Kerror: [m[K‘[01m[KPORT_UART[m[K’ was not declared in this scope; did you mean ‘[01m[KPORT_CAN[m[K’?
+[5.260s]   103 |             else if (driveParams.port_id == [01;31m[KPORT_UART[m[K)
+[5.260s]       |                                             [01;31m[K^~~~~~~~~[m[K
+[5.260s]       |                                             [32m[KPORT_CAN[m[K
+[5.265s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In constructor ‘[01m[Kar_control::ArHardwareInterface::ArHardwareInterface(bool, bool)[m[K’:
+[5.265s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:25:9:[m[K [01;31m[Kerror: [m[K‘[01m[Kar_hardware_interface_node_[m[K’ was not declared in this scope; did you mean ‘[01m[KArHardwareInterface[m[K’?
+[5.265s]    25 |         [01;31m[Kar_hardware_interface_node_[m[K = rclcpp::Node::make_shared("ar_hardware_interface_node",
+[5.265s]       |         [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.265s]       |         [32m[KArHardwareInterface[m[K
+[5.274s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[5.274s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[5.274s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:12[m[K,
+[5.274s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.274s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.274s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:30:[m[K [01;31m[Kerror: [m[K‘[01m[Kar_hardware_interface_node_[m[K’ was not declared in this scope; did you mean ‘[01m[KArHardwareInterface[m[K’?
+[5.274s]   113 |                 RCLCPP_ERROR([01;31m[Kar_hardware_interface_node_[m[K->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.274s]       |                              [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.274s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.274s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.274s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.275s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.275s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.275s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.275s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.275s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.275s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.281s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:117:17:[m[K [01;31m[Kerror: [m[K‘[01m[KJointParameters[m[K’ was not declared in this scope; did you mean ‘[01m[KJointParameter[m[K’?
+[5.282s]   117 |                 [01;31m[KJointParameters[m[K jointParams;
+[5.282s]       |                 [01;31m[K^~~~~~~~~~~~~~~[m[K
+[5.282s]       |                 [32m[KJointParameter[m[K
+[5.286s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:26:88:[m[K [01;31m[Kerror: [m[K‘[01m[Kautomatically_declare_parameters_from_overrides[m[K’ was not declared in this scope
+[5.287s]    26 |                                                                 rclcpp::NodeOptions(), [01;31m[Kautomatically_declare_parameters_from_overrides[m[K(true));
+[5.287s]       |                                                                                        [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.287s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[5.287s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[5.287s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:12[m[K,
+[5.287s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.287s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.287s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.287s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.287s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.288s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.288s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.288s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.288s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:30:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.288s]    30 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Parameter 'robot_description' not found.");
+[5.288s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.288s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.288s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.288s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.288s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.288s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.288s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.288s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:35:13:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.288s]    35 |             [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
+[5.288s]       |             [01;31m[K^~~~~~~~~~~~[m[K
+[5.289s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:118:17:[m[K [01;31m[Kerror: [m[K‘[01m[KjointParams[m[K’ was not declared in this scope; did you mean ‘[01m[KJointParameter[m[K’?
+[5.289s]   118 |                 [01;31m[KjointParams[m[K.joint_name = jt->first.as<std::string>();
+[5.289s]       |                 [01;31m[K^~~~~~~~~~~[m[K
+[5.289s]       |                 [32m[KJointParameter[m[K
+[5.289s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:132:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.289s]   132 |             ar_drives.[01;31m[Kdrive_parameters[m[K.push_back(driveParams);
+[5.289s]       |                       [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.289s]       |                       [32m[Kdrive_parameter[m[K
+[5.289s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:135:29:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.289s]   135 |         std::sort(ar_drives.[01;31m[Kdrive_parameters[m[K.begin(), ar_drives.drive_parameters.end(),
+[5.289s]       |                             [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.289s]       |                             [32m[Kdrive_parameter[m[K
+[5.290s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:135:65:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.290s]   135 |         std::sort(ar_drives.drive_parameters.begin(), ar_drives.[01;31m[Kdrive_parameters[m[K.end(),
+[5.290s]       |                                                                 [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.290s]       |                                                                 [32m[Kdrive_parameter[m[K
+[5.290s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K At global scope:
+[5.290s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:142:37:[m[K [01;31m[Kerror: [m[Kno declaration matches ‘[01m[Kstd::map<int, ar_control::ArDriveControl*> ar_control::ArHardwareInterface::getDrives()[m[K’
+[5.290s]   142 |     std::map<int, ArDriveControl *> [01;31m[KArHardwareInterface[m[K::getDrives()
+[5.290s]       |                                     [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[5.290s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:142:37:[m[K [01;36m[Knote: [m[Kno functions named ‘[01m[Kstd::map<int, ar_control::ArDriveControl*> ar_control::ArHardwareInterface::getDrives()[m[K’
+[5.290s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.290s] [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:25:15:[m[K [01;36m[Knote: [m[K‘[01m[Kclass ar_control::ArHardwareInterface[m[K’ defined here
+[5.290s]    25 |         class [01;36m[KArHardwareInterface[m[K
+[5.290s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~[m[K
+[5.294s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArHardwareInterface::shutdown()[m[K’:
+[5.295s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:54:27:[m[K [01;31m[Kerror: [m[K‘[01m[KgetDrives[m[K’ was not declared in this scope; did you mean ‘[01m[KArDrives[m[K’?
+[5.295s]    54 |         for (auto drive : [01;31m[KgetDrives[m[K)
+[5.295s]       |                           [01;31m[K^~~~~~~~~[m[K
+[5.295s]       |                           [32m[KArDrives[m[K
+[5.304s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArHardwareInterface::readConfigFromYaml(std::string)[m[K’:
+[5.304s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:95:13:[m[K [01;31m[Kerror: [m[K‘[01m[KDriveParameters[m[K’ was not declared in this scope; did you mean ‘[01m[KDriveParameter[m[K’?
+[5.304s]    95 |             [01;31m[KDriveParameters[m[K driveParams;
+[5.304s]       |             [01;31m[K^~~~~~~~~~~~~~~[m[K
+[5.304s]       |             [32m[KDriveParameter[m[K
+[5.312s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:97:13:[m[K [01;31m[Kerror: [m[K‘[01m[KdriveParams[m[K’ was not declared in this scope; did you mean ‘[01m[KDriveParameter[m[K’?
+[5.312s]    97 |             [01;31m[KdriveParams[m[K.drive_id = stringToId(drive_id);
+[5.312s]       |             [01;31m[K^~~~~~~~~~~[m[K
+[5.312s]       |             [32m[KDriveParameter[m[K
+[5.313s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:97:36:[m[K [01;31m[Kerror: [m[K‘[01m[KstringToId[m[K’ was not declared in this scope; did you mean ‘[01m[Kar_utils::stringToId[m[K’?
+[5.313s]    97 |             driveParams.drive_id = [01;31m[KstringToId[m[K(drive_id);
+[5.313s]       |                                    [01;31m[K^~~~~~~~~~[m[K
+[5.313s]       |                                    [32m[Kar_utils::stringToId[m[K
+[5.313s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:19[m[K,
+[5.313s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.313s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.313s] [01m[K/home/hans/ar/install/ar_utils/include/ar_utils.h:31:13:[m[K [01;36m[Knote: [m[K‘[01m[Kar_utils::stringToId[m[K’ declared here
+[5.313s]    31 |         int [01;36m[KstringToId[m[K(std::string str);
+[5.313s]       |             [01;36m[K^~~~~~~~~~[m[K
+[5.320s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:103:45:[m[K [01;31m[Kerror: [m[K‘[01m[KPORT_UART[m[K’ was not declared in this scope; did you mean ‘[01m[KPORT_CAN[m[K’?
+[5.320s]   103 |             else if (driveParams.port_id == [01;31m[KPORT_UART[m[K)
+[5.320s]       |                                             [01;31m[K^~~~~~~~~[m[K
+[5.320s]       |                                             [32m[KPORT_CAN[m[K
+[5.335s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[5.335s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[5.335s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:12[m[K,
+[5.335s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.335s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.335s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:30:[m[K [01;31m[Kerror: [m[K‘[01m[Kar_hardware_interface_node_[m[K’ was not declared in this scope; did you mean ‘[01m[KArHardwareInterface[m[K’?
+[5.336s]   113 |                 RCLCPP_ERROR([01;31m[Kar_hardware_interface_node_[m[K->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.336s]       |                              [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.336s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.336s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.336s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.336s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.336s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.336s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.336s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:113:17:[m[K [01;31m[Kerror: [m[Ktemplate argument 1 is invalid
+[5.336s]   113 |                 [01;31m[KRCLCPP_ERROR[m[K(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParams.port_id);
+[5.336s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[5.343s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:117:17:[m[K [01;31m[Kerror: [m[K‘[01m[KJointParameters[m[K’ was not declared in this scope; did you mean ‘[01m[KJointParameter[m[K’?
+[5.343s]   117 |                 [01;31m[KJointParameters[m[K jointParams;
+[5.343s]       |                 [01;31m[K^~~~~~~~~~~~~~~[m[K
+[5.343s]       |                 [32m[KJointParameter[m[K
+[5.351s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:118:17:[m[K [01;31m[Kerror: [m[K‘[01m[KjointParams[m[K’ was not declared in this scope; did you mean ‘[01m[KJointParameter[m[K’?
+[5.351s]   118 |                 [01;31m[KjointParams[m[K.joint_name = jt->first.as<std::string>();
+[5.351s]       |                 [01;31m[K^~~~~~~~~~~[m[K
+[5.351s]       |                 [32m[KJointParameter[m[K
+[5.351s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:132:23:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.351s]   132 |             ar_drives.[01;31m[Kdrive_parameters[m[K.push_back(driveParams);
+[5.351s]       |                       [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.351s]       |                       [32m[Kdrive_parameter[m[K
+[5.351s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:135:29:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.351s]   135 |         std::sort(ar_drives.[01;31m[Kdrive_parameters[m[K.begin(), ar_drives.drive_parameters.end(),
+[5.351s]       |                             [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.351s]       |                             [32m[Kdrive_parameter[m[K
+[5.352s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:135:65:[m[K [01;31m[Kerror: [m[K‘[01m[Kclass ArDrives[m[K’ has no member named ‘[01m[Kdrive_parameters[m[K’; did you mean ‘[01m[Kdrive_parameter[m[K’?
+[5.352s]   135 |         std::sort(ar_drives.drive_parameters.begin(), ar_drives.[01;31m[Kdrive_parameters[m[K.end(),
+[5.352s]       |                                                                 [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[5.352s]       |                                                                 [32m[Kdrive_parameter[m[K
+[5.352s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:[m[K At global scope:
+[5.352s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:142:37:[m[K [01;31m[Kerror: [m[Kno declaration matches ‘[01m[Kstd::map<int, ar_control::ArDriveControl*> ar_control::ArHardwareInterface::getDrives()[m[K’
+[5.352s]   142 |     std::map<int, ArDriveControl *> [01;31m[KArHardwareInterface[m[K::getDrives()
+[5.352s]       |                                     [01;31m[K^~~~~~~~~~~~~~~~~~~[m[K
+[5.352s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:142:37:[m[K [01;36m[Knote: [m[Kno functions named ‘[01m[Kstd::map<int, ar_control::ArDriveControl*> ar_control::ArHardwareInterface::getDrives()[m[K’
+[5.352s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1[m[K:
+[5.352s] [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:25:15:[m[K [01;36m[Knote: [m[K‘[01m[Kclass ar_control::ArHardwareInterface[m[K’ defined here
+[5.352s]    25 |         class [01;36m[KArHardwareInterface[m[K
+[5.352s]       |               [01;36m[K^~~~~~~~~~~~~~~~~~~[m[K
+[5.353s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual CallbackReturn ar_control::ArSystemHardware::on_configure(const rclcpp_lifecycle::State&)[m[K’:
+[5.353s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:88:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.353s]    88 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.353s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.357s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual std::vector<hardware_interface::StateInterface> ar_control::ArSystemHardware::export_state_interfaces()[m[K’:
+[5.357s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:103:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.357s]   103 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.357s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.359s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual std::vector<hardware_interface::CommandInterface> ar_control::ArSystemHardware::export_command_interfaces()[m[K’:
+[5.360s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:120:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.360s]   120 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.360s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.360s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual CallbackReturn ar_control::ArSystemHardware::on_activate(const rclcpp_lifecycle::State&)[m[K’:
+[5.360s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:137:41:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[KgetDrives[m[K’
+[5.360s]   137 |                 for(auto drive : robot->[01;31m[KgetDrives[m[K()) {
+[5.360s]       |                                         [01;31m[K^~~~~~~~~[m[K
+[5.361s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type ar_control::ArSystemHardware::write(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[5.361s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:178:27:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = class ar_control::ArHardwareInterface[m[K’ {aka ‘[01m[Kclass ar_control::ArHardwareInterface[m[K’} has no member named ‘[01m[Ksoem_drives[m[K’; did you mean ‘[01m[KArDrives ar_control::ArHardwareInterface::ar_drives[m[K’? (not accessible from this context)
+[5.361s]   178 |                 if(robot->[01;31m[Ksoem_drives[m[K)
+[5.361s]       |                           [01;31m[K^~~~~~~~~~~[m[K
+[5.362s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_system.hpp:30[m[K,
+[5.362s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15[m[K:
+[5.362s] [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:39:26:[m[K [01;36m[Knote: [m[Kdeclared private here
+[5.362s]    39 |                 ArDrives [01;36m[Kar_drives[m[K;                                             ///< Holds all drive parameters and joint names
+[5.362s]       |                          [01;36m[K^~~~~~~~~[m[K
+[5.367s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:179:44:[m[K [01;31m[Kerror: [m[K‘[01m[Kcond[m[K’ was not declared in this scope
+[5.368s]   179 |                         pthread_cond_wait(&[01;31m[Kcond[m[K, &lock);
+[5.368s]       |                                            [01;31m[K^~~~[m[K
+[5.369s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:179:51:[m[K [01;31m[Kerror: [m[K‘[01m[Klock[m[K’ was not declared in this scope; did you mean ‘[01m[Kstd::lock[m[K’?
+[5.369s]   179 |                         pthread_cond_wait(&cond, &[01;31m[Klock[m[K);
+[5.369s]       |                                                   [01;31m[K^~~~[m[K
+[5.369s]       |                                                   [32m[Kstd::lock[m[K
+[5.369s] In file included from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_control_server.h:10[m[K,
+[5.369s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_hardware_interface.h:11[m[K,
+[5.369s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/include/ar_system.hpp:30[m[K,
+[5.369s]                  from [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15[m[K:
+[5.369s] [01m[K/usr/include/c++/11/mutex:591:5:[m[K [01;36m[Knote: [m[K‘[01m[Kstd::lock[m[K’ declared here
+[5.369s]   591 |     [01;36m[Klock[m[K(_L1& __l1, _L2& __l2, _L3&... __l3)
+[5.369s]       |     [01;36m[K^~~~[m[K
+[5.403s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArControlServer::createExecutionListener()[m[K’:
+[5.403s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:21:80:[m[K [01;31m[Kerror: [m[K‘[01m[KincomingDisplayTrajectory[m[K’ is not a member of ‘[01m[Kar_control::ArControlServer[m[K’
+[5.403s]    21 |                         "display_planned_path", 2, std::bind(&ArControlServer::[01;31m[KincomingDisplayTrajectory[m[K, this, _1));
+[5.403s]       |                                                                                [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.404s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArControlServer::createExecutionListener()[m[K’:
+[5.404s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:21:80:[m[K [01;31m[Kerror: [m[K‘[01m[KincomingDisplayTrajectory[m[K’ is not a member of ‘[01m[Kar_control::ArControlServer[m[K’
+[5.404s]    21 |                         "display_planned_path", 2, std::bind(&ArControlServer::[01;31m[KincomingDisplayTrajectory[m[K, this, _1));
+[5.404s]       |                                                                                [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[5.428s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArControlServer::execute(std::shared_ptr<rclcpp_action::ServerGoalHandle<ar_action::action::ArControl> >)[m[K’:
+[5.429s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:81:52:[m[K [01;31m[Kerror: [m[K‘[01m[KSUCCESS[m[K’ is not a member of ‘[01m[Kar_control::ControlErrorCode[m[K’
+[5.429s]    81 |                         status = ControlErrorCode::[01;31m[KSUCCESS[m[K;
+[5.429s]       |                                                    [01;31m[K^~~~~~~[m[K
+[5.430s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:[m[K In member function ‘[01m[Kvoid ar_control::ArControlServer::execute(std::shared_ptr<rclcpp_action::ServerGoalHandle<ar_action::action::ArControl> >)[m[K’:
+[5.430s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:81:52:[m[K [01;31m[Kerror: [m[K‘[01m[KSUCCESS[m[K’ is not a member of ‘[01m[Kar_control::ControlErrorCode[m[K’
+[5.430s]    81 |                         status = ControlErrorCode::[01;31m[KSUCCESS[m[K;
+[5.430s]       |                                                    [01;31m[K^~~~~~~[m[K
+[5.610s] [ 55%] Built target ar_control_client
+[7.298s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:160: CMakeFiles/ar_control.dir/src/ar_system.cpp.o] Error 1
+[7.298s] gmake[2]: *** Waiting for unfinished jobs....
+[7.439s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:132: CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o] Error 1
+[7.460s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:132: CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o] Error 1
+[7.460s] gmake[2]: *** Waiting for unfinished jobs....
+[7.484s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:160: CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o] Error 1
+[7.605s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:90: CMakeFiles/ar_control.dir/src/ar_control_server.cpp.o] Error 1
+[7.606s] gmake[1]: *** [CMakeFiles/Makefile2:143: CMakeFiles/ar_control.dir/all] Error 2
+[7.606s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:90: CMakeFiles/ar_control_server.dir/src/ar_control_server.cpp.o] Error 1
+[7.607s] gmake[1]: *** [CMakeFiles/Makefile2:169: CMakeFiles/ar_control_server.dir/all] Error 2
+[7.607s] gmake: *** [Makefile:146: all] Error 2
+[7.609s] Invoked command in '/home/hans/ar/build/ar_control' returned '2': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12

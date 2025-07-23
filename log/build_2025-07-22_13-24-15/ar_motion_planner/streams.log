@@ -1,0 +1,32 @@
+[0.032s] Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
+[0.053s] [33mCMake Warning (dev) in CMakeLists.txt:
+[0.053s]   No project() command is present.  The top-level CMakeLists.txt file must
+[0.053s]   contain a literal, direct call to the project() command.  Add a line of
+[0.053s]   code such as
+[0.053s] 
+[0.054s]     project(ProjectName)
+[0.054s] 
+[0.054s]   near the top of the file, but after cmake_minimum_required().
+[0.054s] 
+[0.054s]   CMake is pretending there is a "project(Project)" command on the first
+[0.054s]   line.
+[0.054s] This warning is for project developers.  Use -Wno-dev to suppress it.
+[0.054s] [0m
+[0.323s] -- The C compiler identification is GNU 11.4.0
+[0.515s] -- The CXX compiler identification is GNU 11.4.0
+[0.535s] -- Detecting C compiler ABI info
+[0.883s] -- Detecting C compiler ABI info - done
+[0.890s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.890s] -- Detecting C compile features
+[0.892s] -- Detecting C compile features - done
+[0.894s] -- Detecting CXX compiler ABI info
+[1.355s] -- Detecting CXX compiler ABI info - done
+[1.362s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.363s] -- Detecting CXX compile features
+[1.363s] -- Detecting CXX compile features - done
+[1.364s] -- Configuring done
+[1.365s] -- Generating done
+[1.367s] -- Build files have been written to: /home/hans/ar/build/ar_motion_planner
+[1.373s] Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake /home/hans/ar/ar_src/command/ar_motion_planner -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_motion_planner
+[1.376s] Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12
+[2.980s] Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12

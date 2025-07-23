@@ -1,0 +1,4 @@
+source;share/ar_srv/local_setup.bash
+source;share/ar_srv/local_setup.dsv
+source;share/ar_srv/local_setup.sh
+source;share/ar_srv/local_setup.zsh

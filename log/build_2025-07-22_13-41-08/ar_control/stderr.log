@@ -1,0 +1,13 @@
+[0mar_control: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+[31mCMake Error at CMakeLists.txt:152 (add_executable):
+  Cannot find source file:
+
+    src/test/ar_control_client_server_test.cpp
+
+[0m
+[31mCMake Error at CMakeLists.txt:152 (add_executable):
+  No SOURCES given to target: ar_control_client_server_test
+
+[0m
+[0mCMake Generate step failed.  Build files cannot be regenerated correctly.[0m
+gmake: *** [Makefile:441: cmake_check_build_system] Error 1

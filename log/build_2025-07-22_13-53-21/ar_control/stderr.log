@@ -1,0 +1,10 @@
+[0mar_control: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+[31mCMake Error at CMakeLists.txt:188 (install):
+  install TARGETS given target "test_cyclic" which does not exist.
+
+[0m
+[31mCMake Error at CMakeLists.txt:215 (install):
+  install TARGETS given target "publish_joint_states" which does not exist.
+
+[0m
+gmake: *** [Makefile:441: cmake_check_build_system] Error 1

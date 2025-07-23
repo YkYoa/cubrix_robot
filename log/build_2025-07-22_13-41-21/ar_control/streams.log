@@ -1,0 +1,128 @@
+[0.008s] Invoking command in '/home/hans/ar/build/ar_control': CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/home/hans/ar/install/ar_scene:/home/hans/ar/install/ar_planner_interface:/home/hans/ar/install/ar_msgs:/home/hans/ar/install/ar_moveit_config:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_action:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12
+[0.027s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.111s] -- Found moveit_common: 2.5.9 (/opt/ros/humble/share/moveit_common/cmake)
+[0.150s] -- Found hardware_interface: 2.50.0 (/opt/ros/humble/share/hardware_interface/cmake)
+[0.151s] [0mar_control: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+[0.169s] -- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.171s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.174s] -- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.180s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.188s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.290s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.291s] -- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.302s] -- Found TinyXML2 via Config file: TinyXML2_DIR-NOTFOUND
+[0.309s] -- Found TinyXML2 via Config file: TinyXML2_DIR-NOTFOUND
+[0.322s] -- Found TinyXML2 via Config file: TinyXML2_DIR-NOTFOUND
+[0.328s] -- Found TinyXML2 via Config file: TinyXML2_DIR-NOTFOUND
+[0.336s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.360s] -- Found rclcpp_action: 16.0.12 (/opt/ros/humble/share/rclcpp_action/cmake)
+[0.364s] -- Found rclcpp_components: 16.0.12 (/opt/ros/humble/share/rclcpp_components/cmake)
+[0.374s] -- Found yaml_cpp_vendor: 8.0.2 (/opt/ros/humble/share/yaml_cpp_vendor/cmake)
+[0.375s] -- Found urdf: 2.6.1 (/opt/ros/humble/share/urdf/cmake)
+[0.378s] -- Found moveit_core: 2.5.9 (/opt/ros/humble/share/moveit_core/cmake)
+[0.386s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+[0.402s] -- Found parameter_traits: 0.4.0 (/opt/ros/humble/share/parameter_traits/cmake)
+[0.410s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: filesystem 
+[0.435s] -- library: /usr/lib/x86_64-linux-gnu/libcurl.so
+[0.460s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[0.535s] -- Found moveit_ros_move_group: 2.5.9 (/opt/ros/humble/share/moveit_ros_move_group/cmake)
+[0.537s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread 
+[0.555s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread chrono 
+[0.564s] -- Found moveit_ros_planning_interface: 2.5.9 (/opt/ros/humble/share/moveit_ros_planning_interface/cmake)
+[0.566s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: date_time filesystem program_options system thread 
+[0.573s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: thread system filesystem regex date_time program_options 
+[0.585s] -- Found moveit_planners: 2.5.9 (/opt/ros/humble/share/moveit_planners/cmake)
+[0.585s] -- Found ar_utils: 0.0.0 (/home/hans/ar/install/ar_utils/share/ar_utils/cmake)
+[0.588s] -- Found ar_action: 0.0.0 (/home/hans/ar/install/ar_action/share/ar_action/cmake)
+[0.634s] -- Found ament_cmake_gtest: 1.3.11 (/opt/ros/humble/share/ament_cmake_gtest/cmake)
+[0.637s] -- Configuring done
+[0.700s] -- Generating done
+[0.713s] -- Build files have been written to: /home/hans/ar/build/ar_control
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o[0m
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_client.cpp.o[0m
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_control_server.cpp.o[0m
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_control_server.cpp.o[0m
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_server.cpp.o[0m
+[0.751s] [ 41%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_control_client.cpp.o[0m
+[0.751s] [ 52%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o[0m
+[0.752s] [ 64%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o[0m
+[0.752s] [ 64%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_hardware_interface.cpp.o[0m
+[0.752s] [ 64%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_control_client.cpp.o[0m
+[0.752s] [ 64%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o[0m
+[0.753s] [ 70%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_system.cpp.o[0m
+[0.759s] [01m[K/home/hans/ar/ar_src/command/ar_control/test/ar_control_client_server_test.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_client.h: No such file or directory
+[0.759s]     1 | #include [01;31m[K<ar_control/ar_control_client.h>[m[K
+[0.760s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.760s] compilation terminated.
+[0.760s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_client.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_client.h: No such file or directory
+[0.760s]     1 | #include [01;31m[K<ar_control/ar_control_client.h>[m[K
+[0.760s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.760s] compilation terminated.
+[0.761s] gmake[2]: *** [CMakeFiles/ar_control_client_server_test.dir/build.make:76: CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o] Error 1
+[0.761s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_client.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_client.h: No such file or directory
+[0.761s]     1 | #include [01;31m[K<ar_control/ar_control_client.h>[m[K
+[0.761s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.761s] compilation terminated.
+[0.761s] gmake[1]: *** [CMakeFiles/Makefile2:221: CMakeFiles/ar_control_client_server_test.dir/all] Error 2
+[0.761s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:3:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_server.h: No such file or directory
+[0.761s]     3 | #include [01;31m[K<ar_control/ar_control_server.h>[m[K
+[0.761s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.762s] compilation terminated.
+[0.762s] gmake[1]: *** Waiting for unfinished jobs....
+[0.762s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:76: CMakeFiles/ar_control_server.dir/src/ar_control_client.cpp.o] Error 1
+[0.762s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:76: CMakeFiles/ar_control.dir/src/ar_control_client.cpp.o] Error 1
+[0.762s] gmake[2]: *** Waiting for unfinished jobs....
+[0.762s] gmake[2]: *** Waiting for unfinished jobs....
+[0.762s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_hardware_interface.h: No such file or directory
+[0.762s]     1 | #include [01;31m[K<ar_control/ar_hardware_interface.h>[m[K
+[0.762s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.762s] compilation terminated.
+[0.762s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:3:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_server.h: No such file or directory
+[0.762s]     3 | #include [01;31m[K<ar_control/ar_control_server.h>[m[K
+[0.762s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.762s] compilation terminated.
+[0.762s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_client.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_client.h: No such file or directory
+[0.762s]     1 | #include [01;31m[K<ar_control/ar_control_client.h>[m[K
+[0.762s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.762s] compilation terminated.
+[0.762s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_hardware_interface.h: No such file or directory
+[0.762s]     1 | #include [01;31m[K<ar_control/ar_hardware_interface.h>[m[K
+[0.762s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.762s] compilation terminated.
+[0.762s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:90: CMakeFiles/ar_control.dir/src/ar_control_server.cpp.o] Error 1
+[0.762s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_system.hpp: No such file or directory
+[0.762s]    15 | #include [01;31m[K"ar_control/ar_system.hpp"[m[K
+[0.763s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.763s] compilation terminated.
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:104: CMakeFiles/ar_control_server.dir/src/ar_hardware_interface.cpp.o] Error 1
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:90: CMakeFiles/ar_control_server.dir/src/ar_control_server.cpp.o] Error 1
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control_client.dir/build.make:76: CMakeFiles/ar_control_client.dir/src/ar_control_client.cpp.o] Error 1
+[0.763s] gmake[2]: *** Waiting for unfinished jobs....
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control_client.dir/build.make:104: CMakeFiles/ar_control_client.dir/src/ar_hardware_interface.cpp.o] Error 1
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control_server.dir/build.make:118: CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o] Error 1
+[0.763s] gmake[1]: *** [CMakeFiles/Makefile2:169: CMakeFiles/ar_control_server.dir/all] Error 2
+[0.763s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_system.hpp: No such file or directory
+[0.763s]    15 | #include [01;31m[K"ar_control/ar_system.hpp"[m[K
+[0.763s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.763s] compilation terminated.
+[0.763s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:118: CMakeFiles/ar_control.dir/src/ar_system.cpp.o] Error 1
+[0.763s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_hardware_interface.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_hardware_interface.h: No such file or directory
+[0.763s]     1 | #include [01;31m[K<ar_control/ar_hardware_interface.h>[m[K
+[0.763s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.763s] compilation terminated.
+[0.763s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_control_server.cpp:3:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_control_server.h: No such file or directory
+[0.763s]     3 | #include [01;31m[K<ar_control/ar_control_server.h>[m[K
+[0.763s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.763s] compilation terminated.
+[0.764s] gmake[2]: *** [CMakeFiles/ar_control.dir/build.make:104: CMakeFiles/ar_control.dir/src/ar_hardware_interface.cpp.o] Error 1
+[0.764s] gmake[1]: *** [CMakeFiles/Makefile2:143: CMakeFiles/ar_control.dir/all] Error 2
+[0.764s] gmake[2]: *** [CMakeFiles/ar_control_client.dir/build.make:90: CMakeFiles/ar_control_client.dir/src/ar_control_server.cpp.o] Error 1
+[0.767s] [ 76%] [32mBuilding CXX object CMakeFiles/ar_control_client.dir/src/ar_system.cpp.o[0m
+[0.774s] [01m[K/home/hans/ar/ar_src/command/ar_control/src/ar_system.cpp:15:10:[m[K [01;31m[Kfatal error: [m[Kar_control/ar_system.hpp: No such file or directory
+[0.774s]    15 | #include [01;31m[K"ar_control/ar_system.hpp"[m[K
+[0.774s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.775s] compilation terminated.
+[0.775s] gmake[2]: *** [CMakeFiles/ar_control_client.dir/build.make:118: CMakeFiles/ar_control_client.dir/src/ar_system.cpp.o] Error 1
+[0.776s] gmake[1]: *** [CMakeFiles/Makefile2:195: CMakeFiles/ar_control_client.dir/all] Error 2
+[0.776s] gmake: *** [Makefile:146: all] Error 2
+[0.778s] Invoked command in '/home/hans/ar/build/ar_control' returned '2': CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/home/hans/ar/install/ar_scene:/home/hans/ar/install/ar_planner_interface:/home/hans/ar/install/ar_msgs:/home/hans/ar/install/ar_moveit_config:/home/hans/ar/install/ar_computation:/home/hans/ar/install/ar_action:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12

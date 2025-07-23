@@ -1,5 +1,0 @@
-[35m[1mConsolidate compiler generated dependencies of target ar_utils[0m
-[ 16%] [32mBuilding CXX object CMakeFiles/ar_utils.dir/src/ar_serializer.cpp.o[0m
-[ 33%] [32m[1mLinking CXX shared library libar_utils.so[0m
-[ 66%] Built target ar_utils
-[ 83%] [32mBuilding CXX object CMakeFiles/test_log.dir/test/test_log.cpp.o[0m

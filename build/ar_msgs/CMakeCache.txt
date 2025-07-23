@@ -331,7 +331,7 @@ ar_msgs_BINARY_DIR:STATIC=/home/hans/ar/build/ar_msgs
 ar_msgs_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-ar_msgs_SOURCE_DIR:STATIC=/home/hans/ar/communication/messages/ar_msgs
+ar_msgs_SOURCE_DIR:STATIC=/home/hans/ar/ar_src/communication/messages/ar_msgs
 
 //Dependencies for the target
 ar_msgs__rosidl_generator_c_LIB_DEPENDS:STATIC=general;std_msgs::std_msgs__rosidl_generator_c;general;builtin_interfaces::builtin_interfaces__rosidl_generator_c;general;actionlib_msgs::actionlib_msgs__rosidl_generator_c;general;geometry_msgs::geometry_msgs__rosidl_generator_c;general;sensor_msgs::sensor_msgs__rosidl_generator_c;general;trajectory_msgs::trajectory_msgs__rosidl_generator_c;general;rosidl_runtime_c::rosidl_runtime_c;general;rcutils::rcutils;
@@ -532,7 +532,7 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=/home/hans/ar/communication/messages/ar_msgs
+CMAKE_HOME_DIRECTORY:INTERNAL=/home/hans/ar/ar_src/communication/messages/ar_msgs
 //Install .so files without execute permission.
 CMAKE_INSTALL_SO_NO_EXE:INTERNAL=1
 //ADVANCED property for variable: CMAKE_LINKER

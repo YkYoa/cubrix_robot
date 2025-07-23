@@ -1,0 +1,71 @@
+[0.008s] Invoking command in '/home/hans/ar/build/ar_control': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12
+[0.052s] [35m[1mConsolidate compiler generated dependencies of target ar_control_server[0m
+[0.052s] [35m[1mConsolidate compiler generated dependencies of target ar_control[0m
+[0.060s] [  5%] [32mBuilding CXX object CMakeFiles/ar_control_client_server_test.dir/test/ar_control_client_server_test.cpp.o[0m
+[0.063s] [ 15%] Built target ar_control_client
+[0.083s] [ 20%] [32mBuilding CXX object CMakeFiles/ar_control_server.dir/src/ar_system.cpp.o[0m
+[0.091s] [ 25%] [32mBuilding CXX object CMakeFiles/ar_control.dir/src/ar_system.cpp.o[0m
+[1.978s] [01m[K/home/hans/ar/ar_src/command/ar_control/test/ar_control_client_server_test.cpp:[m[K In function ‘[01m[Kint main(int, char**)[m[K’:
+[1.978s] [01m[K/home/hans/ar/ar_src/command/ar_control/test/ar_control_client_server_test.cpp:7:14:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kargc[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[1.978s]     7 | int main([01;35m[Kint argc[m[K, char* argv[]) {
+[1.978s]       |          [01;35m[K~~~~^~~~[m[K
+[1.978s] [01m[K/home/hans/ar/ar_src/command/ar_control/test/ar_control_client_server_test.cpp:7:26:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kargv[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[1.978s]     7 | int main(int argc, [01;35m[Kchar* argv[][m[K) {
+[1.978s]       |                    [01;35m[K~~~~~~^~~~~~[m[K
+[2.371s] [ 30%] [32m[1mLinking CXX executable ar_control_client_server_test[0m
+[2.963s] [ 30%] Built target ar_control_client_server_test
+[6.482s] [ 35%] [32m[1mLinking CXX shared library libar_control.so[0m
+[6.518s] [ 40%] [32m[1mLinking CXX executable ar_control_server[0m
+[6.881s] [ 70%] Built target ar_control
+[6.921s] [100%] Built target ar_control_server
+[6.932s] Invoked command in '/home/hans/ar/build/ar_control' returned '0': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/hans/ar/build/ar_control -- -j12 -l12
+[6.934s] Invoking command in '/home/hans/ar/build/ar_control': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/hans/ar/build/ar_control
+[6.940s] -- Install configuration: "Release"
+[6.940s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/ar_control.xml
+[6.940s] -- Installing: /home/hans/ar/install/ar_control/lib/libar_control.so
+[6.941s] -- Set runtime path of "/home/hans/ar/install/ar_control/lib/libar_control.so" to ""
+[6.941s] -- Installing: /home/hans/ar/install/ar_control/lib/ar_control/ar_control_server
+[6.942s] -- Set runtime path of "/home/hans/ar/install/ar_control/lib/ar_control/ar_control_server" to ""
+[6.942s] -- Installing: /home/hans/ar/install/ar_control/include
+[6.942s] -- Installing: /home/hans/ar/install/ar_control/include/ar_hardware_interface.h
+[6.942s] -- Installing: /home/hans/ar/install/ar_control/include/ar_control_client.h
+[6.942s] -- Installing: /home/hans/ar/install/ar_control/include/ar_drive_config.h
+[6.942s] -- Installing: /home/hans/ar/install/ar_control/include/ar_joint_control.h
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/ar_system.hpp
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/ar_control_server.h
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/control_def.h
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/ar_drive_client.h
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/ar_drive_control.h
+[6.943s] -- Installing: /home/hans/ar/install/ar_control/include/visibility_control.h
+[6.944s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/config
+[6.944s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/config/devbrix_drive.yaml
+[6.944s] -- Installing: /home/hans/ar/install/ar_control/lib/libar_control_client.so
+[6.944s] -- Set runtime path of "/home/hans/ar/install/ar_control/lib/libar_control_client.so" to ""
+[6.944s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_simualtion.launch.py
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch/view_robot.launch.py
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch/moveit_empty.rviz
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_moveit.launch.py
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/launch/ar_bringup.launch.py
+[6.945s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/library_path.sh
+[6.946s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/library_path.dsv
+[6.946s] -- Installing: /home/hans/ar/install/ar_control/share/ament_index/resource_index/package_run_dependencies/ar_control
+[6.946s] -- Installing: /home/hans/ar/install/ar_control/share/ament_index/resource_index/parent_prefix_path/ar_control
+[6.946s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/ament_prefix_path.sh
+[6.946s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/ament_prefix_path.dsv
+[6.947s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/path.sh
+[6.947s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/environment/path.dsv
+[6.947s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/local_setup.bash
+[6.947s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/local_setup.sh
+[6.947s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/local_setup.zsh
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/local_setup.dsv
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/package.dsv
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ament_index/resource_index/packages/ar_control
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/ar_control
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_include_directories-extras.cmake
+[6.948s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_libraries-extras.cmake
+[6.949s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/cmake/ament_cmake_export_dependencies-extras.cmake
+[6.949s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/cmake/ar_controlConfig.cmake
+[6.949s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/cmake/ar_controlConfig-version.cmake
+[6.949s] -- Installing: /home/hans/ar/install/ar_control/share/ar_control/package.xml
+[6.951s] Invoked command in '/home/hans/ar/build/ar_control' returned '0': AMENT_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/hans/ar/install/master:/home/hans/ar/install/ar_utils:/home/hans/ar/install/ar_comm:/opt/ros/humble LD_LIBRARY_PATH=/home/hans/ar/install/ar_utils/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/hans/ar/build/ar_control

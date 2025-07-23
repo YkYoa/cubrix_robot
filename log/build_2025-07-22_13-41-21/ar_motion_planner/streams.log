@@ -1,0 +1,2 @@
+[0.028s] Invoking command in '/home/hans/ar/build/ar_motion_planner': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12
+[0.080s] Invoked command in '/home/hans/ar/build/ar_motion_planner' returned '0': /usr/bin/cmake --build /home/hans/ar/build/ar_motion_planner -- -j12 -l12

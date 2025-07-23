@@ -1,0 +1,72 @@
+[0.038s] Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/configuration/ar -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_moveit_config
+[0.354s] -- The C compiler identification is GNU 11.4.0
+[0.522s] -- The CXX compiler identification is GNU 11.4.0
+[0.547s] -- Detecting C compiler ABI info
+[0.920s] -- Detecting C compiler ABI info - done
+[0.926s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.926s] -- Detecting C compile features
+[0.926s] -- Detecting C compile features - done
+[0.929s] -- Detecting CXX compiler ABI info
+[1.394s] -- Detecting CXX compiler ABI info - done
+[1.404s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.404s] -- Detecting CXX compile features
+[1.404s] -- Detecting CXX compile features - done
+[1.408s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.641s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.815s] -- Configuring done
+[1.824s] -- Generating done
+[1.828s] -- Build files have been written to: /home/hans/ar/build/ar_moveit_config
+[1.834s] Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/hans/ar/ar_src/configuration/ar -DCMAKE_INSTALL_PREFIX=/home/hans/ar/install/ar_moveit_config
+[1.836s] Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[3.005s] Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[3.038s] Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_moveit_config
+[3.081s] -- Install configuration: "RelWithDebInfo"
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/cartesian_limits.yaml
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_ros_controllers.yaml
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ompl_planning.yaml
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/joint_limits.yaml
+[3.081s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_config.urdf.xacro
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/kinematics.yaml
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_moveit_controllers.yaml
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_config.srdf.xacro
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch/tomobase_moveit.rviz
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch/view_robot.launch.py
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/ros2_control
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/ros2_control/ar.ros2_control.xacro
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions
+[3.082s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_4.STL
+[3.083s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_3.STL
+[3.084s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_5.STL
+[3.098s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_1.STL
+[3.099s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_2.STL
+[3.102s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/base_link.STL
+[3.103s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_6.STL
+[3.103s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals
+[3.104s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_4.STL
+[3.104s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_3.STL
+[3.106s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_5.STL
+[3.116s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_1.STL
+[3.117s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_2.STL
+[3.119s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/base_link.STL
+[3.121s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_6.STL
+[3.121s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/urdf
+[3.121s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/urdf/ar_base.xacro
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/package_run_dependencies/ar_moveit_config
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/parent_prefix_path/ar_moveit_config
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/ament_prefix_path.sh
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/ament_prefix_path.dsv
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/path.sh
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/path.dsv
+[3.123s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.bash
+[3.124s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.sh
+[3.124s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.zsh
+[3.124s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.dsv
+[3.124s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/package.dsv
+[3.124s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/packages/ar_moveit_config
+[3.125s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/cmake/ar_moveit_configConfig.cmake
+[3.125s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/cmake/ar_moveit_configConfig-version.cmake
+[3.126s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/package.xml
+[3.130s] Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_moveit_config

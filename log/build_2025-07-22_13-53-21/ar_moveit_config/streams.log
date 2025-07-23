@@ -1,0 +1,53 @@
+[0.028s] Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[0.090s] Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/hans/ar/build/ar_moveit_config -- -j12 -l12
+[0.091s] Invoking command in '/home/hans/ar/build/ar_moveit_config': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_moveit_config
+[0.103s] -- Install configuration: "RelWithDebInfo"
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/cartesian_limits.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_ros_controllers.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ompl_planning.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/joint_limits.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_config.urdf.xacro
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/kinematics.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_moveit_controllers.yaml
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/config/ar_config.srdf.xacro
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch
+[0.103s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch/tomobase_moveit.rviz
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/launch/view_robot.launch.py
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/ros2_control
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/ros2_control/ar.ros2_control.xacro
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions
+[0.106s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_4.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_3.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_5.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_1.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_2.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/base_link.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/collisions/link_6.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_4.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_3.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_5.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_1.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_2.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/base_link.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/meshes/visuals/link_6.STL
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/urdf
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/urdf/ar_base.xacro
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/package_run_dependencies/ar_moveit_config
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/parent_prefix_path/ar_moveit_config
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/ament_prefix_path.sh
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/ament_prefix_path.dsv
+[0.107s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/path.sh
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/environment/path.dsv
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.bash
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.sh
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.zsh
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/local_setup.dsv
+[0.108s] -- Installing: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/package.dsv
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ament_index/resource_index/packages/ar_moveit_config
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/cmake/ar_moveit_configConfig.cmake
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/cmake/ar_moveit_configConfig-version.cmake
+[0.108s] -- Up-to-date: /home/hans/ar/install/ar_moveit_config/share/ar_moveit_config/package.xml
+[0.151s] Invoked command in '/home/hans/ar/build/ar_moveit_config' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/hans/ar/build/ar_moveit_config

@@ -1,0 +1,18 @@
+[0mar_control: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+[31mCMake Error at CMakeLists.txt:28 (find_package):
+  By not providing "Findar_action.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "ar_action", but CMake did not find one.
+
+  Could not find a package configuration file provided by "ar_action" with
+  any of the following names:
+
+    ar_actionConfig.cmake
+    ar_action-config.cmake
+
+  Add the installation prefix of "ar_action" to CMAKE_PREFIX_PATH or set
+  "ar_action_DIR" to a directory containing one of the above files.  If
+  "ar_action" provides a separate development package or SDK, be sure it has
+  been installed.
+
+[0m

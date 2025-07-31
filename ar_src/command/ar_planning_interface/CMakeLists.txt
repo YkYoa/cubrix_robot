@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(ar_planner_interface)
+project(ar_planning_interface)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -9,6 +9,16 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
+
+set(SRC_FILES
+  src/planning_base.cpp
+)
+
+set(DEPENDS
+  ament_cmake
+  moveit_ros_planning_interface  
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -21,5 +31,9 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+
+
+
 
 ament_package()

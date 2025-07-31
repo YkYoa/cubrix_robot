@@ -64,7 +64,7 @@ Visualization Manager:
       Interrupt Display: false
       Links:
         All Links Enabled: true
-        Body_base:
+        Base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -282,7 +282,7 @@ Visualization Manager:
         Interrupt Display: false
         Links:
           All Links Enabled: true
-          Body_base:
+          Base:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -500,7 +500,7 @@ Visualization Manager:
         Attached Body Color: 150; 50; 150
         Links:
           All Links Enabled: true
-          Body_base:
+          Base:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -685,7 +685,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: Body_base
+    Fixed Frame: Base
     Frame Rate: 30
   Name: root
   Tools:

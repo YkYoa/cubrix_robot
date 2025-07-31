@@ -106,7 +106,7 @@ def generate_launch_description():
 		name="static_transform_publisher",
 		output="log",
 		emulate_tty=True,
-		arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "Body_base"],
+		arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "Base"],
 	)
 
 	# Publish TF
@@ -116,7 +116,11 @@ def generate_launch_description():
 		name="robot_state_publisher",
 		output="both",
 		emulate_tty=True,
-		parameters=[robotDesc],
+		parameters=[ 
+				robotDesc,
+			    {"use_sim_time": simArg},  
+        		{"publish_frequency": 100.0}, 
+		],
 	)
 
 	# ros2_control using arSystem as hardware

@@ -103,8 +103,13 @@ namespace ar_control
 
     void ArDriveControl::read()
     {
-        // Same as write, no drive client yet so return
-        return;
+        // In simulation mode, update joint states from commands
+        for(auto joint : joints) {
+            // Copy command position to actual position for simulation
+            joint->joint_pos = joint->joint_pos_cmd;
+            // Set velocity to 0 for simulation (or calculate from position difference)
+            joint->joint_vel = 0.0;
+        }
     }
 
 } // namespace ar_control

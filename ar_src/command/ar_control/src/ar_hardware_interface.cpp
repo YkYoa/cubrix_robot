@@ -162,18 +162,18 @@ namespace ar_control
                   });
 
         // Print out all loaded drive and joint parameters
-        std::cout << "Loaded drive parameters:\n";
-        for (const auto& drive : ar_drives.drive_parameters) {
-            std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Drive Mode: " << drive.drive_mode << std::endl;
-            for (const auto& joint : drive.joint_paramters) {
-                std::cout << "  Joint Name: " << joint.joint_name
-                          << ", Client ID: " << joint.client_id
-                          << ", Gear Ratio: " << joint.gear_ratio
-                          << ", Encoder Res: " << joint.encoder_res
-                          << ", Encoder Offset: " << joint.encoder_offset
-                          << ", Log Joint: " << joint.log_joint << std::endl;
-            }
-        }
+        // std::cout << "Loaded drive parameters:\n";
+        // for (const auto& drive : ar_drives.drive_parameters) {
+        //     std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Drive Mode: " << drive.drive_mode << std::endl;
+        //     for (const auto& joint : drive.joint_paramters) {
+        //         std::cout << "  Joint Name: " << joint.joint_name
+        //                   << ", Client ID: " << joint.client_id
+        //                   << ", Gear Ratio: " << joint.gear_ratio
+        //                   << ", Encoder Res: " << joint.encoder_res
+        //                   << ", Encoder Offset: " << joint.encoder_offset
+        //                   << ", Log Joint: " << joint.log_joint << std::endl;
+        //     }
+        // }
     }
 
     std::map<int, ArDriveControl *> ArHardwareInterface::getDrives()

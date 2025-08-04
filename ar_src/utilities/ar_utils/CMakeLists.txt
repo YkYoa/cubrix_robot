@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.8)
 set(PROJECT_NAME ar_utils)
 project(${PROJECT_NAME})
 
-set(CMAKE_CXX_STANDARD 17)  # Or use 17, 20, etc.
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#options
+# Options
 option(BUILD_TESTING "Enable building of tests" OFF)
 
 # Find dependencies
@@ -19,28 +19,28 @@ find_package(Eigen3 REQUIRED)
 find_package(moveit_core REQUIRED)
 
 set(SRC_FILES
-	src/ar_utils.cpp
-	src/ar_logging.cpp
-	src/ar_serializer.cpp
+    src/ar_utils.cpp
+    src/ar_logging.cpp
+    src/ar_serializer.cpp
 )
 
 set(DEPENDS
-	ament_cmake
-	yaml_cpp_vendor
-	yaml-cpp
-	rclcpp
-	rclcpp_lifecycle
-	Boost
-	Eigen3
-	moveit_core
+    ament_cmake
+    yaml_cpp_vendor
+    yaml-cpp
+    rclcpp
+    rclcpp_lifecycle
+    Boost
+    Eigen3
+    moveit_core
 )
 
 include_directories(${PROJECT_NAME}
-	PUBLIC
-	include
-	${THIS_PACKAGE_INCLUDE_DIRS}
-	${Boost_INCLUDE_DIR}
-	${EIGEN_INCLUDE_DIRS})
+    PUBLIC
+    include
+    ${THIS_PACKAGE_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIR}
+    ${EIGEN_INCLUDE_DIRS})
 
 # Create shared library
 add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
@@ -55,27 +55,40 @@ ament_target_dependencies(
   ${DEPENDS}
 )
 ament_export_dependencies(${DEPENDS})
-#Install libraries and headers
+
+# Install libraries and headers
 install(DIRECTORY include/
-		DESTINATION include)
+        DESTINATION include)
 install(
     TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}
-  	ARCHIVE DESTINATION lib
+    ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
-    )
+)
 
-add_executable(test_log test/test_log.cpp)
-target_link_libraries(test_log ${PROJECT_NAME})
-ament_target_dependencies(test_log ${DEPENDS})
-install(TARGETS test_log DESTINATION lib/${PROJECT_NAME})
-
-
-
+# Test handling - FIXED SECTION
 if(BUILD_TESTING)
-	message(STATUS "Building tests...")
-	add_subdirectory(test)
+    message(STATUS "Building tests...")
+    
+    # Find testing dependencies
+    find_package(ament_cmake_gtest REQUIRED)
+    find_package(ament_lint_auto REQUIRED)
+    
+    # Build test_log executable
+    add_executable(test_log test/test_log.cpp)
+    target_link_libraries(test_log ${PROJECT_NAME})
+    ament_target_dependencies(test_log ${DEPENDS})
+    
+    # Add as test (instead of installing)
+    ament_add_test(test_log
+        COMMAND "$<TARGET_FILE:test_log>"
+        TIMEOUT 30
+    )
+    
+    # Optionally add linting
+    ament_lint_auto_find_test_dependencies()
 endif()
+
 # Package the library
 ament_package()

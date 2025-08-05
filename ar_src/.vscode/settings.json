@@ -67,6 +67,15 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "strstream": "cpp",
+        "codecvt": "cpp",
+        "shared_mutex": "cpp",
+        "cfenv": "cpp",
+        "expected": "cpp",
+		"spanstream": "cpp",
+		"stacktrace": "cpp",
+        "__functional_03": "cpp",
+
     }
 }

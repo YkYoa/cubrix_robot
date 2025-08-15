@@ -48,7 +48,7 @@ namespace ar
     {
         ArPose();
         ArPose(const tf2::Vector3& position,const tf2::Quaternion& quaternion);
-        ArPose(double x = 0, double y = 0, double z = 0, 
+        ArPose(double x, double y, double z, 
                double qx = 0, double qy = 0, double qz = 0, double qw = 1);
         
         tf2::Matrix3x3 getRotationMatrix() const;    // convert quaternion to rotation matrix

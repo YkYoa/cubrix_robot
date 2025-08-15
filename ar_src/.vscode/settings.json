@@ -73,9 +73,9 @@
         "shared_mutex": "cpp",
         "cfenv": "cpp",
         "expected": "cpp",
-		"spanstream": "cpp",
-		"stacktrace": "cpp",
+        "spanstream": "cpp",
+        "stacktrace": "cpp",
         "__functional_03": "cpp",
-
+        "core": "cpp"
     }
 }

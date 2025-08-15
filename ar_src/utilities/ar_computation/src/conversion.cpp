@@ -117,6 +117,11 @@ namespace ar
         return ArPose(transform.getOrigin(), transform.getRotation());
     }
     
+    tf2::Transform arPoseToTfTransform(const ArPose& pose)
+    {
+        return tf2::Transform(pose.quat, pose.pos);
+    }
 
+    
 
 } // namespace ar

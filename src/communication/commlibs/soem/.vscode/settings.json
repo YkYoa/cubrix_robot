@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "thread": "c",
+        "osal_defs.h": "c",
+        "stdint.h": "c"
+    }
+}

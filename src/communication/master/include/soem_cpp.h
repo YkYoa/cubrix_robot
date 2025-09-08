@@ -2,8 +2,8 @@
 #define __SOEM_CPP__H__
 
 
-#include "osal.h"
-#include "oshw.h"
+#include <osal.h>
+#include <oshw.h>
 #include "stdio.h"
 #include "string.h"
 
@@ -23,10 +23,8 @@ namespace master
         int ec_config_init(uint8 usetable);
         int ec_config_map(void *pIOmap);
         int ec_config_overlap_map(void *pIOmap);
-        int ec_config_map_aligned(void *pIOmap);
         int ec_config_map_group(void *pIOmap, uint8 group);
         int ec_config_overlap_map_group(void *pIOmap, uint8 group);
-        int ec_config_map_group_aligned(void *pIOmap, uint8 group);
         int ec_config(uint8 usetable, void *pIOmap);
         int ec_config_overlap(uint8 usetable, void *pIOmap);
         int ec_recover_slave(uint16 slave, int timeout);
@@ -124,6 +122,8 @@ namespace master
 			&ec_elist,			// .elist         =
 			&ec_idxstack,		// .idxstack      =
 			&EcatError,			// .ecaterror     =
+			0,					// .DCtO          =
+			0,					// .DCl           =
 			&ec_DCtime,			// .DCtime        =
 			&ec_SMcommtype[0],	// .SMcommtype    =
 			&ec_PDOassign[0],	// .PDOassign     =
@@ -133,7 +133,7 @@ namespace master
 			NULL,				// .FOEhook()
 			NULL,				// .EOEhook()
 			0					// .manualstatechange
-        };
+		};
 
     private:
     	/** cache for EEPROM read functions */

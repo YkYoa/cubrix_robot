@@ -19,22 +19,22 @@
 
 namespace master
 {
-    using boost::accumulators::accumulator_set;
+    // using boost::accumulators::accumulator_set;
 
-    struct EtherCatStats
-	{
-		accumulator_set<double, stats<max, mean>> ec_acc;
+    // struct EtherCatStats
+	// {
+	// 	accumulator_set<double, stats<max, mean>> ec_acc;
 
-		double current_send_receive_period;
-		double current_ethercat_loop;
+	// 	double current_send_receive_period;
+	// 	double current_ethercat_loop;
 
-		int overruns;
-		int recent_overruns;
-		int last_overrun;
-		int last_severe_overrun;
+	// 	int overruns;
+	// 	int recent_overruns;
+	// 	int last_overrun;
+	// 	int last_severe_overrun;
 
-		double overrun_loop_sec;
-	};
+	// 	double overrun_loop_sec;
+	// };
 
     struct DriverInfo
     {
@@ -60,20 +60,20 @@ namespace master
     class ThreadParameters
     {
     public:
-		ThreadParameters(boost::mutex& pmutex, SOEM& psoem, std::vector<int>& slaveIds, bool& pstop_flag, uint8_t& pport_Id,
-						 pthread_cond_t& pcond, pthread_mutex_t& pcond_lock, bool& psynch_flag_on, EtherCatStats& ethercat_stats,
-						 std::unordered_map<int, DriverInfo>& driverInfos);
+		// ThreadParameters(boost::mutex& pmutex, SOEM& psoem, std::vector<int>& slaveIds, bool& pstop_flag, uint8_t& pport_Id,
+		// 				 pthread_cond_t& pcond, pthread_mutex_t& pcond_lock, bool& psynch_flag_on, EtherCatStats& ethercat_stats,
+		// 				 std::unordered_map<int, DriverInfo>& driverInfos);
 
-		SOEM& soem;
-        std::vector<int> slave_ids;
-		bool& stop_flag;
-		boost::mutex& mutex;
-		pthread_cond_t& cond;
-		pthread_mutex_t& cond_lock;
-		bool& synch_flag_on;
-		uint8_t& port_id;
-		EtherCatStats& etc_stats;
-		std::map<int, std::string> joint_names;
+		// SOEM& soem;
+        // std::vector<int> slave_ids;
+		// bool& stop_flag;
+		// boost::mutex& mutex;
+		// pthread_cond_t& cond;
+		// pthread_mutex_t& cond_lock;
+		// bool& synch_flag_on;
+		// uint8_t& port_id;
+		// EtherCatStats& etc_stats;
+		// std::map<int, std::string> joint_names;
 
     };
 

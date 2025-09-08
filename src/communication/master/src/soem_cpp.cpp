@@ -21,11 +21,6 @@ namespace master
         return ec_config_overlap_map(pIOmap);
     }
 
-    int SOEM::ec_config_map_aligned(void *pIOmap)
-    {
-        return ec_config_map_group_aligned(pIOmap, 0);
-    }
-
     int SOEM::ec_config_map_group(void *pIOmap, uint8 group)
     {
         return ecx_config_map_group(&ecx_context, pIOmap, group);
@@ -34,11 +29,6 @@ namespace master
     int SOEM::ec_config_overlap_map_group(void *pIOmap, uint8 group)
     {
         return ecx_config_overlap_map_group(&ecx_context, pIOmap, group);
-    }
-
-    int SOEM::ec_config_map_group_aligned(void *pIOmap, uint8 group)
-    {
-        return ecx_config_map_group_aligned(&ecx_context, pIOmap, group);
     }
 
     int SOEM::ec_config(uint8 usetable, void *pIOmap)

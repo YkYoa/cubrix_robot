@@ -1,7 +1,7 @@
 #ifndef _AR_DRIVE_CLIENT_H_
 #define _AR_DRIVE_CLIENT_H_
 
-#include <master/ethercat_manager.h>
+#include <ethercat_manager.h>
 
 namespace ar_control
 {

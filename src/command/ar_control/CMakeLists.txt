@@ -27,7 +27,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-# find_package(ar_master REQUIRED)
+find_package(master REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(urdf REQUIRED)
 find_package(ar_action REQUIRED)
@@ -78,7 +78,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 
   ar_action
   ar_comm
-  # ar_master
+  master
   # ar_devices
   # ar_tcp
   ar_utils
@@ -97,7 +97,7 @@ set(THIS_PACKAGE_INCLUDE_DIRS
   ${OpenCV_INCLUDE_DIRS}
   ${ar_action_INCLUDE_DIRS}
   ${ar_comm_INCLUDE_DIRS}
-  # ${ar_master_INCLUDE_DIRS}
+  ${master_INCLUDE_DIRS}
   # ${ar_devices_INCLUDE_DIRS}
   ${ar_utils_INCLUDE_DIRS}
   ${GSL_INCLUDE_DIRS}

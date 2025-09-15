@@ -3,11 +3,10 @@
 ### This file defines the configuration for the AR drive system, including port information, drive IDs, and joint specifications.
 ### It is used to set up the hardware interface for the AR robot arm.
 ### Set up the port information, drive IDs, and joint specifications for the AR robot arm.
-### 0 > simulation, 1 > real robot
+### 0 > simulation, 1 > SOEM
 
 port_info:
-  port_name: tty/USB0
-  baud_rate: 115200
+  port_name: enp3s0
 
 use_torque_offset: false
 

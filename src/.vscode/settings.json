@@ -76,6 +76,8 @@
         "spanstream": "cpp",
         "stacktrace": "cpp",
         "__functional_03": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "csignal": "cpp",
+        "valarray": "cpp"
     }
 }

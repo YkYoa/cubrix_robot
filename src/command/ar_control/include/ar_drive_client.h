@@ -5,7 +5,6 @@
 
 namespace ar_control
 {
-
     struct DriveInput
     {
     };
@@ -36,7 +35,7 @@ namespace ar_control
     {
     public:
         // Constructor
-        ArDriveClient(master::EtherCatManager* manager, int slaveId);
+        ArDriveClient(std::shared_ptr<master::EthercatManager> manager, int slaveId);
         ~ArDriveClient ();
 
         void readInputs(SingleJointCyclicInput* input);
@@ -47,18 +46,20 @@ namespace ar_control
         template <typename T, typename U> void motorOn(T* input, U* output);
         template <typename T, typename U> void motorOff(T* input, U* output);
 
-        inline master::EtherCatManager* getManager() 
-        { 
-            return manager_; 
-        }
+        inline master::EthercatManager& getManager() { return *manager_; }
 
-        master::DriveInfo driver_info_;
+        std::shared_ptr<master::DriverInfo> driver_info_;
+
     private:
+        std::shared_ptr<master::EthercatManager> manager_;
         // Private members and methods
-        template <typename T> vodi ErrorHandling(const T* input);
+        template <typename T> void ErrorHandling(const T* input);
 
-        master::EthercatManager& manager_;
-        
+        int input_map_size;
+        int output_map_size;
+        int slave_id_;
+
+        const std::map<uint16_t, std::string>* error_maps;
     };
 
 }

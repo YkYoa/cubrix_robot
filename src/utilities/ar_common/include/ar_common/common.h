@@ -26,5 +26,11 @@ namespace ar_common
     std::string_view getArmEndEffector();
     std::string_view getJointGroupARM();
     const std::vector<std::string>& getJointGroups();
+    
+    // Config path
+
+    void getConfigPath();
+    void readYamlFile(std::string yaml_path);
+    void readYamlFile(std::string yaml_path, int slaveId);
 
 }// namespace ar_common

@@ -1,6 +1,7 @@
 #include "ar_hardware_interface.h"
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
+#include <ar_common/common.h>
 
 namespace ar_control
 {
@@ -20,7 +21,8 @@ namespace ar_control
         }
     }
 
-    ArHardwareInterface::ArHardwareInterface(bool isSimulation, bool isUI)
+    ArHardwareInterface::ArHardwareInterface(std::vector<std::shared_ptr<boost::mutex>> comm_mutex, pthread_cond_t& cond, 
+        pthread_mutex_t& cond_lock, std::string robotDesc, bool& bQuit, bool isSimulation, bool isUI) : b_quit_(bQuit)
     {
         // Initialize the hardware interface
         control_server_thread = nullptr;
@@ -43,10 +45,18 @@ namespace ar_control
             RCLCPP_ERROR(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
         }
 
-        std::string config_path = ament_index_cpp::get_package_share_directory("ar_control") + "/config/ar_drive.yaml";
-        readConfigFromYaml(config_path);
+        readConfigFromYaml();
 
-        // RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing PROTOCOL manager, drives and joints");
+        RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing ETHERCAT manager, drives and joints");
+        portManager = nullptr;
+
+        if(!is_simulation){
+            portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
+            if(!portManager->initialize(b_quit_, soem_drives)){
+                b_quit_ = true;
+                return;
+            }
+        }
 
         for(auto& driveParm : ar_drives.drive_parameters){
             drives[driveParm.drive_id] = new ArDriveControl(driveParm, is_ui);
@@ -87,27 +97,15 @@ namespace ar_control
         RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), "Shut down complete.");
     }
 
-    void ArHardwareInterface::readConfigFromYaml(std::string yaml_path)
+    void ArHardwareInterface::readConfigFromYaml()
     {
-        RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), COLOR_DARKYELLOW "Drive config path: %s" COLOR_RESET, yaml_path.c_str());
-        YAML::Node config;
-        try
+        std::string config_path = ar_common::getConfigPath();
+        RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), COLOR_DARKYELLOW "Drive config path: %s" COLOR_RESET, config_path.c_str());
+        
+        YAML::Node config = ar_common::readYamlFile(config_path);
+        if (config.IsNull())
         {
-            config = YAML::LoadFile(yaml_path);
-        }
-        catch (const YAML::BadFile &e)
-        {
-            std::cout << COLOR_RED "Error: Failed to load the YAML file: " << e.what() << COLOR_RESET << std::endl;
-            return;
-        }
-        catch (const YAML::ParserException &e)
-        {
-            std::cout << COLOR_RED "Error: YAML parsing error: " << e.what() << COLOR_RESET << std::endl;
-            return;
-        }
-        catch (const std::exception &e)
-        {
-            std::cout << COLOR_RED "Error: An unexpected error occurred: " << e.what() << COLOR_RESET << std::endl;
+            RCLCPP_ERROR(rclcpp::get_logger("ArHardwareInterface"), "Failed to load YAML configuration file");
             return;
         }
         YAML::Node port_ids = config["port_ids"];
@@ -119,29 +117,24 @@ namespace ar_control
             std::string drive_id = it->first.as<std::string>();
             driveParam.drive_id = ar_utils::stringToId(drive_id);
             driveParam.port_id = it->second.as<int>();
-            if (is_simulation)
+            if(is_simulation)
             {
                 driveParam.port_id = NO_COMM;
             }
-            else if (driveParam.port_id == PORT_SOEM)
+            else if(driveParam.port_id == PORT_SOEM)
             {
-                std::cout << COLOR_DARKYELLOW "Port ID: " << driveParam.port_id << COLOR_RESET << std::endl;
+                soem_drives++;
+                driveParam.slave_id = soem_drives;
             }
-            else if (driveParam.port_id == PORT_CAN)
-            {
-                std::cout << COLOR_DARKYELLOW "Port ID: " << driveParam.port_id << COLOR_RESET << std::endl;
-            }
-            else
-            {
-                RCLCPP_ERROR(ar_hardware_interface_node_->get_logger(), "Invalid port ID: %d", driveParam.port_id);
-            }
+            // else if (driveParam.port_id == DISCONNECTED)
+            // {
+            //     std::cout << COLOR_DARKYELLOW "Port ID: " << driveParam.port_id << COLOR_RESET << std::endl;
+            // }
             for (YAML::const_iterator jt = drives[drive_id]["joints"].begin(); jt != drives[drive_id]["joints"].end(); jt++)
             {
                 JointParameter jointParam;
                 jointParam.joint_name = jt->first.as<std::string>();
                 const YAML::Node &joint_node = drives[drive_id]["joints"][jointParam.joint_name];
-                if (YAML::Node parm = joint_node["client_id"])
-                    jointParam.client_id = parm.as<int>();
                 if (YAML::Node parm = joint_node["gear_ratio"])
                     jointParam.gear_ratio = parm.as<int>();
                 if (YAML::Node parm = joint_node["encoder_res"])
@@ -162,18 +155,17 @@ namespace ar_control
                   });
 
         // Print out all loaded drive and joint parameters
-        // std::cout << "Loaded drive parameters:\n";
-        // for (const auto& drive : ar_drives.drive_parameters) {
-        //     std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Drive Mode: " << drive.drive_mode << std::endl;
-        //     for (const auto& joint : drive.joint_paramters) {
-        //         std::cout << "  Joint Name: " << joint.joint_name
-        //                   << ", Client ID: " << joint.client_id
-        //                   << ", Gear Ratio: " << joint.gear_ratio
-        //                   << ", Encoder Res: " << joint.encoder_res
-        //                   << ", Encoder Offset: " << joint.encoder_offset
-        //                   << ", Log Joint: " << joint.log_joint << std::endl;
-        //     }
-        // }
+        std::cout << "Loaded drive parameters:\n";
+        for (const auto& drive : ar_drives.drive_parameters) {
+            std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Slave Id: " << drive.slave_id << std::endl;
+            for (const auto& joint : drive.joint_paramters) {
+                std::cout << "  Joint Name: " << joint.joint_name
+                          << ", Gear Ratio: " << joint.gear_ratio
+                          << ", Encoder Res: " << joint.encoder_res
+                          << ", Encoder Offset: " << joint.encoder_offset
+                          << ", Log Joint: " << joint.log_joint << std::endl;
+            }
+        }
     }
 
     std::map<int, ArDriveControl *> ArHardwareInterface::getDrives()

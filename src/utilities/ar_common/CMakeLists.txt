@@ -10,6 +10,8 @@ option(BUILD_TESTING "Enable building of tests" OFF)
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 set(SRC_FILES
     src/common.cpp
@@ -17,6 +19,8 @@ set(SRC_FILES
 
 set(DEPENDS
     ament_cmake
+    ament_index_cpp
+    yaml-cpp
 )
 
 include_directories(${PROJECT_NAME}

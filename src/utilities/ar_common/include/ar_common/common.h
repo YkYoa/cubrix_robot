@@ -5,6 +5,8 @@
 #include <string_view>
 #include <unordered_set>
 #include <unordered_map>
+#include <yaml-cpp/yaml.h>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 
 namespace ar_common
 {
@@ -27,10 +29,9 @@ namespace ar_common
     std::string_view getJointGroupARM();
     const std::vector<std::string>& getJointGroups();
     
-    // Config path
-
-    void getConfigPath();
-    void readYamlFile(std::string yaml_path);
-    void readYamlFile(std::string yaml_path, int slaveId);
+    // Config utilities
+    std::string getConfigPath();
+    YAML::Node readYamlFile(const std::string& yaml_path);
+    YAML::Node readYamlFile();
 
 }// namespace ar_common

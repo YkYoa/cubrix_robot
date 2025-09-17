@@ -20,6 +20,7 @@ find_package(rclcpp REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system filesystem thread)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(ar_utils)
+find_package(ar_common REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -54,6 +55,7 @@ ament_target_dependencies(
   yaml_cpp_vendor
   soem
   ar_utils
+  ar_common
 )
 
 # INSTALL

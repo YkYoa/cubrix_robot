@@ -18,7 +18,6 @@ namespace ar_control
     public:
         std::string joint_name;   ///< Name of the joint
         std::string hardware_id;  ///< Hardware ID for the joint
-        int client_id;            ///< Client ID for the joint
         int home_encoder_offset;  ///< Home encoder offset for the joint
         int rewrite_count;        ///< Rewrite count for the joint
 

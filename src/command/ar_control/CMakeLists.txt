@@ -34,6 +34,7 @@ find_package(ar_action REQUIRED)
 find_package(ar_comm REQUIRED)
 # find_package(ar_devices REQUIRED)
 find_package(ar_utils REQUIRED)
+find_package(ar_common REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(GSL REQUIRED)
 find_package(pilz_industrial_motion_planner REQUIRED)
@@ -82,6 +83,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   # ar_devices
   # ar_tcp
   ar_utils
+  ar_common
   pilz_industrial_motion_planner
   GSL
   moveit_core

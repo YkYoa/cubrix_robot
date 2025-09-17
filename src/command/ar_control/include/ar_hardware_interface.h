@@ -7,12 +7,10 @@
 
 #pragma once
 
-
 #include <ar_control_server.h>
 #include "yaml-cpp/yaml.h"
 #include <rclcpp/rclcpp.hpp>
 #include <urdf/model.h>
-
 
 #include <moveit/move_group_interface/move_group_interface.h>
 
@@ -25,36 +23,38 @@ namespace ar_control
 	class ArHardwareInterface
 	{
 	public:
-		ArHardwareInterface(bool isSimulation = false, bool isUi = false);
+		ArHardwareInterface(std::vector<std::shared_ptr<boost::mutex>> comm_mutex, pthread_cond_t &cond, pthread_mutex_t &cond_lock,
+							std::string robotDesc, bool &bQuit, bool isSimulation = false, bool isUi = false);
 		~ArHardwareInterface();
 
 		void shutdown();
 		void read();
 		void write();
 
-		std::map<int, ArDriveControl*> getDrives();
+		std::map<int, ArDriveControl *> getDrives();
 
-		bool is_simulation;		///< Flag to indicate if the hardware is simulated
-		bool is_ui;				///< Flag to indicate if the UI is enabled
+		bool is_simulation; ///< Flag to indicate if the hardware is simulated
+		bool is_ui;			///< Flag to indicate if the UI is enabled
+		bool& b_quit_;		///< Reference to the quit flag
+
+		int soem_drives = 0; ///< Number of SOEM drives detected
 
 	private:
-		ArDrives ar_drives;                              		///< Holds all drive parameters and joint names
-		urdf::Model urdf_model;									///< URDF model of the robot
-		std::map<int, ArDriveControl*> drives;					///< Map of drive ID to ArDriveControl objects
+		ArDrives ar_drives;						///< Holds all drive parameters and joint names
+		urdf::Model urdf_model;					///< URDF model of the robot
+		std::map<int, ArDriveControl *> drives; ///< Map of drive ID to ArDriveControl objects
 
-		std::thread* control_server_thread;              		///< Thread for the control server
-		std::shared_ptr<ArControlServer> ar_control_server;     ///< Control server instance
+		std::thread *control_server_thread;					///< Thread for the control server
+		std::shared_ptr<ArControlServer> ar_control_server; ///< Control server instance
 
-		std::shared_ptr<rclcpp::Node> ar_hardware_interface_node_;  ///< Node for the hardware interface
+		std::shared_ptr<rclcpp::Node> ar_hardware_interface_node_; ///< Node for the hardware interface
 
-
-    	void InitializeDrives(std::vector<ArDriveControl*>& drives);
-		void readConfigFromYaml(std::string yaml_path);
+		void InitializeDrives(std::vector<ArDriveControl *> &drives);
+		void readConfigFromYaml();
 		void launchControlServer();
 
-		// ar_master::Protocol* protocol_manager_; (add later)
-		std::map<int, std::vector<int>> port_to_slave_id_;      ///< Map of port IDs to slave IDs
-		std::map<int, int> drive_id_to_slave_id_;  	 			///< Map of drive IDs to slave IDs	
-		std::map<int, int> slave_id_to_drive_id_;				///< Map of slave IDs to drive IDs
+		int no_of_port_connected_ = 0;			   ///< Number of connected ports
+
+		master::EthercatManager *portManager; ///< Port manager for handling communication ports
 	};
-}  // namespace tomo_control
+} // namespace ar_control

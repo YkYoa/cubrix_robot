@@ -7,6 +7,7 @@
 
 enum PortNumber
 {
+    DISCONNECTED = -1,
     NO_COMM = 0,
     PORT_SOEM = 1,
     PORT_CAN = 2
@@ -15,6 +16,7 @@ enum PortNumber
 enum ControlModes
 {
 	ProfilePosition,
+    CyclicSynchronousPosition,
 };
 
 class JointParameter
@@ -22,7 +24,6 @@ class JointParameter
 public:
     JointParameter()
     {
-        client_id = -1;
         gear_ratio = 0;
         encoder_res = 0;
         encoder_offset = 0;
@@ -30,7 +31,6 @@ public:
         log_joint = false;
     }
     std::string joint_name;
-    int client_id;              ///< Client ID for the joint
     int gear_ratio;             ///< Gear ratio for the joint
     int encoder_res;            ///< Encoder resolution for the joint
     int encoder_offset;         ///< Encoder offset for the joint
@@ -45,9 +45,11 @@ class DriveParameter
 public:
     DriveParameter()
     {
+        slave_id = -1;
         port_id = NO_COMM;
         drive_mode = ProfilePosition;
     }
+    int slave_id;
     int drive_id; 
     int drive_mode;
     int port_id;

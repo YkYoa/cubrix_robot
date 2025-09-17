@@ -8,6 +8,7 @@
 #include <pthread.h>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#include <iostream>
 
 #include <yaml-cpp/yaml.h>
 #include <ament_index_cpp/get_package_share_directory.hpp>
@@ -90,7 +91,7 @@ namespace master
         EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond, pthread_mutex_t &cond_lock, boost::mutex &mutex);
         ~EthercatManager();
 
-        bool initialize(bool &bQuit, std::vector<int> &slaveIds);
+        bool initialize(bool &bQuit, int slaveId);
         bool destroyEthercatManager();
 
         /**
@@ -154,7 +155,7 @@ namespace master
     private:
         SOEM soem;
 
-        bool initSoem(bool& bQuit, std::vector<int> &slaveIds);
+        bool initSoem(bool& bQuit, int slaveId);
 
         void processPDOProcess(int slave_num);
         void readFromYamlFile(std::string yaml_path);

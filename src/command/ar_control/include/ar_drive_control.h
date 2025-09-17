@@ -11,9 +11,8 @@ namespace ar_control
     {
     public:
         ArDriveControl(DriveParameter& driveParam, bool uiState = false);
-        // void InitializeDriveClient(ar_master::Protocol* protocolManager, int slaveId);
-        void InitializeDriveClient(int slaveId);
         ~ArDriveControl();
+        void InitializeDriveClient(int driveId);
         
         void AddJoint(JointParameter& jointParam);
         void InitializeDrive();

@@ -10,11 +10,9 @@ namespace ar_control
         drive_id_ = driveParm.drive_id;
     }
 
-    void ArDriveControl::InitializeDriveClient(int slaveId)
+    void ArDriveControl::InitializeDriveClient(int driveId)
     {
         // This function will be implemented later
-        // Initialize the drive client with the given slave ID
-        // protocol_manager_->initializeClient(slaveId);
 
         return;
     }
@@ -33,13 +31,9 @@ namespace ar_control
             joint->lower_limit = 0.0;
         }
 
-        if(jointCount() > 1){
-            joint->client_id = jointParam.client_id;
-        }
-
         joints.push_back(joint);
 
-        if((jointCount() > 1) && (joint->client_id = -1)){
+        if(jointCount() > 1){
             joint->joint_pos_cmd = joint->joint_pos = joint->joint_vel = joint->joint_vel_cmd = joint->home_encoder_offset = 0;
         }
 
@@ -61,8 +55,8 @@ namespace ar_control
                 jointParam.joint_name.c_str(), jointParam.gear_ratio, jointParam.encoder_res, joint->pulse_per_revolution);
         }
 
-        printf( "Joint '%s' added on drive %d with client Id: %d at encodere offset: %d", 
-                    jointParam.joint_name.c_str(), drive_id_, joint->client_id, joint->home_encoder_offset);
+        printf( "Joint '%s' added on drive %d, encoder offset: %d", 
+                    jointParam.joint_name.c_str(), drive_id_, joint->home_encoder_offset);
         fflush(stdout);
     }
 

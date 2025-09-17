@@ -57,9 +57,9 @@ namespace ar_control
 
         int input_map_size;
         int output_map_size;
-        int slave_id_;
 
         const std::map<uint16_t, std::string>* error_maps;
+        int slave_id_;
     };
 
 }

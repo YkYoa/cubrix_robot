@@ -22,6 +22,10 @@
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/state.hpp"
+
+#include "visibility_control.h"
+#include "ar_hardware_interface.h"
 
 double now()
 {
@@ -43,6 +47,7 @@ namespace ar_control
 		robot_desc = info_.hardware_parameters["desc"];
 		is_simulation  = info_.hardware_parameters["sim"] == "False" ? false : true;
 		is_ui  = info_.hardware_parameters["ui"] == "False" ? false : true;
+		b_quit = false;
 
 		// hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 		// hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -50,7 +55,7 @@ namespace ar_control
 		RCLCPP_WARN(rclcpp::get_logger("ArSystemHardware"), "Init robot: %s, sim: %s (is_simulation=%d), ui: %s (is_ui=%d)", 
 		robot_desc.c_str(),	info_.hardware_parameters["sim"].c_str(), is_simulation, info_.hardware_parameters["ui"].c_str(), is_ui);
 
-		robot = std::make_shared<ArHardwareInterface>(is_simulation, is_ui);
+		robot = std::make_shared<ArHardwareInterface>(comm_mutex, cond, lock, robot_desc, b_quit, is_simulation, is_ui);
 
 		for(const hardware_interface::ComponentInfo& joint : info_.joints) {
 			if(joint.command_interfaces.size() != 1) {
@@ -150,6 +155,7 @@ namespace ar_control
 	CallbackReturn ArSystemHardware::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/)
 	{
 		RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "Deactivating...Please wait");
+		robot->shutdown();
 
 		RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "Successfully deactivated!");
 		return CallbackReturn::SUCCESS;
@@ -181,9 +187,17 @@ namespace ar_control
 		return hardware_interface::return_type::OK;
 	}
 
+	void ArSystemHardware::shutdown()
+	{
+		// Destroy pthread resources
+		pthread_mutex_destroy(&lock);
+		pthread_cond_destroy(&cond);
+	}
+
 	ArSystemHardware::~ArSystemHardware()
 	{
-		robot->shutdown();
+		this->shutdown(); // Call own shutdown method
+		// robot->shutdown(); // Original line, now handled by this->shutdown()
 		usleep(1000);
 	}
 

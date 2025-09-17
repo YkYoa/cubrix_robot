@@ -7,7 +7,7 @@ trajectory_msgs/JointTrajectory trajectory
 string[] joint_names
 
 int32 drive_id
-int32 client_id
+int32 slave_id
 ---
 #result definition
 int32 status

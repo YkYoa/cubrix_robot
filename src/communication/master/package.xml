@@ -14,6 +14,7 @@
 
   <depend>soem</depend>
   <depend>ar_utils</depend>
+  <depend>ar_common</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

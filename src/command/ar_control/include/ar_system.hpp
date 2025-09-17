@@ -63,11 +63,19 @@ namespace ar_control
 		hardware_interface::return_type write(const rclcpp::Time& time, const rclcpp::Duration& period) override;
 		~ArSystemHardware() override;
 
+        ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
+        void shutdown();
+
 	private:
         // Parameters for the Ar robot
         std::string robot_desc; ///< Description of the robot
         bool is_ui;             ///< Flag to indicate if the UI is enabled
 		bool is_simulation;     ///< Flag to indicate if the hardware is simulated
+        bool b_quit;           ///< Flag to indicate if the system should quit
+        std::vector<std::shared_ptr<boost::mutex>> comm_mutex; ///< Mutexes for communication
+        boost::mutex control_mutex; ///< Mutex for control operations
+        pthread_cond_t cond = PTHREAD_COND_INITIALIZER; ///< Condition variable for synchronization
+        pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER; ///< Mutex for the condition variable
 
         std::shared_ptr<ArHardwareInterface> robot; ///< Shared pointer to the Ar hardware interface
 

@@ -6,7 +6,6 @@ namespace ar_control
     ArJointControl::ArJointControl(std::string jointName)
     {
         joint_name = jointName;
-        client_id = -1;
 
         profile_position = 10;
         rewrite_count = 0;

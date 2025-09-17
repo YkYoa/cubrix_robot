@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include <yaml-cpp/yaml.h>
+#include <rclcpp/rclcpp.hpp>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
 #include <soem_cpp.h>
@@ -31,9 +32,16 @@ namespace master
 
     // ms, this parameter will be updated dynamically from the ROS controller configuration file
 	[[maybe_unused]] static unsigned DRIVER_SYNCH_TIME = 10;
+    
+    using boost::accumulators::accumulator_set;
+	using boost::accumulators::stats;
+	using boost::accumulators::tag::max;
+	using boost::accumulators::tag::mean;
 
     struct EtherCatStats
     {
+        accumulator_set<double, stats<max, mean>> ec_acc;
+
         double current_send_receive_period;
         double current_ethercat_loop;
 
@@ -83,6 +91,12 @@ namespace master
         uint8_t &port_id;
         EtherCatStats &etc_stats;
         std::map<int, std::string> joint_names;
+
+        // Thread-shared state
+        int expected_wkc = 0;
+        int sent = 0;
+        int wkc = 0;
+        bool process_data = false;
     };
 
     class EthercatManager
@@ -91,7 +105,7 @@ namespace master
         EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond, pthread_mutex_t &cond_lock, boost::mutex &mutex);
         ~EthercatManager();
 
-        bool initialize(bool &bQuit, int slaveId);
+        bool initialize(bool &bQuit, std::vector<int> slaveIds);
         bool destroyEthercatManager();
 
         /**
@@ -155,16 +169,17 @@ namespace master
     private:
         SOEM soem;
 
-        bool initSoem(bool& bQuit, int slaveId);
+        bool initSoem(bool& bQuit, std::vector<int> slaveIds);
 
         void processPDOProcess(int slave_num);
         void readFromYamlFile(std::string yaml_path);
         void configProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
 
-		pthread_t p_cycle_thread_, p_handle_error_thread_;
-
+        
         std::shared_ptr<LeadshineParameters> leadshine_param_ptr;
-
+        std::unordered_map<int, DriverInfo> driver_infos_;
+        EtherCatStats etc_stats;
+        
         uint8_t port_id;
         uint8_t iomap_[4096];
 		bool synch_flag_;
@@ -178,7 +193,9 @@ namespace master
         ThreadParameters* thread_parameter;
         pthread_cond_t& cond_;
 		pthread_mutex_t& cond_lock_;
+		pthread_t p_cycle_thread_, p_handle_error_thread_;
 
+        //ticket related
     };
 }
 

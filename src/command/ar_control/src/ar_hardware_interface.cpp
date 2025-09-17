@@ -52,10 +52,10 @@ namespace ar_control
 
         if(!is_simulation){
             portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
-            if(!portManager->initialize(b_quit_, soem_drives)){
-                b_quit_ = true;
-                return;
-            }
+            // if(!portManager->initialize(b_quit_, soem_drives)){
+            //     b_quit_ = true;
+            //     return;
+            // }
         }
 
         for(auto& driveParm : ar_drives.drive_parameters){

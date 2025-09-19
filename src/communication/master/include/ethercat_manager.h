@@ -72,6 +72,11 @@ namespace master
 
         std::string driver_type;
         std::string joint_name;
+
+        struct LeadshineDriveData{
+            std::string com_port;
+            int control_mode;
+        };
     };
 
     class ThreadParameters
@@ -166,14 +171,19 @@ namespace master
          * \brief get the status of clients
          */
         void getStatus(int slave_no, std::string &name, int &eep_man, int &eep_id, int &eep_rev, int &obits, int &ibits, int &state, int &pdelay, int &hasdc, int &activeports, int &configadr) const;
+        
+        DriverInfo getDriverInfo(int slave_no) const;
+
+    
     private:
         SOEM soem;
 
         bool initSoem(bool& bQuit, std::vector<int> slaveIds);
 
-        void processPDOProcess(int slave_num);
-        void readFromYamlFile(std::string yaml_path);
-        void configProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
+        void configPDOProcess(int slave_num);
+        bool readFromYamlFile(int slave_no);
+        void configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
+        void configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
 
         
         std::shared_ptr<LeadshineParameters> leadshine_param_ptr;
@@ -187,6 +197,8 @@ namespace master
 		YAML::Node ethercat_config_;
 		std::string robot_desc_;
         bool stop_flag;
+        int max_slave_count;
+        int driver_count;
         
         // Thread
         boost::mutex& iomap_mutex_;

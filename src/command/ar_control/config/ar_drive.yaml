@@ -4,9 +4,23 @@
 ### It is used to set up the hardware interface for the AR robot arm.
 ### Set up the port information, drive IDs, and joint specifications for the AR robot arm.
 ### 0 > simulation (run as a dummy joint), 1 > SOEM (EtherCAT)
+### driver mode : 0 > Cyclic position mode, 1 > Profile position mode
 
 port_info:
   port_name: enp3s0
+
+driver_info:
+  driver_mode: 0
+  CS3E_D503B:
+    product_code: 0x85000000
+    vendor_id: 0x43210000
+  CS3E_D507B:
+    product_code: 0x87000000
+    vendor_id: 0x43210000
+  CL3T:
+    product_code: 0x10000000
+    vendor_id: 0x43210000
+
 
 use_torque_offset: false
 

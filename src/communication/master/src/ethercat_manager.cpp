@@ -69,7 +69,7 @@ namespace master
 	template uint16_t readSDO<uint16_t>(int slave_no, uint16_t index, uint8_t subidx, SOEM& soem);
 	template uint32_t readSDO<uint32_t>(int slave_no, uint16_t index, uint8_t subidx, SOEM& soem);
 
-        OSAL_THREAD_FUNC handleErrors(void *thread_param)
+    OSAL_THREAD_FUNC handleErrors(void *thread_param)
     {
         ThreadParameters *error_thread_param = (ThreadParameters *) thread_param;
         uint8_t delay_count[error_thread_param->slave_ids.size()] = {0};
@@ -266,16 +266,16 @@ namespace master
         
         std::string yamlpath = ar_common::getConfigPath();
         std::cout << COLOR_DARKYELLOW "EtherCatManager: Reading drive parameters from: " << yamlpath << COLOR_RESET << std::endl;
-        YAML::Node config = ar_common::readYamlFile(yamlpath);
-        if (config.IsNull())
-        {
-            std::cout << COLOR_RED "Error: Failed to load YAML configuration file" << COLOR_RESET << std::endl;
-            return false;
-        }
+        ethercat_config_ = ar_common::readYamlFile(yamlpath);
 
         p_cycle_thread_ = 0;
         p_handle_error_thread_ = 0;
         stop_flag = false;
+
+        auto max_slaves_it = std::max_element(slaveIds.begin(), slaveIds.end());
+        if(max_slaves_it != slaveIds.end()){
+            max_slave_count = *max_slaves_it;
+        }
 
         if(initSoem(bQuit, slaveIds))
         {
@@ -294,6 +294,30 @@ namespace master
         }
 
         
+
+        return true;
+    }
+
+    bool EthercatManager::readFromYamlFile(int slave_no)
+    {
+        DriverInfo driver_info;
+        DriverInfo::LeadshineDriveData driver_data;
+
+        driver_data.com_port = ethercat_config_["port_info"]["port_name"].as<std::string>();
+        driver_data.control_mode = ethercat_config_["driver_info"]["driver_mode"].as<int>();
+
+        for(auto it = ethercat_config_.begin(); it!= ethercat_config_.end(); ++it){
+            driver_info.driver_type = it->first.as<std::string>();
+        }
+
+        if(driver_info.driver_type != soem.ec_slave[slave_no].name) {
+			printf(COLOR_YELLOW "WARNING the driver %d type is different from config file \n", slave_no);
+			std::cout << "driver type: " << soem.ec_slave[slave_no].name << "; expected: " << driver_info.driver_type << COLOR_RESET
+					  << std::endl;
+			driver_info.driver_type = soem.ec_slave[slave_no].name;
+            return false;
+		}
+		driver_infos_.insert(std::make_pair(slave_no, driver_info));
 
         return true;
     }
@@ -353,10 +377,181 @@ namespace master
 
     bool EthercatManager::initSoem(bool &bQuit, std::vector<int> slaveIds)
     {
-        (void)bQuit;
-        (void)slaveIds;
-        // Placeholder init until fully implemented; return true to allow threads to start
+        printf(COLOR_YELLOW "\n[%s] Initializing Soem EtherCatManager[%d]..." COLOR_RESET "\n",
+               ar_utils::getCurrentTime(false, false).c_str(), port_id);           
+        const static unsigned MAX_BUFF_SIZE = 1024;
+
+        std::string ifName = ethercat_config_["port_info"]["port_name"].as<std::string>();
+        char buffer[MAX_BUFF_SIZE];
+        if(ifName.size() >= sizeof(buffer - 1)){
+            printf(COLOR_RED "Error: Interface name is too long: %s" COLOR_RESET "\n", ifName.c_str());
+            return false;
+        }
+        std::strncpy(buffer, ifName.c_str(), sizeof(buffer) - 1);
+
+        if(!soem.ec_init(buffer)){
+            printf(COLOR_RED "Error: Failed to initialize EtherCAT on interface %s" COLOR_RESET "\n", buffer);
+            return false;
+        }
+
+        // wait for slave 
+        int slaveCount = -INT_MAX;
+        while(true){
+            // find and auto-config slave 
+            soem.ec_config_init(FALSE);
+            if(slaveCount != soem.ec_slavecount){
+                if(soem.ec_slavecount > max_slave_count){
+                    printf(COLOR_YELLOW "[EtherCatManager] Detected %d slaves" COLOR_RESET "\n", soem.ec_slavecount);
+                    break;
+                }
+                slaveCount = soem.ec_slavecount - soem.ec_slavecount;
+				printf(COLOR_RED "%s Ethercat port %d: Waiting for %d slave%s (expected: %d; found %d)..." COLOR_RESET "\n",
+					   ar_utils::getCurrentTime().c_str(), port_id, slaveCount, slaveCount > 1 ? "s" : "", max_slave_count,
+					   soem.ec_slavecount);
+				fflush(stdout);
+				usleep(1000000);
+
+                				slaveCount = soem.ec_slavecount;
+				if(slaveCount > 0) {
+					soem.ec_slave[0].state = EC_STATE_INIT;
+					soem.ec_writestate(0);
+				}
+            }else
+                usleep(1000000);
+            if(bQuit)
+                return false;
+        }
+
+        printf(COLOR_YELLOW "%s SOEM found %d slaves and configured %ld" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str(),
+               soem.ec_slavecount, slaveIds.size());
+        fflush(stdout);
+
+        driver_count = 0;
+
+        for(auto slave_id : slaveIds){
+            printf(" Man: %8.8x ID: %8.8x Rev: %8.8x\n", (int)soem.ec_slave[slave_id].eep_man, (int)soem.ec_slave[slave_id].eep_id,
+                   (int)soem.ec_slave[slave_id].eep_rev);
+            driver_count++;
+        }
+    	printf(COLOR_YELLOW "%s Found %d Drivers" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str(), driver_count);
+		fflush(stdout);
+
+
+        if(soem.ec_statecheck(0, EC_STATE_PRE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_PRE_OP) {
+			printf(COLOR_RED "%s Could not set EC_STATE_PRE_OP" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str());
+			fflush(stdout);
+			return false;
+		}
+
+        // Pair driver 
+        for(auto slave_id : slaveIds){
+            readFromYamlFile(slave_id);
+        }
+
+        // config PDO 
+        for(auto slave_id : slaveIds) {
+			configPDOProcess(slave_id);
+		}
+
+        //Config IO map
+        int io_map_size = soem.ec_config_map(&iomap_);
+        std::cout << COLOR_YELLOW "[EtherCatManager] IOMap size: " << io_map_size << COLOR_RESET << std::endl;
+
+        //locate dc slaves
+        soem.ec_configdc();
+
+        // '0' here addresses all slaves
+		if(soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP) {
+			printf("Could not set EC_STATE_SAFE_OP\n");
+			fflush(stdout);
+			return false;
+		}
+
+        soem.ec_slave[0].state = EC_STATE_OPERATIONAL;
+		soem.ec_send_processdata();
+		soem.ec_receive_processdata(EC_TIMEOUTRET_8);
+
+		soem.ec_writestate(0);
+		int chk = 200;
+		do {
+			soem.ec_send_processdata();
+			soem.ec_receive_processdata(EC_TIMEOUTRET_8);
+			soem.ec_statecheck(0, EC_STATE_OPERATIONAL, 50000);	 // 50 ms wait for state check
+		} while(chk-- && (soem.ec_slave[0].state != EC_STATE_OPERATIONAL));
+
+		soem.ec_readstate();
+		for(auto slave_id : slaveIds) {
+			printf("\nSlave:%d\n Name:%s\n Output size: %dbits\n Input size: %dbits\n State: %d\n Delay: %d[ns]\n Has DC: %d\n", slave_id,
+				   soem.ec_slave[slave_id].name, soem.ec_slave[slave_id].Obits, soem.ec_slave[slave_id].Ibits,
+				   soem.ec_slave[slave_id].state, soem.ec_slave[slave_id].pdelay, soem.ec_slave[slave_id].hasdc);
+			if(soem.ec_slave[slave_id].hasdc)
+				printf(" DCParentport:%d\n", soem.ec_slave[slave_id].parentport);
+			printf(" Activeports:%d.%d.%d.%d\n", (soem.ec_slave[slave_id].activeports & 0x01) > 0,
+				   (soem.ec_slave[slave_id].activeports & 0x02) > 0, (soem.ec_slave[slave_id].activeports & 0x04) > 0,
+				   (soem.ec_slave[slave_id].activeports & 0x08) > 0);
+			printf(" Configured address: %4.4x\n", soem.ec_slave[slave_id].configadr);
+
+		}
+		fflush(stdout);
+
+        // check PDO sync mode, cycle time, sync0 cycle time
+        for( auto slave_id : slaveIds){
+            int ret = 0, l;
+            uint16_t sync_mode;
+            uint32_t cycle_time;
+            uint32_t minimum_cycle_time;
+            uint32_t sync0_cycle_time;
+
+            l = sizeof(sync_mode);
+            ret += soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
+			l = sizeof(cycle_time);
+			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x02, FALSE, &l, &cycle_time, EC_TIMEOUTRXM);
+			l = sizeof(minimum_cycle_time);
+			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x05, FALSE, &l, &minimum_cycle_time, EC_TIMEOUTRXM);
+			l = sizeof(sync0_cycle_time);
+			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_cycle_time, EC_TIMEOUTRXM);
+			printf("PDO syncmode %02x, cycle time %d ns (min %d), sync0 cycle time %d ns, ret = %d\n", sync_mode, cycle_time,
+				   minimum_cycle_time, sync0_cycle_time, ret);
+
+        }
+
+        printf(COLOR_YELLOW "\n%s Finished etherCAT master[%d] configured successfully" COLOR_RESET "\n",
+			   ar_utils::getCurrentTime().c_str(), port_id);
+		fflush(stdout);
+
+
         return true;
+    }
+
+    DriverInfo EthercatManager::getDriverInfo(int slave_no) const
+	{
+		auto it = driver_infos_.find(slave_no);
+		if(it != driver_infos_.end())
+			return it->second;
+		else {
+			std::cout << "Driver not found or initialized";
+			return DriverInfo();
+		}
+	}
+
+
+    void EthercatManager::configPDOProcess(int slave_num)
+    {
+        DriverInfo driver_info = getDriverInfo(slave_num);
+        DriverInfo::LeadshineDriveData driver_data;
+
+        printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s" COLOR_RESET ,driver_info.driver_type.c_str());
+
+        // if(driver_data.control_mode = 0){
+        //     configPDOCyclicPosition(slave_num, leadshine_param_ptr);
+        // }else if (driver_data.control_mode = 1){
+        //     configPDOProfilePosition(slave_num, leadshine_param_ptr);
+        // } 
+    }
+
+    void EthercatManager::configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
+    {
+
     }
 
     ThreadParameters::ThreadParameters(boost::mutex &pmutex, SOEM &psoem, std::vector<int> &slaveIds, bool &pstop_flag, uint8_t &pport_Id,

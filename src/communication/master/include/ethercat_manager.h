@@ -172,6 +172,9 @@ namespace master
          */
         void getStatus(int slave_no, std::string &name, int &eep_man, int &eep_id, int &eep_rev, int &obits, int &ibits, int &state, int &pdelay, int &hasdc, int &activeports, int &configadr) const;
         
+        int getInputBits(int slave_no) const;
+        int getOutputBits(int slave_no) const;
+
         DriverInfo getDriverInfo(int slave_no) const;
 
     

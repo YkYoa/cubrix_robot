@@ -4,6 +4,7 @@
 #include <ar_drive_client.h>
 #include <ar_joint_control.h>
 #include <ar_utils.h>
+#include <ethercat_manager.h>
 
 namespace ar_control
 {
@@ -12,7 +13,7 @@ namespace ar_control
     public:
         ArDriveControl(DriveParameter& driveParam, bool uiState = false);
         ~ArDriveControl();
-        void InitializeDriveClient(int driveId);
+        void InitializeDriveClient(master::EthercatManager* manager, int slaveId);
         
         void AddJoint(JointParameter& jointParam);
         void InitializeDrive();
@@ -54,7 +55,7 @@ namespace ar_control
         std::vector<JointParameter> joint_parameters;  ///< Joint parameters associated with this drive
         bool is_ui_;  ///< Flag to indicate if the UI is enabled
         int drive_id_;  ///< Unique identifier for the drive
-        // ar_master::Protocol* protocol_manager_;  ///< Protocol manager for communication (to be added later)
+        std::unique_ptr<ar_control::ArDriveClient> ar_client; ///< Pointer to the drive client
 
 
     };

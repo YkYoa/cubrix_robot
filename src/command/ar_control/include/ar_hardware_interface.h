@@ -15,6 +15,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 
 #include <ar_utils.h>
+#include <vector>
 #include <ar_drive_config.h>
 #include <ar_drive_control.h>
 
@@ -37,7 +38,7 @@ namespace ar_control
 		bool is_ui;			///< Flag to indicate if the UI is enabled
 		bool& b_quit_;		///< Reference to the quit flag
 
-		int soem_drives = 0; ///< Number of SOEM drives detected
+		std::vector<int> soem_drives; ///< SOEM slave IDs detected (1-based indices)
 
 	private:
 		ArDrives ar_drives;						///< Holds all drive parameters and joint names

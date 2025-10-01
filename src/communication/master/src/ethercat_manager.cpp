@@ -542,17 +542,194 @@ namespace master
 
         printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s" COLOR_RESET ,driver_info.driver_type.c_str());
 
-        // if(driver_data.control_mode = 0){
-        //     configPDOCyclicPosition(slave_num, leadshine_param_ptr);
-        // }else if (driver_data.control_mode = 1){
-        //     configPDOProfilePosition(slave_num, leadshine_param_ptr);
-        // } 
+        if(driver_data.control_mode = 0){
+            configPDOCyclicPosition(slave_num, leadshine_param_ptr);
+        }else if (driver_data.control_mode = 1){
+            configPDOProfilePosition(slave_num, leadshine_param_ptr);
+        } 
     }
 
     void EthercatManager::configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
     {
+        // Slave info init
+		int ret = 0, l;
+		uint8_t num_entries;
+		l = sizeof(num_entries);
+		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+		// printf("len 1 = %d\n", num_entries);
+		//------------------------ RPDO Mapping Start ------------------------------
+		uint32_t mapping;
+		// printf("RPO start = %d\n", ret);
+		num_entries = 0;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+		// printf("RPO debug = %d\n", ret);
+		//  default
+		// add control word 6040
+		mapping = leadshine_param_ptr->CONTROL_WORD.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add target position 607A
+		mapping = leadshine_param_ptr->TARGET_POSITION.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+        // add touch probe function 60b8
+		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = 3;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+
+
+        // printf("RPD end = %d\n", ret);
+
+		//------------------------ RPDO Mapping End ------------------------------
+
+		//------------------------ TPDO Mapping Start ------------------------------
+
+		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+		// printf("len 2 = %d\n", num_entries);
+		num_entries = 0;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+		// add Error code 603F
+		mapping = leadshine_param_ptr->ERROR_CODE.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Statusword 6041
+		mapping = leadshine_param_ptr->STATUS_WORD.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Modes of operation display
+		mapping = leadshine_param_ptr->MODE_OF_OPERATION_DISPLAY.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Position actual value 6064
+		mapping = leadshine_param_ptr->ACTUAL_POSITION.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x04, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Actual velocity value 606C
+		mapping = leadshine_param_ptr->TOUCH_PROBE_STATUS.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x05, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Actual motor torque value 6077
+		mapping = leadshine_param_ptr->TOUCH_PROBE_1_POSITION_VALUE.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x06, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// add Digital inputs 60FD
+		mapping = leadshine_param_ptr->DIGITAL_INPUTS.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x07, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		// printf("TPD set num = %d\n", ret);
+		num_entries = 7;
+		l			= sizeof(num_entries);
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+		// ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+		// printf("len = %d\n", num_entries);
+		// printf("TPD ret = %d\n", ret);
+
+		// SYNC PDO mapping
+		uint8_t num_pdo;
+		// set 0 change PDO mapping index
+		num_pdo = 0;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+		// set to default PDO mapping 4
+		uint16_t idx_rxpdo = leadshine_param_ptr->RXPDO1.index;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x01, FALSE, sizeof(idx_rxpdo), &idx_rxpdo, EC_TIMEOUTRXM);
+		// set number of assigned PDOs
+		num_pdo = 1;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+		// printf("RxPDO mapping object index %d = %04x ret=%d\n", slave_num, idx_rxpdo, ret);
+
+		// set 0 change PDO mapping index
+		num_pdo = 0;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+		// set to default PDO mapping 4
+		uint16_t idx_txpdo = leadshine_param_ptr->TXPDO1.index;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x01, FALSE, sizeof(idx_txpdo), &idx_txpdo, EC_TIMEOUTRXM);
+		// set number of assigned PDOs
+		num_pdo = 1;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+		// printf("TxPDO mapping object index %d = %04x ret=%d\n", slave_num, idx_txpdo, ret);
 
     }
+
+    void EthercatManager::configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
+    {   
+        // later
+    }
+
+    int EthercatManager::getInputBits(int slave_no) const
+	{
+		if(slave_no > max_slave_count) {
+			printf(COLOR_RED "%s ERROR : slave_no(%d) is larger than max_slave_id configured(%d)" COLOR_RESET "\n",
+				   ar_utils::getCurrentTime().c_str(), slave_no, max_slave_count);
+			fflush(stdout);
+			exit(1);
+		}
+		return soem.ec_slave[slave_no].Ibits;
+	}
+
+    int EthercatManager::getOutputBits(int slave_no) const
+    {
+        if(slave_no > max_slave_count) {
+			printf(COLOR_RED "%s ERROR : slave_no(%d) is larger than max_slave_id configured(%d)" COLOR_RESET "\n",
+				   ar_utils::getCurrentTime().c_str(), slave_no, max_slave_count);
+			fflush(stdout);
+			exit(1);
+		}
+		return soem.ec_slave[slave_no].Obits;
+
+    }
+
+	void EthercatManager::write(int slave_no, uint8_t channel, uint8_t value)
+	{
+		boost::mutex::scoped_lock lock(iomap_mutex_);
+		soem.ec_slave[slave_no].outputs[channel] = value;
+	}
+
+    uint8_t EthercatManager::readOutput(int slave_no, uint8_t channel) const
+	{
+		boost::mutex::scoped_lock lock(iomap_mutex_);
+		if(slave_no > max_slave_count) {
+			printf(COLOR_RED "%s ERROR : slave_no(%d) is larger than max_slave_id configured(%d)" COLOR_RESET "\n",
+				   ar_utils::getCurrentTime().c_str(), slave_no, max_slave_count);
+			fflush(stdout);
+			exit(1);
+		}
+		if(channel * 8 >= soem.ec_slave[slave_no].Obits) {
+			printf(COLOR_RED "%s ERROR : channel(%d) is larger that Output bits (%d)" COLOR_RESET "\n",
+				   ar_utils::getCurrentTime().c_str(), channel * 8, soem.ec_slave[slave_no].Obits);
+			fflush(stdout);
+			exit(1);
+		}
+		return soem.ec_slave[slave_no].outputs[channel];
+	}
+
+    uint8_t EthercatManager::readInput(int slave_no, uint8_t channel) const
+	{
+		boost::mutex::scoped_lock lock(iomap_mutex_);
+		if(slave_no > max_slave_count) {
+			// checkErrorProcessed();
+			printf(COLOR_RED "%s ERROR : slave_no(%d) is larger than max_slave_id configured(%d)" COLOR_RESET "\n",
+				   ar_utils::getCurrentTime().c_str(), slave_no, max_slave_count);
+			fflush(stdout);
+			exit(1);
+		}
+		if(channel * 8 >= soem.ec_slave[slave_no].Ibits) {
+			printf(COLOR_RED "%s ERROR : channel(%d) is larger than Input bits (%d)" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str(),
+				   channel * 8, soem.ec_slave[slave_no].Ibits);
+			fflush(stdout);
+			exit(1);
+		}
+		return soem.ec_slave[slave_no].inputs[channel];
+	}
+
 
     ThreadParameters::ThreadParameters(boost::mutex &pmutex, SOEM &psoem, std::vector<int> &slaveIds, bool &pstop_flag, uint8_t &pport_Id,
                                        pthread_cond_t &pcond, pthread_mutex_t &pcond_lock, bool &psynch_flag_on,
@@ -568,5 +745,6 @@ namespace master
             slave_ids.push_back(slave_id);
         }
     }
+
 
 }

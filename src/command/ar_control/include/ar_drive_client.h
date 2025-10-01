@@ -17,25 +17,24 @@ namespace ar_control
     {
         uint16 error_code;
         uint16 status_word;
-        uint8 displayed_mode_of_operation;
+        uint8 mode_of_operation_display;
         int32 actual_position;
-        int32 actual_velocity;
+        uint16 touch_probe_status;
+        int32 touch_probe_1_positive_value;
+        uint32 digital_inputs;
     };
     
     struct SingleJointCyclicOutput : DriveOutput
     {
-        uint16 error_code;
         uint16 control_word;
-        uint8 operation_mode;
         int32 target_position;
-        int32 target_velocity;
+        uint32 touch_probe_function;
     };
 
     class ArDriveClient
     {
     public:
-        // Constructor
-        ArDriveClient(std::shared_ptr<master::EthercatManager> manager, int slaveId);
+        ArDriveClient(master::EthercatManager& manager, int slaveId);
         ~ArDriveClient ();
 
         void readInputs(SingleJointCyclicInput* input);
@@ -46,12 +45,15 @@ namespace ar_control
         template <typename T, typename U> void motorOn(T* input, U* output);
         template <typename T, typename U> void motorOff(T* input, U* output);
 
-        inline master::EthercatManager& getManager() { return *manager_; }
+		inline master::EthercatManager& getManager()
+		{
+			return manager_;
+		}
 
         std::shared_ptr<master::DriverInfo> driver_info_;
 
     private:
-        std::shared_ptr<master::EthercatManager> manager_;
+        master::EthercatManager& manager_;
         // Private members and methods
         template <typename T> void ErrorHandling(const T* input);
 
@@ -59,7 +61,7 @@ namespace ar_control
         int output_map_size;
 
         const std::map<uint16_t, std::string>* error_maps;
-        int slave_id_;
+        const int slave_id_;
     };
 
 }

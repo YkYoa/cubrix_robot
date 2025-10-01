@@ -10,11 +10,13 @@ namespace ar_control
         drive_id_ = driveParm.drive_id;
     }
 
-    void ArDriveControl::InitializeDriveClient(int driveId)
+    void ArDriveControl::InitializeDriveClient(master::EthercatManager* manager, int slaveId)
     {
-        // This function will be implemented later
-
-        return;
+        drive_id_ = slaveId;
+        ar_client.reset();
+        if(manager){
+            ar_client = std::make_unique<ArDriveClient>(*manager, slaveId);
+        }
     }
 
     void ArDriveControl::AddJoint(JointParameter& jointParam)

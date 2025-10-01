@@ -51,16 +51,28 @@ namespace ar_control
         portManager = nullptr;
 
         if(!is_simulation){
+            // Ensure member vector `soem_drives` holds the SOEM slave IDs
+            soem_drives.clear();
+            for (const auto &driveParm : ar_drives.drive_parameters)
+            {
+                if (driveParm.port_id == PORT_SOEM)
+                {
+                    soem_drives.push_back(driveParm.slave_id);
+                }
+            }
+
             portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
-            // if(!portManager->initialize(b_quit_, soem_drives)){
-            //     b_quit_ = true;
-            //     return;
-            // }
+            if(!portManager->initialize(b_quit_, soem_drives)){
+                b_quit_ = true;
+                return;
+            }
         }
 
         for(auto& driveParm : ar_drives.drive_parameters){
             drives[driveParm.drive_id] = new ArDriveControl(driveParm, is_ui);
-            drives[driveParm.drive_id]->InitializeDriveClient(driveParm.port_id);
+            // Initialize drive client when on SOEM port with the EthercatManager and assigned slave id
+            if(!is_simulation && driveParm.port_id == PORT_SOEM && portManager)
+                drives[driveParm.drive_id]->InitializeDriveClient(portManager, driveParm.slave_id);
 
             for(auto& jointParm : driveParm.joint_paramters){
                 auto urdf_joint = urdf_model.getJoint(jointParm.joint_name);
@@ -123,8 +135,8 @@ namespace ar_control
             }
             else if(driveParam.port_id == PORT_SOEM)
             {
-                soem_drives++;
-                driveParam.slave_id = soem_drives;
+                int next_slave_id = static_cast<int>(soem_drives.size()) + 1;
+                driveParam.slave_id = next_slave_id;
             }
             // else if (driveParam.port_id == DISCONNECTED)
             // {

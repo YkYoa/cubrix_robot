@@ -47,7 +47,7 @@ public:
     {
         slave_id = -1;
         port_id = NO_COMM;
-        drive_mode = ProfilePosition;
+        drive_mode = CyclicSynchronousPosition;
     }
     int slave_id;
     int drive_id; 

@@ -51,7 +51,6 @@ namespace ar_control
         portManager = nullptr;
 
         if(!is_simulation){
-            // Ensure member vector `soem_drives` holds the SOEM slave IDs
             soem_drives.clear();
             for (const auto &driveParm : ar_drives.drive_parameters)
             {
@@ -62,15 +61,18 @@ namespace ar_control
             }
 
             portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
+            
             if(!portManager->initialize(b_quit_, soem_drives)){
+                std::cout<<"IN" <<std::endl;
                 b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to initialize ETHERCAT manager. Exiting.");
                 return;
             }
         }
 
         for(auto& driveParm : ar_drives.drive_parameters){
             drives[driveParm.drive_id] = new ArDriveControl(driveParm, is_ui);
-            // Initialize drive client when on SOEM port with the EthercatManager and assigned slave id
+
             if(!is_simulation && driveParm.port_id == PORT_SOEM && portManager)
                 drives[driveParm.drive_id]->InitializeDriveClient(portManager, driveParm.slave_id);
 
@@ -87,6 +89,7 @@ namespace ar_control
                 drives_ptr.push_back(drive.second);
         }
 
+        control_server_thread = new std::thread(&ArHardwareInterface::launchControlServer, this);
     }
 
     ArHardwareInterface::~ArHardwareInterface()

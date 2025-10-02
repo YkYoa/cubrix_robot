@@ -82,7 +82,7 @@ namespace master
                 error_thread_param->soem.ec_group[0].docheckstate = false;
                 error_thread_param->soem.ec_readstate();
 
-                printf(COLOR_YELLOW "[EtherCatManager] Checking state of slaves..." COLOR_RESET "\n");
+                // printf(COLOR_YELLOW "[EtherCatManager] Checking state of slaves..." COLOR_RESET "\n");
                 bool stop_flag_on = false;
                 for (auto slave : error_thread_param->slave_ids)
                 {
@@ -268,6 +268,12 @@ namespace master
         std::cout << COLOR_DARKYELLOW "EtherCatManager: Reading drive parameters from: " << yamlpath << COLOR_RESET << std::endl;
         ethercat_config_ = ar_common::readYamlFile(yamlpath);
 
+        if (!ethercat_config_["port_info"] || !ethercat_config_["port_info"]["port_name"])
+        {
+            printf(COLOR_RED "Error: Invalid configuration - missing port_info/port_name\n" COLOR_RESET);
+            return false;
+        }
+
         p_cycle_thread_ = 0;
         p_handle_error_thread_ = 0;
         stop_flag = false;
@@ -306,8 +312,19 @@ namespace master
         driver_data.com_port = ethercat_config_["port_info"]["port_name"].as<std::string>();
         driver_data.control_mode = ethercat_config_["driver_info"]["driver_mode"].as<int>();
 
-        for(auto it = ethercat_config_.begin(); it!= ethercat_config_.end(); ++it){
-            driver_info.driver_type = it->first.as<std::string>();
+        std::string drive_key = "drive_" + std::to_string(slave_no);
+
+        if (ethercat_config_["drives"][drive_key])
+        {
+            const auto &joints = ethercat_config_["drives"][drive_key]["joints"];
+            if (joints && joints.begin() != joints.end())
+            {
+                auto joint_node = joints.begin()->second;
+                if (joint_node["driver_name"])
+                {
+                    driver_info.driver_type = joint_node["driver_name"].as<std::string>();
+                }
+            }
         }
 
         if(driver_info.driver_type != soem.ec_slave[slave_no].name) {
@@ -317,6 +334,7 @@ namespace master
 			driver_info.driver_type = soem.ec_slave[slave_no].name;
             return false;
 		}
+
 		driver_infos_.insert(std::make_pair(slave_no, driver_info));
 
         return true;
@@ -396,22 +414,23 @@ namespace master
 
         // wait for slave 
         int slaveCount = -INT_MAX;
+
         while(true){
             // find and auto-config slave 
             soem.ec_config_init(FALSE);
             if(slaveCount != soem.ec_slavecount){
-                if(soem.ec_slavecount > max_slave_count){
+                if(soem.ec_slavecount >= max_slave_count){
                     printf(COLOR_YELLOW "[EtherCatManager] Detected %d slaves" COLOR_RESET "\n", soem.ec_slavecount);
                     break;
                 }
-                slaveCount = soem.ec_slavecount - soem.ec_slavecount;
+                slaveCount = max_slave_count - soem.ec_slavecount;
 				printf(COLOR_RED "%s Ethercat port %d: Waiting for %d slave%s (expected: %d; found %d)..." COLOR_RESET "\n",
 					   ar_utils::getCurrentTime().c_str(), port_id, slaveCount, slaveCount > 1 ? "s" : "", max_slave_count,
 					   soem.ec_slavecount);
 				fflush(stdout);
-				usleep(1000000);
+				// usleep(1000000);
 
-                				slaveCount = soem.ec_slavecount;
+                slaveCount = soem.ec_slavecount;
 				if(slaveCount > 0) {
 					soem.ec_slave[0].state = EC_STATE_INIT;
 					soem.ec_writestate(0);
@@ -421,6 +440,8 @@ namespace master
             if(bQuit)
                 return false;
         }
+
+
 
         printf(COLOR_YELLOW "%s SOEM found %d slaves and configured %ld" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str(),
                soem.ec_slavecount, slaveIds.size());
@@ -476,6 +497,7 @@ namespace master
 		do {
 			soem.ec_send_processdata();
 			soem.ec_receive_processdata(EC_TIMEOUTRET_8);
+
 			soem.ec_statecheck(0, EC_STATE_OPERATIONAL, 50000);	 // 50 ms wait for state check
 		} while(chk-- && (soem.ec_slave[0].state != EC_STATE_OPERATIONAL));
 
@@ -540,7 +562,7 @@ namespace master
         DriverInfo driver_info = getDriverInfo(slave_num);
         DriverInfo::LeadshineDriveData driver_data;
 
-        printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s" COLOR_RESET ,driver_info.driver_type.c_str());
+        printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s \n" COLOR_RESET ,driver_info.driver_type.c_str());
 
         if(driver_data.control_mode = 0){
             configPDOCyclicPosition(slave_num, leadshine_param_ptr);

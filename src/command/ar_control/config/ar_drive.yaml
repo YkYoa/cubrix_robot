@@ -7,7 +7,7 @@
 ### driver mode : 0 > Cyclic position mode, 1 > Profile position mode
 
 port_info:
-  port_name: enp3s0
+  port_name: enp2s0
 
 driver_info:
   driver_mode: 0
@@ -25,18 +25,19 @@ driver_info:
 use_torque_offset: false
 
 port_ids: 
-  drive_1: 1   # SOEM-connected
-  drive_2: 1   # SOEM-connected
-  drive_3: 1   # SOEM-connected
-  drive_4: 1   # SOEM-connected
-  drive_5: 0   # dummy (disconnected/unplugged)
-  drive_6: 1   # SOEM-connected
+  drive_1: 1   
+  drive_2: 0   
+  drive_3: 0   
+  drive_4: 0   
+  drive_5: 0   
+  drive_6: 0   
 
 
 drives:
   drive_1:
     joints:
       Arm_joint1:
+        driver_name: CS3E-D503B      
         gear_ratio: 16
         encoder_res: 256
         encoder_offset: 4000

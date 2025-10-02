@@ -49,6 +49,11 @@ namespace ar_control
 		is_ui  = info_.hardware_parameters["ui"] == "False" ? false : true;
 		b_quit = false;
 
+		comm_mutex.push_back(std::make_shared<boost::mutex>());
+		comm_mutex.push_back(std::make_shared<boost::mutex>());
+		comm_mutex.push_back(std::make_shared<boost::mutex>());
+
+
 		// hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 		// hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
@@ -196,9 +201,17 @@ namespace ar_control
 
 	ArSystemHardware::~ArSystemHardware()
 	{
-		this->shutdown(); // Call own shutdown method
+		robot->shutdown(); // Call own shutdown method
 		// robot->shutdown(); // Original line, now handled by this->shutdown()
 		usleep(1000);
+
+		pthread_cond_destroy(&cond);
+		pthread_mutex_destroy(&lock);
+
+		for(auto& mutex : comm_mutex) {
+			mutex.reset();	// reset shared_ptr to release ownership
+		}
+
 	}
 
 }  // namespace ar_control

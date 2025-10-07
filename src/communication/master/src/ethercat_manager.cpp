@@ -81,9 +81,20 @@ namespace master
             {
                 error_thread_param->soem.ec_group[0].docheckstate = false;
                 error_thread_param->soem.ec_readstate();
-
-                // printf(COLOR_YELLOW "[EtherCatManager] Checking state of slaves..." COLOR_RESET "\n");
                 bool stop_flag_on = false;
+
+                static int count = 0;
+                if(count++ % 100 == 0){
+                    int32_t operation_mode = readSDO<int32_t>(1, 0x6060, 0x00, error_thread_param->soem);
+                    uint16_t status_word = readSDO<uint16_t>(1, 0x6041, 0x00, error_thread_param->soem);
+                    uint16_t error_code = readSDO<uint16_t>(1, 0x603F, 0x00, error_thread_param->soem);
+                    printf(COLOR_RED "[EtherCatManager] slave %d () op mode: 0x%04X, status word: 0x%04X, error code: 0x%04X" COLOR_RESET "\n",
+                           1, operation_mode, status_word, error_code);
+                }
+
+                // printf(COLOR_YELLOW "[EtherCatManager] %s Checking state of slaves..." COLOR_RESET "\n", ar_utils::getCurrentTime(false, false).c_str());
+
+                
                 for (auto slave : error_thread_param->slave_ids)
                 {
                     const char *jointName = error_thread_param->joint_names[slave].c_str();
@@ -400,15 +411,15 @@ namespace master
         const static unsigned MAX_BUFF_SIZE = 1024;
 
         std::string ifName = ethercat_config_["port_info"]["port_name"].as<std::string>();
-        char buffer[MAX_BUFF_SIZE];
-        if(ifName.size() >= sizeof(buffer - 1)){
-            printf(COLOR_RED "Error: Interface name is too long: %s" COLOR_RESET "\n", ifName.c_str());
-            return false;
-        }
-        std::strncpy(buffer, ifName.c_str(), sizeof(buffer) - 1);
+        // char buffer[MAX_BUFF_SIZE];
+        // if(ifName.size() >= sizeof(buffer - 1)){
+        //     printf(COLOR_RED "Error: Interface name is too long: %s" COLOR_RESET "\n", ifName.c_str());
+        //     return false;
+        // }
+        // std::strncpy(buffer, ifName.c_str(), sizeof(buffer) - 1);
 
-        if(!soem.ec_init(buffer)){
-            printf(COLOR_RED "Error: Failed to initialize EtherCAT on interface %s" COLOR_RESET "\n", buffer);
+        if(!soem.ec_init(ifName.c_str())){
+            printf(COLOR_RED "Error: Failed to initialize EtherCAT on interface " COLOR_RESET "\n");
             return false;
         }
 
@@ -470,14 +481,15 @@ namespace master
         }
 
         // config PDO 
-        for(auto slave_id : slaveIds) {
-			configPDOProcess(slave_id);
-		}
+        // for(auto slave_id : slaveIds) {
+			// configPDOProcess(slave_id);
+        // }
+
 
         //Config IO map
         int io_map_size = soem.ec_config_map(&iomap_);
         std::cout << COLOR_YELLOW "[EtherCatManager] IOMap size: " << io_map_size << COLOR_RESET << std::endl;
-
+        
         //locate dc slaves
         soem.ec_configdc();
 
@@ -564,11 +576,14 @@ namespace master
 
         printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s \n" COLOR_RESET ,driver_info.driver_type.c_str());
 
-        if(driver_data.control_mode = 0){
+        if (driver_data.control_mode == 0)
+        {
             configPDOCyclicPosition(slave_num, leadshine_param_ptr);
-        }else if (driver_data.control_mode = 1){
+        }
+        else if (driver_data.control_mode == 1)
+        {
             configPDOProfilePosition(slave_num, leadshine_param_ptr);
-        } 
+        }
     }
 
     void EthercatManager::configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
@@ -578,34 +593,39 @@ namespace master
 		uint8_t num_entries;
 		l = sizeof(num_entries);
 		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
-		// printf("len 1 = %d\n", num_entries);
+		printf("len 1 = %d\n", num_entries);
 		//------------------------ RPDO Mapping Start ------------------------------
 		uint32_t mapping;
-		// printf("RPO start = %d\n", ret);
+		printf("RPDO start = %d\n", ret);
 		num_entries = 0;
 		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
 								EC_TIMEOUTRXM);
-		// printf("RPO debug = %d\n", ret);
+		printf("RPDO debug = %d\n", ret);
 		//  default
 		// add control word 6040
 		mapping = leadshine_param_ptr->CONTROL_WORD.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("controlword debug = %d\n", ret);
+            
 		// add target position 607A
 		mapping = leadshine_param_ptr->TARGET_POSITION.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("target position debug = %d\n", ret);
+        
         // add touch probe function 60b8
 		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("touch probe function debug = %d\n", ret);
 
         num_entries = 3;
 		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
 								EC_TIMEOUTRXM);
 
 
-        // printf("RPD end = %d\n", ret);
+        printf("RPDO end = %d\n", ret);
 
 		//------------------------ RPDO Mapping End ------------------------------
 

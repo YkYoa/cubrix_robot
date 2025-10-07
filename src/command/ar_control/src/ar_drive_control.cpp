@@ -91,10 +91,23 @@ namespace ar_control
         return nDof;
     }
 
+    template <typename T> void ArDriveControl::jointCmdToPulses(ArJointControl* joint, T* position, T* velocity)
+    {
+		if(position)
+			*position = int32(joint->joint_pos_cmd * joint->pulse_per_revolution);
+		if(velocity)
+			*velocity = int32(joint->velocity_actual_value * joint->pulse_per_revolution);
+    }
+
     void ArDriveControl::write()
     {
-        // No drive client yet so return
-        return;
+        if(drive_parameter.drive_mode == CyclicSynchronousPosition){
+            ArJointControl* joint = joints[0];
+            SingleJointCyclicOutput* output = (SingleJointCyclicOutput*) driveOutput;
+            ar_client->writeOutputs(output);
+
+            jointCmdToPulses(joint, &output->target_position);
+        }
     }
 
     void ArDriveControl::read()

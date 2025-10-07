@@ -48,6 +48,8 @@ namespace ar_control
             return joints;
         }
 
+        template <typename T> void jointCmdToPulses(ArJointControl* joint, T* position = nullptr, T* velocity = nullptr);
+
         std::vector<ArJointControl* > joints; ///< Vector of joint controls associated with this drive
 
     protected:
@@ -57,6 +59,8 @@ namespace ar_control
         int drive_id_;  ///< Unique identifier for the drive
         std::unique_ptr<ar_control::ArDriveClient> ar_client; ///< Pointer to the drive client
 
+        DriveInput* driveInput;   ///< Pointer to the drive input structure
+        DriveOutput* driveOutput; ///< Pointer to the drive output structure
 
     };
 

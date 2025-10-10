@@ -46,6 +46,7 @@ public:
     DriveParameter()
     {
         slave_id = -1;
+        is_dual_axis = false;
         port_id = NO_COMM;
         drive_mode = CyclicSynchronousPosition;
     }
@@ -53,6 +54,7 @@ public:
     int drive_id; 
     int drive_mode;
     int port_id;
+    bool is_dual_axis;
     std::vector<JointParameter> joint_paramters;
     std::map<std::string, int> joint_name_to_id;
 };

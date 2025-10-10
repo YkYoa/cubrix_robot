@@ -39,7 +39,7 @@ namespace ar_control
 		bool& b_quit_;		///< Reference to the quit flag
 
 		std::vector<int> soem_drives; ///< SOEM slave IDs detected (1-based indices)
-
+ 
 	private:
 		ArDrives ar_drives;						///< Holds all drive parameters and joint names
 		urdf::Model urdf_model;					///< URDF model of the robot

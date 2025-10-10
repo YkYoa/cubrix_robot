@@ -1,10 +1,10 @@
 #pragma once 
 
-#include <ar_drive_config.h>
-#include <ar_drive_client.h>
-#include <ar_joint_control.h>
-#include <ar_utils.h>
-#include <ethercat_manager.h>
+#include "ar_drive_config.h"
+#include "ar_joint_control.h"
+#include "ar_utils.h"
+#include "ethercat_manager.h"
+#include "ar_drive_client.h"
 
 namespace ar_control
 {
@@ -19,6 +19,7 @@ namespace ar_control
         void InitializeDrive();
         void read();
         void write();
+        void shutdown();
         
         int getInputActualValueToStatus(tVectorS& jointNames, tVectorS& hardwareIds, 
                                 std::vector<uint32_t>& positionActualValues, std::vector<uint32_t>& velocityActualValues);

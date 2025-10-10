@@ -91,9 +91,6 @@ namespace master
                     printf(COLOR_RED "[EtherCatManager] slave %d () op mode: 0x%04X, status word: 0x%04X, error code: 0x%04X" COLOR_RESET "\n",
                            1, operation_mode, status_word, error_code);
                 }
-
-                // printf(COLOR_YELLOW "[EtherCatManager] %s Checking state of slaves..." COLOR_RESET "\n", ar_utils::getCurrentTime(false, false).c_str());
-
                 
                 for (auto slave : error_thread_param->slave_ids)
                 {
@@ -155,7 +152,6 @@ namespace master
                     }
                 }
                 error_thread_param->process_data = false;
-
             }
             osal_usleep(20000);
         }
@@ -310,8 +306,6 @@ namespace master
             return true;
         }
 
-        
-
         return true;
     }
 
@@ -327,14 +321,14 @@ namespace master
 
         if (ethercat_config_["drives"][drive_key])
         {
-            const auto &joints = ethercat_config_["drives"][drive_key]["joints"];
-            if (joints && joints.begin() != joints.end())
+            const auto &drive_node = ethercat_config_["drives"][drive_key];
+
+            if (drive_node["driver_name"])
             {
-                auto joint_node = joints.begin()->second;
-                if (joint_node["driver_name"])
-                {
-                    driver_info.driver_type = joint_node["driver_name"].as<std::string>();
-                }
+                driver_info.driver_type = drive_node["driver_name"].as<std::string>();
+                RCLCPP_INFO(rclcpp::get_logger("EtherCatManager"),
+                            "Slave %d driver_name: %s",
+                            slave_no, driver_info.driver_type.c_str());
             }
         }
 

@@ -11,15 +11,15 @@ port_info:
 
 driver_info:
   driver_mode: 0
-  CS3E_D503B:
-    product_code: 0x85000000
-    vendor_id: 0x43210000
-  CS3E_D507B:
-    product_code: 0x87000000
-    vendor_id: 0x43210000
-  CL3T:
-    product_code: 0x10000000
-    vendor_id: 0x43210000
+  # CS3E_D503B:
+  #   product_code: 0x85000000
+  #   vendor_id: 0x43210000
+  # CS3E_D507B:
+  #   product_code: 0x87000000
+  #   vendor_id: 0x43210000
+  # CL3T:
+  #   product_code: 0x10000000
+  #   vendor_id: 0x43210000
 
 
 use_torque_offset: false
@@ -30,28 +30,38 @@ port_ids:
   drive_3: 0   
   drive_4: 0   
   drive_5: 0   
-  drive_6: 0   
+  # drive_6: 0   
 
 
 drives:
   drive_1:
+    is_dual_axis: true
+    driver_name: 2CL3-EC403T      
     joints:
       Arm_joint1:
-        driver_name: CS3E-D503B      
         gear_ratio: 16
         encoder_res: 256
         encoder_offset: 4000
         # torque_gamma:
         log_joint: false
-  drive_2:
-    joints:
       Arm_joint2:
         gear_ratio: 16
         encoder_res: 256
         encoder_offset: 4000
         # torque_gamma:
         log_joint: false
-  drive_3:
+
+  # drive_2:
+  #   joints:
+  #     Arm_joint2:
+  #       gear_ratio: 16
+  #       encoder_res: 256
+  #       encoder_offset: 4000
+  #       # torque_gamma:
+  #       log_joint: false
+  drive_2:
+    is_dual_axis: false
+    driver_name: CS3E_D503B
     joints:
       Arm_joint3:
         gear_ratio: 16
@@ -59,7 +69,9 @@ drives:
         encoder_offset: 4000
         # torque_gamma:
         log_joint: false
-  drive_4:
+  drive_3:
+    is_dual_axis: false
+    driver_name: CS3E_D503B
     joints:
       Arm_joint4:
         gear_ratio: 16
@@ -67,7 +79,9 @@ drives:
         encoder_offset: 4000
         # torque_gamma:
         log_joint: false
-  drive_5:
+  drive_4:
+    is_dual_axis: false
+    driver_name: CS3E_D503B
     joints:
       Arm_joint5:
         gear_ratio: 16
@@ -75,7 +89,9 @@ drives:
         encoder_offset: 4000
         # torque_gamma:
         log_joint: false
-  drive_6:
+  drive_5:
+    is_dual_axis: false
+    driver_name: CS3E_D503B
     joints:
       Arm_joint6:
         gear_ratio: 16

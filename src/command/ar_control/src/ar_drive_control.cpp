@@ -22,7 +22,7 @@ namespace ar_control
     void ArDriveControl::AddJoint(JointParameter& jointParam)
     {
         ArJointControl* joint = new ArJointControl(jointParam.joint_name);
-		printf(COLOR_BLUE "\n[Tomo Drive Control] Drive %d add joint: %s" COLOR_RESET, drive_id_, jointParam.joint_name.c_str());
+		printf(COLOR_BLUE "\n[Ar Drive Control] Drive %d add joint: %s" COLOR_RESET, drive_id_, jointParam.joint_name.c_str());
         joint->rev_angle_convert_mode = jointParam.rev_angle_convert_mode;
 
         if(jointParam.joint_limits != NULL){
@@ -66,13 +66,68 @@ namespace ar_control
     {
 		printf(COLOR_DARKYELLOW "\n[Ar Drive Control] ---------------------- Initializing drive %d----------------------" COLOR_RESET,
 			   drive_id_);
-        // Now no drive client yet so return
-        return;
+        
+        if(drive_parameter.is_dual_axis == true){
+            DualJointCyclicInput* input = new DualJointCyclicInput();
+            DualJointCyclicOutput* output = new DualJointCyclicOutput();
+            driveInput = input;
+            driveOutput = output;
+
+            ar_client->resetFaultDualJoint(input, output);
+            output->control_word_1 = 0x0006;
+            usleep(10000);
+            output->control_word_1 = 0x0007;
+            usleep(10000);
+            output->control_word_1 = 0x000f;
+            usleep(10000);
+            output->control_word_2 = 0x0006;
+            usleep(10000);
+            output->control_word_2 = 0x0007;
+            usleep(10000);
+            output->control_word_2 = 0x000f;
+            usleep(10000);
+        }
+
+
+
+       return;
     }
 
     ArDriveControl::~ArDriveControl()
     {
-        printf("\n[Ar Drive Control] [Drive %d] destruction", drive_id_);
+        printf("\n[Ar Drive Control] Shutting down");
+        shutdown();
+        for(auto joint:joints){
+            delete joint;
+        }
+        joints.clear();
+
+        if(driveInput)
+            delete driveInput;
+        if(driveOutput)
+            delete driveOutput;
+
+        ar_client.reset();
+    }
+
+    void ArDriveControl::shutdown()
+    {
+        if(ar_client == nullptr)
+            return;
+
+        printf(COLOR_DARKYELLOW "\n[Ar Drive Control] Shutting down drive %d" COLOR_RESET, drive_id_);
+
+        if(drive_parameter.is_dual_axis == true){
+            DualJointCyclicInput* input = (DualJointCyclicInput*) driveInput;
+            DualJointCyclicOutput* output = (DualJointCyclicOutput*) driveOutput;
+            ar_client->resetFaultDualJoint(input,output);
+        }else{
+            SingleJointCyclicInput* input = (SingleJointCyclicInput*) driveInput;
+            SingleJointCyclicOutput* output = (SingleJointCyclicOutput*) driveOutput;
+            ar_client->resetFaultSingleJoint(input,output);
+        }
+        // ar_client->motorOff(input,output);
+
     }
 
     int ArDriveControl::getInputActualValueToStatus(tVectorS& jointNames, tVectorS& hardwareIds, 
@@ -101,13 +156,13 @@ namespace ar_control
 
     void ArDriveControl::write()
     {
-        if(drive_parameter.drive_mode == CyclicSynchronousPosition){
-            ArJointControl* joint = joints[0];
-            SingleJointCyclicOutput* output = (SingleJointCyclicOutput*) driveOutput;
-            ar_client->writeOutputs(output);
+        // if(drive_parameter.drive_mode == CyclicSynchronousPosition){
+        //     ArJointControl* joint = joints[0];
+        //     SingleJointCyclicOutput* output = (SingleJointCyclicOutput*) driveOutput;
+        //     ar_client->writeOutputs(output);
 
-            jointCmdToPulses(joint, &output->target_position);
-        }
+        //     jointCmdToPulses(joint, &output->target_position);
+        // }
     }
 
     void ArDriveControl::read()

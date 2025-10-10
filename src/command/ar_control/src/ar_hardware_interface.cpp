@@ -63,7 +63,6 @@ namespace ar_control
             portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
             
             if(!portManager->initialize(b_quit_, soem_drives)){
-                std::cout<<"IN" <<std::endl;
                 b_quit_ = true;
                 RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to initialize ETHERCAT manager. Exiting.");
                 return;
@@ -132,6 +131,7 @@ namespace ar_control
             std::string drive_id = it->first.as<std::string>();
             driveParam.drive_id = ar_utils::stringToId(drive_id);
             driveParam.port_id = it->second.as<int>();
+            driveParam.is_dual_axis = drives[drive_id]["is_dual_axis"] ? drives[drive_id]["is_dual_axis"].as<bool>() : false;
             if(is_simulation)
             {
                 driveParam.port_id = NO_COMM;
@@ -172,7 +172,11 @@ namespace ar_control
         // Print out all loaded drive and joint parameters
         std::cout << "Loaded drive parameters:\n";
         for (const auto& drive : ar_drives.drive_parameters) {
-            std::cout << "Drive ID: " << drive.drive_id << ", Port ID: " << drive.port_id << ", Slave Id: " << drive.slave_id << std::endl;
+            std::cout << "Drive ID: " << drive.drive_id
+                      << ", Port ID: " << drive.port_id 
+                      << ", Slave Id: " << drive.slave_id
+                      << ", Is Dual Axis: " << (drive.is_dual_axis ? "True" : "False")
+                      << std::endl;
             for (const auto& joint : drive.joint_paramters) {
                 std::cout << "  Joint Name: " << joint.joint_name
                           << ", Gear Ratio: " << joint.gear_ratio

@@ -16,8 +16,7 @@ namespace ar_control
     void ArHardwareInterface::InitializeDrives(std::vector<ArDriveControl*>& drives)
     {
         for(auto drive : drives){
-            if(drive->jointCount() == 1)
-                drive->InitializeDrive();
+            drive->InitializeDrive();
         }
     }
 
@@ -61,19 +60,24 @@ namespace ar_control
             }
 
             portManager = new master::EthercatManager((uint8_t) PORT_SOEM, robotDesc, cond, cond_lock, *comm_mutex[PORT_SOEM]);
-            
-            if(!portManager->initialize(b_quit_, soem_drives)){
+            if (!portManager->initialize(b_quit_, soem_drives))
+            {
                 b_quit_ = true;
                 RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to initialize ETHERCAT manager. Exiting.");
                 return;
             }
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "ETHERCAT manager initialized for %zu SOEM drives", soem_drives.size());
         }
 
         for(auto& driveParm : ar_drives.drive_parameters){
             drives[driveParm.drive_id] = new ArDriveControl(driveParm, is_ui);
 
-            if(!is_simulation && driveParm.port_id == PORT_SOEM && portManager)
+            if(!is_simulation && driveParm.port_id == PORT_SOEM && portManager) {
+                RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), 
+                    "Initializing drive client for drive %d with slave_id %d", 
+                    driveParm.drive_id, driveParm.slave_id);
                 drives[driveParm.drive_id]->InitializeDriveClient(portManager, driveParm.slave_id);
+            }
 
             for(auto& jointParm : driveParm.joint_paramters){
                 auto urdf_joint = urdf_model.getJoint(jointParm.joint_name);
@@ -87,6 +91,8 @@ namespace ar_control
             if(drive.second)
                 drives_ptr.push_back(drive.second);
         }
+        
+        InitializeDrives(drives_ptr);
 
         control_server_thread = new std::thread(&ArHardwareInterface::launchControlServer, this);
     }
@@ -105,10 +111,14 @@ namespace ar_control
                 delete drive.second;
             }
         }
-        if (control_server_thread)
-            control_server_thread->join();
+		if(portManager) {
+			RCLCPP_INFO(rclcpp::get_logger("Tomo"), "Delete manager");
+			delete portManager;
+		}
+		if(control_server_thread)
+			control_server_thread->join();
 
-        RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), "Shut down complete.");
+        RCLCPP_INFO(rclcpp::get_logger("\nArHardwareInterface"), "Shut down complete.");
     }
 
     void ArHardwareInterface::readConfigFromYaml()

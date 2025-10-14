@@ -157,15 +157,64 @@ namespace ar_control
       return;
 
     output->control_word_1 = 0x80;
+    writeOutputs(output);
+    usleep(10000);
     output->control_word_2 = 0x80;
     writeOutputs(output);
+    usleep(10000);
+
+    int loop = 0;
+    while(input->error_code_1 !=0 || input->error_code_2 !=0){
+			if(loop++ % 100 == 1) {
+				printf("error_code = %04x, status_word %04x, operation_mode = %2d, position = %08x\n", input->error_code_1, input->status_word_1, 
+          input->mode_of_operation_display_1, input->actual_position_1);
+        output->control_word_1	   = 0x80;  // fault reset
+        writeOutputs(output);
+        usleep(10000);
+        printf("error_code = %04x, status_word %04x, operation_mode = %2d, position = %08x\n", input->error_code_2, input->status_word_2, 
+          input->mode_of_operation_display_2, input->actual_position_2);
+        output->control_word_2	   = 0x80;  // fault reset
+        writeOutputs(output);
+        usleep(10000);
+        readInputs(input);
+
+      }  
+    }
   }
 
   template <typename T, typename U>
-  void motorOff(T *input, U *output)
+  void ArDriveClient::dualMotorOff(T *input, U *output)
   {
+    output->control_word_1 = 0x00;
+    writeOutputs(output);
+    usleep(10000);
+
+    output->control_word_1 = 0x80;
+    writeOutputs(output);
+    usleep(10000);
+
+    output->control_word_1 = 0x06;
+    writeOutputs(output);
+    usleep(10000);
+
+    output->control_word_2 = 0x00;
+    writeOutputs(output);
+    usleep(10000);  
+
+    output->control_word_2 = 0x80;
+    writeOutputs(output);
+    usleep(10000);
+
+    output->control_word_2 = 0x06;
+    writeOutputs(output);
+    usleep(10000);
   }
 
+  // template <typename T, typename U>
+  // void ArDriveClient::singleMotorOff(T *input, U *output)
+  // {
+
+  // }
 
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -176,6 +225,19 @@ namespace ar_control
   
   template void ArDriveClient::resetFaultDualJoint<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput* input,
 																					 DualJointCyclicOutput* output);
+
+  // template void ArDriveClient::dualMotorOn<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput* input,
+  //                                          DualJointCyclicOutput* output);
+
+  // template void ArDriveClient::singleMotorOn<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput* input,
+                                          //  SingleJointCyclicOutput* output);
+
+  template void ArDriveClient::dualMotorOff<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput* input,
+                                           DualJointCyclicOutput* output);
+
+  // template void ArDriveClient::singleMotorOff<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput* input,
+                                          //  SingleJointCyclicOutput* output);
+
 
 
 }

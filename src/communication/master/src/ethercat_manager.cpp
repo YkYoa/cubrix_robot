@@ -83,14 +83,14 @@ namespace master
                 error_thread_param->soem.ec_readstate();
                 bool stop_flag_on = false;
 
-                static int count = 0;
-                if(count++ % 100 == 0){
-                    int32_t operation_mode = readSDO<int32_t>(1, 0x6060, 0x00, error_thread_param->soem);
-                    uint16_t status_word = readSDO<uint16_t>(1, 0x6041, 0x00, error_thread_param->soem);
-                    uint16_t error_code = readSDO<uint16_t>(1, 0x603F, 0x00, error_thread_param->soem);
-                    printf(COLOR_RED "[EtherCatManager] slave %d () op mode: 0x%04X, status word: 0x%04X, error code: 0x%04X" COLOR_RESET "\n",
-                           1, operation_mode, status_word, error_code);
-                }
+                // static int count = 0;
+                // if(count++ % 100 == 0){
+                //     int32_t operation_mode = readSDO<int32_t>(1, 0x6060, 0x00, error_thread_param->soem);
+                //     uint16_t status_word = readSDO<uint16_t>(1, 0x6041, 0x00, error_thread_param->soem);
+                //     uint16_t error_code = readSDO<uint16_t>(1, 0x603F, 0x00, error_thread_param->soem);
+                //     printf(COLOR_RED "[EtherCatManager] slave %d () op mode: 0x%04X, status word: 0x%04X, error code: 0x%04X" COLOR_RESET "\n",
+                //            1, operation_mode, status_word, error_code);
+                // }
                 
                 for (auto slave : error_thread_param->slave_ids)
                 {

@@ -49,7 +49,8 @@ namespace ar_control
             return joints;
         }
 
-        template <typename T> void jointCmdToPulses(ArJointControl* joint, T* position = nullptr, T* velocity = nullptr);
+        // template <typename T> void jointCmdToPulses(ArJointControl* joint, T* position = nullptr, T* velocity = nullptr);
+        template <typename OutputType> void jointCmdToPulses(ArJointControl* joint, OutputType* output);
 
         std::vector<ArJointControl* > joints; ///< Vector of joint controls associated with this drive
 
@@ -57,6 +58,7 @@ namespace ar_control
         DriveParameter& drive_parameter; ///< Drive parameters for this control
         std::vector<JointParameter> joint_parameters;  ///< Joint parameters associated with this drive
         bool is_ui_;  ///< Flag to indicate if the UI is enabled
+        bool is_dual_axis_; ///< Flag to indicate if the drive is dual axis
         int drive_id_;  ///< Unique identifier for the drive
         std::unique_ptr<ar_control::ArDriveClient> ar_client; ///< Pointer to the drive client
 

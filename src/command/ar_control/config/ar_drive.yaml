@@ -39,15 +39,15 @@ drives:
     driver_name: 2CL3-EC403T      
     joints:
       Arm_joint1:
-        gear_ratio: 16
-        encoder_res: 256
-        encoder_offset: 4000
+        gear_ratio: 1
+        encoder_res: 4000
+        encoder_offset: 0
         # torque_gamma:
         log_joint: false
       Arm_joint2:
-        gear_ratio: 16
-        encoder_res: 256
-        encoder_offset: 4000
+        gear_ratio: 1
+        encoder_res: 4000
+        encoder_offset: 0
         # torque_gamma:
         log_joint: false
 

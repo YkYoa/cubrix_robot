@@ -77,8 +77,10 @@ namespace ar_control
 
         template <typename T, typename U> void resetFaultSingleJoint(T* input, U* output);
         template <typename T, typename U> void resetFaultDualJoint(T* input, U* output);
-        template <typename T, typename U> void motorOn(T* input, U* output);
-        template <typename T, typename U> void motorOff(T* input, U* output);
+        template <typename T, typename U> void dualMotorOn(T* input, U* output);
+        template <typename T, typename U> void singleMotorOn(T* input, U* output);
+        template <typename T, typename U> void dualMotorOff(T* input, U* output);
+        template <typename T, typename U> void singleMotorOff(T* input, U* output);
 
 		inline master::EthercatManager& getManager()
 		{

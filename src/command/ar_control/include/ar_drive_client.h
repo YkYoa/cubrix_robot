@@ -5,6 +5,8 @@
 
 namespace ar_control
 {
+    #define LEADSHINE_DRIVER_MAX_JOINT_COUNT 2
+
     struct DriveInput
     {
     };
@@ -31,34 +33,34 @@ namespace ar_control
         uint32 touch_probe_function;
     };
 
+    struct TxPDO
+    {
+        uint16 control_word;
+        int32 target_position;
+        uint32 touch_probe_function;
+    };
+
+    struct RxPDO
+    {
+        uint16 error_code;
+        uint16 status_word;
+        uint8 mode_of_operation_display;
+        int32 actual_position;
+        uint16 touch_probe_status;
+        int32 touch_probe_positive_value;
+        uint32 digital_inputs;
+
+    };
+
+
     struct DualJointCyclicInput : DriveInput
     {
-        uint16 error_code_1;
-        uint16 status_word_1;
-        uint8 mode_of_operation_display_1;
-        int32 actual_position_1;
-        uint16 touch_probe_status_1;
-        int32 touch_probe_1_positive_value_1;
-        uint32 digital_inputs_1;
-
-        uint16 error_code_2;
-        uint16 status_word_2;
-        uint8 mode_of_operation_display_2;
-        int32 actual_position_2;
-        uint16 touch_probe_status_2;
-        int32 touch_probe_1_positive_value_2;
-        uint32 digital_inputs_2;
+        RxPDO axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
     };
 
     struct DualJointCyclicOutput : DriveOutput
     {
-        uint16 control_word_1;
-        int32 target_position_1;
-        uint32 touch_probe_function_1;
-
-        uint16 control_word_2;
-        int32 target_position_2;
-        uint32 touch_probe_function_2;
+        TxPDO axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
     };
 
     class ArDriveClient

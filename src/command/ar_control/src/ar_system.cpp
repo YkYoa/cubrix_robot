@@ -186,8 +186,7 @@ namespace ar_control
 		robot->write();
 
 		/// Control loop waits in this write function - to sync with the comm loop
-		// if(robot->soem_drives)
-		// 	pthread_cond_wait(&cond, &lock);
+		pthread_cond_wait(&cond, &lock);
 
 		return hardware_interface::return_type::OK;
 	}
@@ -202,7 +201,6 @@ namespace ar_control
 	ArSystemHardware::~ArSystemHardware()
 	{
 		robot->shutdown(); // Call own shutdown method
-		// robot->shutdown(); // Original line, now handled by this->shutdown()
 		usleep(1000);
 
 		pthread_cond_destroy(&cond);

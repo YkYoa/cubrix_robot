@@ -8,6 +8,7 @@
 
 port_info:
   port_name: enp2s0
+  # port_name: enx00e04c6806e8
 
 driver_info:
   driver_mode: 0

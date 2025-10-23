@@ -72,6 +72,7 @@ namespace master
 
         std::string driver_type;
         std::string joint_name;
+        bool is_dual_driver;
 
         struct LeadshineDriveData{
             std::string com_port;
@@ -187,6 +188,7 @@ namespace master
         bool readFromYamlFile(int slave_no);
         void configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
         void configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
+        void configPDODualCyclic(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
 
         
         std::shared_ptr<LeadshineParameters> leadshine_param_ptr;

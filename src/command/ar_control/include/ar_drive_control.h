@@ -44,7 +44,7 @@ namespace ar_control
             return drive_parameter.joint_paramters.size();
         }
 
-        std::vector<ArJointControl*> getJoints()
+        inline std::vector<ArJointControl*> getJoints()
         {
             return joints;
         }

@@ -87,7 +87,6 @@ namespace master
                 // if(count++ % 100 == 0){
                 //     int32_t operation_mode = readSDO<int32_t>(1, 0x6060, 0x00, error_thread_param->soem);
                 //     uint16_t status_word = readSDO<uint16_t>(1, 0x6041, 0x00, error_thread_param->soem);
-                //     uint16_t error_code = readSDO<uint16_t>(1, 0x603F, 0x00, error_thread_param->soem);
                 //     printf(COLOR_RED "[EtherCatManager] slave %d () op mode: 0x%04X, status word: 0x%04X, error code: 0x%04X" COLOR_RESET "\n",
                 //            1, operation_mode, status_word, error_code);
                 // }
@@ -329,6 +328,7 @@ namespace master
                 RCLCPP_INFO(rclcpp::get_logger("EtherCatManager"),
                             "Slave %d driver_name: %s",
                             slave_no, driver_info.driver_type.c_str());
+                driver_info.is_dual_driver = drive_node["is_dual_axis"] ? drive_node["is_dual_axis"].as<bool>() : false;
             }
         }
 
@@ -476,7 +476,7 @@ namespace master
 
         // config PDO 
         // for(auto slave_id : slaveIds) {
-			// configPDOProcess(slave_id);
+		// 	configPDOProcess(slave_id);
         // }
 
 
@@ -572,7 +572,11 @@ namespace master
 
         if (driver_data.control_mode == 0)
         {
-            configPDOCyclicPosition(slave_num, leadshine_param_ptr);
+
+            if (driver_info.is_dual_driver == true)
+                configPDODualCyclic(slave_num, leadshine_param_ptr);
+            else
+                configPDOCyclicPosition(slave_num, leadshine_param_ptr);
         }
         else if (driver_data.control_mode == 1)
         {
@@ -698,6 +702,49 @@ namespace master
     void EthercatManager::configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
     {   
         // later
+    }
+
+    void EthercatManager::configPDODualCyclic(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
+    {
+        // Slave info init
+		int ret = 0, l;
+		uint8_t num_entries;
+		l = sizeof(num_entries);
+		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+		printf("len 1 = %d\n", num_entries);
+		//------------------------ RPDO Mapping Start ------------------------------
+		uint32_t mapping;
+		printf("RPDO start = %d\n", ret);
+		num_entries = 0;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+		printf("RPDO debug = %d\n", ret);
+		//  default
+		// add control word 6040
+		mapping = leadshine_param_ptr->CONTROL_WORD.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("controlword debug = %d\n", ret);
+            
+		// add target position 607A
+		mapping = leadshine_param_ptr->TARGET_POSITION.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("target position debug = %d\n", ret);
+        
+        // add touch probe function 60b8
+		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
+		ret +=
+			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+		printf("touch probe function debug = %d\n", ret);
+
+        num_entries = 3;
+		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+								EC_TIMEOUTRXM);
+
+
+        printf("RPDO end = %d\n", ret);
+
     }
 
     int EthercatManager::getInputBits(int slave_no) const

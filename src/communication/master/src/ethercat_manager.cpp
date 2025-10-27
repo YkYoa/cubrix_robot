@@ -355,13 +355,10 @@ namespace master
         try
         {
             stop_flag = true;
-            // Request init operational state for all slaves
             soem.ec_slave[0].state = EC_STATE_INIT;
 
-            /* Request init state for all slaves */
             soem.ec_writestate(0);
 
-            // Stop SOEM, close socket
             soem.ec_close();
 
             printf(COLOR_YELLOW "\n[%s] Closing EtherCatManager[%d] port" COLOR_RESET "\n",
@@ -522,13 +519,14 @@ namespace master
 		}
 		fflush(stdout);
 
-        // check PDO sync mode, cycle time, sync0 cycle time
+        // check PDO sync mode, cycle time, sync0 cycle time, encoder res
         for( auto slave_id : slaveIds){
             int ret = 0, l;
             uint16_t sync_mode;
             uint32_t cycle_time;
             uint32_t minimum_cycle_time;
             uint32_t sync0_cycle_time;
+            uint32_t encoder_res;
 
             l = sizeof(sync_mode);
             ret += soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
@@ -538,8 +536,10 @@ namespace master
 			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x05, FALSE, &l, &minimum_cycle_time, EC_TIMEOUTRXM);
 			l = sizeof(sync0_cycle_time);
 			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_cycle_time, EC_TIMEOUTRXM);
-			printf("PDO syncmode %02x, cycle time %d ns (min %d), sync0 cycle time %d ns, ret = %d\n", sync_mode, cycle_time,
-				   minimum_cycle_time, sync0_cycle_time, ret);
+            l = sizeof(encoder_res);
+            ret += soem.ec_SDOread(slave_id, 0x6092, 0x01, FALSE, &l, &encoder_res, EC_TIMEOUTRXM);
+			printf("PDO syncmode %02x, cycle time %d ns (min %d), sync0 cycle time %d ns, encoder res %d, ret = %d\n", sync_mode, cycle_time,
+				   minimum_cycle_time, sync0_cycle_time, encoder_res, ret);
 
         }
 
@@ -606,11 +606,11 @@ namespace master
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 		printf("controlword debug = %d\n", ret);
             
-		// add target position 607A
-		mapping = leadshine_param_ptr->TARGET_POSITION.address;
+		// add target position 6092 (Leadshine specific)
+		mapping = leadshine_param_ptr->VL_TARGET_VELOCITY.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		printf("target position debug = %d\n", ret);
+		printf("target position (6092) debug = %d\n", ret);
         
         // add touch probe function 60b8
 		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
@@ -726,11 +726,11 @@ namespace master
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 		printf("controlword debug = %d\n", ret);
             
-		// add target position 607A
-		mapping = leadshine_param_ptr->TARGET_POSITION.address;
+		// add target position 6092 (Leadshine specific)
+		mapping = leadshine_param_ptr->VL_TARGET_VELOCITY.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		printf("target position debug = %d\n", ret);
+		printf("target position (6092) debug = %d\n", ret);
         
         // add touch probe function 60b8
 		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;

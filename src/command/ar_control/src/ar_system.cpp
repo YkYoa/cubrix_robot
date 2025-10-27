@@ -186,7 +186,9 @@ namespace ar_control
 		robot->write();
 
 		/// Control loop waits in this write function - to sync with the comm loop
-		pthread_cond_wait(&cond, &lock);
+		if(!is_simulation){
+			pthread_cond_wait(&cond, &lock);
+		}
 
 		return hardware_interface::return_type::OK;
 	}

@@ -89,10 +89,19 @@ namespace ar_control
         printf(COLOR_DARKYELLOW "\n[Ar Drive Control] ---------------------- Initializing drive %d----------------------" COLOR_RESET,
                drive_id_);
 
+        if(!ar_client)
+            return;
+
         const uint16_t enable_sequence[] = {
             0x0006, // Switch On Disabled → Ready to Switch On
             0x0007, // Ready to Switch On → Switched On
             0x001F  // Switched On → Operation Enabled
+        };
+
+        const uint16_t expect_state_bit[] = {
+            0x0021, // Ready to Switch On
+            0x0023, // Switched On
+            0x0027  // Operation Enabled
         };
 
         if (drive_parameter.is_dual_axis == true)
@@ -105,42 +114,30 @@ namespace ar_control
             if (ar_client != nullptr)
             {
                 ar_client->resetFaultDualJoint(input, output);
+                for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
+                    output->axis[i].target_position = input->axis[i].actual_position;
+                }
+                ar_client->writeOutputs(output);
+
                 memset(output, 0, sizeof(DualJointCyclicOutput));
 
-                output->axis[0].control_word = 0x0006;
-                output->axis[1].control_word = 0x0006;
-                ar_client->writeOutputs(output);
-                usleep(50000);
-                
-                ar_client->readInputs(input);
-                printf("\n After control word = 6h:");
-                for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-                {
-                    printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", input->axis[i].error_code, input->axis[i].status_word, input->axis[i].mode_of_operation_display);
-                }
+                for(int i = 0; i < 3; i++){
+                    for(size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++){
+                        output->axis[j].control_word = enable_sequence[i];
+                    }
+                    ar_client->writeOutputs(output);
+                    usleep(10000);
 
-                output->axis[0].control_word = 0x0007;
-                output->axis[1].control_word = 0x0007;
-                ar_client->writeOutputs(output);
-                usleep(50000);
-                
-                ar_client->readInputs(input);
-                printf("\n After control word = 7h:");
-                for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-                {
-                    printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", input->axis[i].error_code, input->axis[i].status_word, input->axis[i].mode_of_operation_display);
-                }
+                    // int loop = 0;
+                    // do{
+                    //     ar_client->readInputs(input);
+                    //     usleep(1000);
+                    //     loop++;
+                    // }while(((input->axis[0].status_word & 0x017F) != expect_state_bit[i] ||
+                    //         (input->axis[1].status_word & 0x017F) != expect_state_bit[i]) && loop < 2000);
 
-                output->axis[0].control_word = 0x001f; 
-                output->axis[1].control_word = 0x001f;
-                ar_client->writeOutputs(output);
-                usleep(50000);
-                
-                ar_client->readInputs(input);
-                printf("\n After control word = fh (Enable Operation):");
-                for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-                {
-                    printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", input->axis[i].error_code, input->axis[i].status_word, input->axis[i].mode_of_operation_display);
+                    // printf("\n[EnableSeq %d] Axis0 stat=0x%04x  Axis1 stat=0x%04x",
+                    //        i, input->axis[0].status_word, input->axis[1].status_word);
                 }
             }
         }
@@ -208,9 +205,8 @@ namespace ar_control
             SingleJointCyclicInput *input = (SingleJointCyclicInput *)driveInput;
             SingleJointCyclicOutput *output = (SingleJointCyclicOutput *)driveOutput;
             ar_client->resetFaultSingleJoint(input, output);
-            // ar_client->singleMotorOff(input,output);
+            ar_client->singleMotorOff(input,output);
         }
-        // ar_client->motorOff(input,output);
     }
 
     int ArDriveControl::getInputActualValueToStatus(tVectorS &jointNames, tVectorS &hardwareIds,

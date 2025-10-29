@@ -482,6 +482,19 @@ namespace master
         //locate dc slaves
         soem.ec_configdc();
 
+        uint32_t cycle_time = DRIVER_SYNCH_TIME * 1e+6; // ns
+        printf("  DC cycle time: %u ns (%d ms)\n", cycle_time, DRIVER_SYNCH_TIME);
+        for (auto slave_id : slaveIds) {
+            if (soem.ec_slave[slave_id].hasdc) {
+                // SYNC0: activate, cycle time, no phase shift
+                soem.ec_dcsync0(slave_id, TRUE, cycle_time, 0);
+                printf("  Slave %d: SYNC0 configured\n", slave_id);
+            }
+
+            uint8_t sync_type = 2;
+            soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
+        }
+
         // '0' here addresses all slaves
 		if(soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP) {
 			printf("Could not set EC_STATE_SAFE_OP\n");

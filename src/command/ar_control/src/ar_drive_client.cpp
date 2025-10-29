@@ -190,7 +190,7 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::dualMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x00, 0x60, 0x80, 0x00};
+    const uint16 sequence[] = {0x00, 0x80, 0x00};
 
     for (uint16 cmd : sequence)
     {
@@ -205,11 +205,19 @@ namespace ar_control
     printf("\n[dualMotorOff] Motors for all axes are now OFF (complete).\n");
   }
 
-  // template <typename T, typename U>
-  // void ArDriveClient::singleMotorOff(T *input, U *output)
-  // {
+  template <typename T, typename U>
+  void ArDriveClient::singleMotorOff(T *input, U *output)
+  {
+    const uint16 sequence[] = {0x00, 0x80, 0x00};
 
-  // }
+    for (uint16 cmd : sequence)
+    {
+      output->control_word = cmd;
+      writeOutputs(output);
+      usleep(10000);
+    }
+
+  }
 
   //------------------------------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------------------------------
@@ -229,7 +237,6 @@ namespace ar_control
   template void ArDriveClient::dualMotorOff<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput *input,
                                                                                          DualJointCyclicOutput *output);
 
-  // template void ArDriveClient::singleMotorOff<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput* input,
-  //  SingleJointCyclicOutput* output);
-
+  template void ArDriveClient::singleMotorOff<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput *input,
+                                                                                               SingleJointCyclicOutput *output);
 }

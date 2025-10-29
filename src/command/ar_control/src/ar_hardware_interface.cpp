@@ -134,6 +134,7 @@ namespace ar_control
         }
         YAML::Node port_ids = config["port_ids"];
         YAML::Node drives = config["drives"];
+        soem_drives.clear();
 
         for (YAML::const_iterator it = port_ids.begin(); it != port_ids.end(); it++)
         {
@@ -145,16 +146,16 @@ namespace ar_control
             if(is_simulation)
             {
                 driveParam.port_id = NO_COMM;
+                driveParam.slave_id = -1;
             }
             else if(driveParam.port_id == PORT_SOEM)
             {
-                int next_slave_id = static_cast<int>(soem_drives.size()) + 1;
-                driveParam.slave_id = next_slave_id;
+                driveParam.slave_id = static_cast<int>(soem_drives.size()) + 1;
+                soem_drives.push_back(driveParam.slave_id); 
             }
-            // else if (driveParam.port_id == DISCONNECTED)
-            // {
-            //     std::cout << COLOR_DARKYELLOW "Port ID: " << driveParam.port_id << COLOR_RESET << std::endl;
-            // }
+            else
+                driveParam.slave_id = -1;
+
             for (YAML::const_iterator jt = drives[drive_id]["joints"].begin(); jt != drives[drive_id]["joints"].end(); jt++)
             {
                 JointParameter jointParam;

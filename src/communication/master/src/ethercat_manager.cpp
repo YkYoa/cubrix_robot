@@ -443,8 +443,6 @@ namespace master
                 return false;
         }
 
-
-
         printf(COLOR_YELLOW "%s SOEM found %d slaves and configured %ld" COLOR_RESET "\n", ar_utils::getCurrentTime().c_str(),
                soem.ec_slavecount, slaveIds.size());
         fflush(stdout);
@@ -520,13 +518,13 @@ namespace master
 		fflush(stdout);
 
         // check PDO sync mode, cycle time, sync0 cycle time, encoder res
-        for( auto slave_id : slaveIds){
+        for(auto slave_id : slaveIds){
             int ret = 0, l;
             uint16_t sync_mode;
             uint32_t cycle_time;
             uint32_t minimum_cycle_time;
             uint32_t sync0_cycle_time;
-            uint32_t encoder_res;
+            uint16_t sync_type_support;
 
             l = sizeof(sync_mode);
             ret += soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
@@ -536,10 +534,10 @@ namespace master
 			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x05, FALSE, &l, &minimum_cycle_time, EC_TIMEOUTRXM);
 			l = sizeof(sync0_cycle_time);
 			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_cycle_time, EC_TIMEOUTRXM);
-            l = sizeof(encoder_res);
-            ret += soem.ec_SDOread(slave_id, 0x6092, 0x01, FALSE, &l, &encoder_res, EC_TIMEOUTRXM);
-			printf("PDO syncmode %02x, cycle time %d ns (min %d), sync0 cycle time %d ns, encoder res %d, ret = %d\n", sync_mode, cycle_time,
-				   minimum_cycle_time, sync0_cycle_time, encoder_res, ret);
+            l = sizeof(sync_type_support);
+            ret += soem.ec_SDOread(slave_id, 0x1c32, 0x04, FALSE, &l, &sync_type_support, EC_TIMEOUTRXM);
+			printf("PDO syncmode %04x, cycle time %d ns (min %d), sync0 cycle time %d ns, sync type sp %d, ret = %d\n", sync_mode, cycle_time,
+				   minimum_cycle_time, sync0_cycle_time, sync_type_support, ret);
 
         }
 

@@ -185,15 +185,12 @@ namespace ar_control
         usleep(10000);
       }
     }
-
-    printf("[resetFaultDualJoint] timeout waiting for errors to clear. axis0 err=0x%04x axis1 err=0x%04x\n",
-           input->axis[0].error_code, input->axis[1].error_code);
   }
 
   template <typename T, typename U>
   void ArDriveClient::dualMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x00, 0x06, 0x80, 0x00};
+    const uint16 sequence[] = {0x00, 0x60, 0x80, 0x00};
 
     for (uint16 cmd : sequence)
     {
@@ -204,7 +201,8 @@ namespace ar_control
       writeOutputs(output);
       usleep(10000);
     }
-    printf("\n[dualMotorOff] Motors for all axes are now OFF (sequence complete).\n");
+
+    printf("\n[dualMotorOff] Motors for all axes are now OFF (complete).\n");
   }
 
   // template <typename T, typename U>

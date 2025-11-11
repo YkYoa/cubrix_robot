@@ -190,7 +190,7 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::dualMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x00, 0x80, 0x00};
+    const uint16 sequence[] = {0x00, 0x80, 0b110};
 
     for (uint16 cmd : sequence)
     {
@@ -216,7 +216,22 @@ namespace ar_control
       writeOutputs(output);
       usleep(10000);
     }
+  }
 
+  template <typename T, typename U>
+  void ArDriveClient::dualMotorOn(T *input, U *output)
+  {
+    for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
+      output->axis[i].control_word & 0x04;
+    }
+    writeOutputs(output);
+  }
+
+  template <typename T, typename U>
+  void ArDriveClient::singleMotorOn(T *input, U *output)
+  {
+    output->control_word & 0x04;
+    writeOutputs(output);
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -228,11 +243,11 @@ namespace ar_control
   template void ArDriveClient::resetFaultDualJoint<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput *input,
                                                                                                 DualJointCyclicOutput *output);
 
-  // template void ArDriveClient::dualMotorOn<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput* input,
-  //                                          DualJointCyclicOutput* output);
+  template void ArDriveClient::dualMotorOn<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput *input,
+                                                                                        DualJointCyclicOutput *output);
 
-  // template void ArDriveClient::singleMotorOn<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput* input,
-  //  SingleJointCyclicOutput* output);
+  template void ArDriveClient::singleMotorOn<SingleJointCyclicInput, SingleJointCyclicOutput>(SingleJointCyclicInput *input,
+                                                                                              SingleJointCyclicOutput *output);
 
   template void ArDriveClient::dualMotorOff<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput *input,
                                                                                          DualJointCyclicOutput *output);

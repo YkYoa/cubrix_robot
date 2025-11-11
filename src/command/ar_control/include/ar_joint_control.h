@@ -12,8 +12,8 @@ namespace ar_control
         ArJointControl(std::string jointName);
         ~ArJointControl() {};
 
-        void getInputActualValueToStatus(std::string &jointName, std::string &hardwareId, 
-                                            uint32_t &positionActualValue, uint32_t &velocityActualValue);
+        // void getInputActualValueToStatus(std::string &jointName, std::string &hardwareId, 
+        //                                     uint32_t &positionActualValue, uint32_t &velocityActualValue);
 
     public:
         std::string joint_name;   ///< Name of the joint

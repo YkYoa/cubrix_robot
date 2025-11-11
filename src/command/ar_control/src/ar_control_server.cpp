@@ -74,6 +74,30 @@ namespace ar_control
 			status = ControlErrorCode::SUCCESS;
 			break;
 		}
+		// case SET_MOTOR_STATE: {
+		// 	for(size_t i = 0; i < goal->joint_names.size(); i++){
+		// 		const std::string& joint_name = goal->joint_names[i];
+		// 		bool cmd = goal->motor_states[i];
+		// 		int drive_id = goal->drive_id;
+		// 		int slave_id = goal->slave_id;
+
+		// 		auto it = drive_map_.find(drive_id);
+		// 		if(it == drive_map_.end()){
+		// 			continue;
+		// 		}
+
+		// 		auto drive = it->second;
+
+		// 		if(cmd){
+		// 			drive->motorOn();
+		// 		}else{
+		// 			drive->motorOff();
+		// 		}
+		// 	}
+
+		// 	status = ControlErrorCode::SUCCESS;
+		// 	break;
+		// }
 		}
 
 		result->status = status;

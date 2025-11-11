@@ -16,8 +16,8 @@ namespace ar_control
     };
 
     enum HostCommand{
-        //Adding later
         PLANNING,
+        SET_MOTOR_STATE,
         UNKNOWN_CMD
     };
 
@@ -28,6 +28,7 @@ namespace ar_control
 
     static std::map<int, std::string> HostCommandToName = {
         {PLANNING, "PLANNING"},
+        {SET_MOTOR_STATE, "SET_MOTOR_STATE"},
         {UNKNOWN_CMD, "UNKNOWN_CMD"}
     };
 

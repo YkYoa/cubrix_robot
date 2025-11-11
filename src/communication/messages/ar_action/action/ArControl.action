@@ -1,10 +1,10 @@
-#Imaging Action definition
 uint8 action
 string planning_group
 trajectory_msgs/JointTrajectory trajectory
 
 # For ui command on off servo
 string[] joint_names
+bool[] motor_cmds
 
 int32 drive_id
 int32 slave_id

@@ -22,6 +22,7 @@
 namespace ar_control
 {
     class ArHardwareInterface;
+    class ArDriveControl;
 
     class ArControlServer : public rclcpp::Node
     {
@@ -47,8 +48,9 @@ namespace ar_control
 
 	private:
 		// boost::mutex& control_mutex_;
-		ArHardwareInterface* robot;
-		rclcpp::CallbackGroup::SharedPtr server_cb_group;
+        ArHardwareInterface* robot;
+        std::map<int, std::shared_ptr<ArDriveControl>> drive_map_;
+        rclcpp::CallbackGroup::SharedPtr server_cb_group;
 
 		rclcpp::Subscription<moveit_msgs::msg::DisplayTrajectory>::SharedPtr trajectory_topic_sub;
 		rclcpp::Subscription<trajectory_msgs::msg::JointTrajectory>::SharedPtr trajectory_servo_sub;

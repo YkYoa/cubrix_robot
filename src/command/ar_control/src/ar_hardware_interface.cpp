@@ -94,7 +94,6 @@ namespace ar_control
         
         InitializeDrives(drives_ptr);
 
-        control_server_thread = new std::thread(&ArHardwareInterface::launchControlServer, this);
     }
 
     ArHardwareInterface::~ArHardwareInterface()
@@ -112,7 +111,7 @@ namespace ar_control
             }
         }
 		if(portManager) {
-			RCLCPP_INFO(rclcpp::get_logger("Tomo"), "Delete manager");
+			RCLCPP_INFO(rclcpp::get_logger("Ar"), "Delete manager");
 			delete portManager;
 		}
 		if(control_server_thread)

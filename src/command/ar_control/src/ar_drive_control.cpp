@@ -95,13 +95,8 @@ namespace ar_control
         const uint16_t enable_sequence[] = {
             0x0006, // Switch On Disabled → Ready to Switch On
             0x0007, // Ready to Switch On → Switched On
-            0x001F  // Switched On → Operation Enabled
-        };
-
-        const uint16_t expect_state_bit[] = {
-            0x0021, // Ready to Switch On
-            0x0023, // Switched On
-            0x0027  // Operation Enabled
+            0x000F,  // Switched On → Operation Enabled
+            // 0x001F  // Switched On → Operation Enabled
         };
 
         if (drive_parameter.is_dual_axis == true)
@@ -126,18 +121,7 @@ namespace ar_control
                         output->axis[j].control_word = enable_sequence[i];
                     }
                     ar_client->writeOutputs(output);
-                    usleep(10000);
-
-                    // int loop = 0;
-                    // do{
-                    //     ar_client->readInputs(input);
-                    //     usleep(1000);
-                    //     loop++;
-                    // }while(((input->axis[0].status_word & 0x017F) != expect_state_bit[i] ||
-                    //         (input->axis[1].status_word & 0x017F) != expect_state_bit[i]) && loop < 2000);
-
-                    // printf("\n[EnableSeq %d] Axis0 stat=0x%04x  Axis1 stat=0x%04x",
-                    //        i, input->axis[0].status_word, input->axis[1].status_word);
+                    usleep(30000);
                 }
             }
         }
@@ -151,12 +135,17 @@ namespace ar_control
             if (ar_client != nullptr)
             {
                 ar_client->resetFaultSingleJoint(input, output);
+                output->target_position = input->actual_position;
+                ar_client->writeOutputs(output);
                 memset(output, 0, sizeof(SingleJointCyclicOutput));
                                 
-                for(uint16 cmd : enable_sequence) {
-                    output->control_word = cmd;
-                    ar_client->writeOutputs(output);
+                for(int i = 0; i < 3; i++){
                     usleep(10000);
+                    output->control_word = enable_sequence[i];
+                    ar_client->writeOutputs(output);
+
+                    ar_client->readInputs(input);
+                    printf("Single Axis State %d: Status=0x%04X\n", i, input->status_word);
                 }
             }
         }
@@ -204,26 +193,14 @@ namespace ar_control
         {
             SingleJointCyclicInput *input = (SingleJointCyclicInput *)driveInput;
             SingleJointCyclicOutput *output = (SingleJointCyclicOutput *)driveOutput;
+            ar_client->readInputs(input);
+
+            printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", 
+                input->error_code, input->status_word, input->mode_of_operation_display);
+
             ar_client->resetFaultSingleJoint(input, output);
             ar_client->singleMotorOff(input,output);
         }
-    }
-
-    int ArDriveControl::getInputActualValueToStatus(tVectorS &jointNames, tVectorS &hardwareIds,
-                                                    std::vector<uint32_t> &positionActualValues, std::vector<uint32_t> &velocityActualValues)
-    {
-        int nDof = 0;
-        for (auto joint : joints)
-        {
-            joint->getInputActualValueToStatus(joint->joint_name, joint->hardware_id,
-                                               joint->position_actual_value, joint->velocity_actual_value);
-            jointNames.push_back(joint->joint_name);
-            hardwareIds.push_back(joint->hardware_id);
-            positionActualValues.push_back(joint->position_actual_value);
-            velocityActualValues.push_back(joint->velocity_actual_value);
-            nDof++;
-        }
-        return nDof;
     }
 
     // template <typename T> void ArDriveControl::jointCmdToPulses(ArJointControl* joint, T* position, T* velocity)
@@ -362,12 +339,40 @@ namespace ar_control
                 static int print_counter_single = 0;
                 if (++print_counter_single >= 100 && ENABLE_PRINT)
                 {
-                    printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f"
-                           , input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos);
+                    printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
+                           , input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
                     print_counter_single = 0;
                 }
+            }
+        }
+    }
+
+    void ArDriveControl::motorOn()
+    {
+        if(!ar_client){
+            return;
+        }
+        else{
+            if(is_dual_axis_){
+                ar_client->dualMotorOn((DualJointCyclicInput *)driveInput, (DualJointCyclicOutput *)driveOutput);
+            }else{
+                ar_client->singleMotorOn((SingleJointCyclicInput *)driveInput, (SingleJointCyclicOutput *)driveOutput);
+            }
+        }
+    }
+
+    void ArDriveControl::motorOff()
+    {
+        if(!ar_client){
+            return;
+        }
+        else{
+            if(is_dual_axis_){
+                ar_client->dualMotorOff((DualJointCyclicInput *)driveInput, (DualJointCyclicOutput *)driveOutput);
+            }else{
+                ar_client->singleMotorOff((SingleJointCyclicInput *)driveInput, (SingleJointCyclicOutput *)driveOutput);
             }
         }
     }

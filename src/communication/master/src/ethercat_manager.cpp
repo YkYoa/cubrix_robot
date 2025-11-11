@@ -469,9 +469,36 @@ namespace master
             readFromYamlFile(slave_id);
         }
 
+        // Check DC status for all slaves
+        printf("\n=== DC Status Check ===\n");
+        for (auto slave_id : slaveIds)
+        {
+            if (soem.ec_slave[slave_id].hasdc)
+            {
+                uint32_t sync0_time, cycle_time;
+                uint8_t sync_mode;
+                int l;
+
+                l = sizeof(sync_mode);
+                soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
+
+                l = sizeof(sync0_time);
+                soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_time, EC_TIMEOUTRXM);
+
+                l = sizeof(cycle_time);
+                soem.ec_SDOread(slave_id, 0x1c32, 0x02, FALSE, &l, &cycle_time, EC_TIMEOUTRXM);
+
+                printf("Slave %d: SyncMode=%d, Sync0Time=%u, CycleTime=%u\n",
+                       slave_id, sync_mode, sync0_time, cycle_time);
+            }
+        }
+
         // config PDO 
         // for(auto slave_id : slaveIds) {
-		// 	configPDOProcess(slave_id);
+        //     DriverInfo driver_info = getDriverInfo(slave_id);
+        //     if(driver_info.driver_type.find("CS3E-D503B") != std::string::npos){
+        //         configPDOProcess(slave_id);
+        //     }
         // }
 
 
@@ -484,16 +511,51 @@ namespace master
 
         uint32_t cycle_time = DRIVER_SYNCH_TIME * 1e+6; // ns
         printf("  DC cycle time: %u ns (%d ms)\n", cycle_time, DRIVER_SYNCH_TIME);
-        for (auto slave_id : slaveIds) {
-            if (soem.ec_slave[slave_id].hasdc) {
-                // SYNC0: activate, cycle time, no phase shift
+
+        for(auto slave_id : slaveIds){
+            if(soem.ec_slave[slave_id].hasdc){
                 soem.ec_dcsync0(slave_id, TRUE, cycle_time, 0);
-                printf("  Slave %d: SYNC0 configured\n", slave_id);
+                printf("  Slave %d: DC SYNC0 configured\n", slave_id);
             }
 
             uint8_t sync_type = 2;
             soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
+            usleep(50000);
+
+            int l = sizeof(cycle_time);
+            soem.ec_SDOwrite(slave_id, 0x1c32, 0x02, FALSE, l, &cycle_time, EC_TIMEOUTRXM);
+            usleep(50000);
+
+            soem.ec_SDOwrite(slave_id, 0x1c32, 0x0a, FALSE, l, &cycle_time, EC_TIMEOUTRXM);
+
+            usleep(50000);
+            printf("  Slave %d: Cycle time set to %u ns\n", slave_id, cycle_time);
         }
+
+        // for (auto slave_id : slaveIds)
+        // {
+        //     printf("Configuring slave %d (%s)\n", slave_id, soem.ec_slave[slave_id].name);
+
+        //     if (strstr(soem.ec_slave[slave_id].name, "2CL3-EC403T") != nullptr)
+        //     {
+        //         soem.ec_dcsync0(slave_id, TRUE, cycle_time, 0);
+        //         printf("  Slave %d: DC SYNC0 configured\n", slave_id);
+
+        //         uint8_t sync_type = 2;
+        //         soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
+        //         usleep(50000);
+
+        //     }
+        //     else
+        //     {
+        //         soem.ec_dcsync0(slave_id, FALSE, cycle_time, 0);
+        //         printf("  Slave %d: DC SYNC0 configured\n", slave_id);
+
+        //         uint8_t sync_type = 2;
+        //         soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
+        //         usleep(50000);
+        //     }
+        // }
 
         // '0' here addresses all slaves
 		if(soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP) {
@@ -583,7 +645,6 @@ namespace master
 
         if (driver_data.control_mode == 0)
         {
-
             if (driver_info.is_dual_driver == true)
                 configPDODualCyclic(slave_num, leadshine_param_ptr);
             else
@@ -598,116 +659,100 @@ namespace master
     void EthercatManager::configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
     {
         // Slave info init
-		int ret = 0, l;
-		uint8_t num_entries;
-		l = sizeof(num_entries);
-		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
-		printf("len 1 = %d\n", num_entries);
-		//------------------------ RPDO Mapping Start ------------------------------
-		uint32_t mapping;
-		printf("RPDO start = %d\n", ret);
-		num_entries = 0;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
-								EC_TIMEOUTRXM);
-		printf("RPDO debug = %d\n", ret);
-		//  default
-		// add control word 6040
-		mapping = leadshine_param_ptr->CONTROL_WORD.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		printf("controlword debug = %d\n", ret);
-            
-		// add target position 6092 (Leadshine specific)
-		mapping = leadshine_param_ptr->VL_TARGET_VELOCITY.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		printf("target position (6092) debug = %d\n", ret);
-        
-        // add touch probe function 60b8
-		mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		printf("touch probe function debug = %d\n", ret);
+        int ret = 0, l;
+        uint8_t num_entries;
+        l = sizeof(num_entries);
+        ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+        printf("Current RPDO entries: %d\n", num_entries);
 
+        //------------------------ RPDO Mapping Start ------------------------------
+        uint32_t mapping;
+
+        // Clear existing mapping
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+                                EC_TIMEOUTRXM);
+
+        // Map objects for cyclic position mode
+        // 1. Control Word (6040h)
+        mapping = leadshine_param_ptr->CONTROL_WORD.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        // 2. Target Position (607Ah) - Use TARGET_POSITION instead of VL_TARGET_VELOCITY
+        mapping = leadshine_param_ptr->TARGET_POSITION.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        // 3. Touch Probe Function (60B8h)
+        mapping = leadshine_param_ptr->TOUCH_PROBE_FUNCTION.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        // Set final number of entries
         num_entries = 3;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
-								EC_TIMEOUTRXM);
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+                                EC_TIMEOUTRXM);
 
+        printf("RPDO configuration result: %d\n", ret);
 
-        printf("RPDO end = %d\n", ret);
+        //------------------------ TPDO Mapping Start ------------------------------
+        ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+        printf("Current TPDO entries: %d\n", num_entries);
 
-		//------------------------ RPDO Mapping End ------------------------------
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+                                EC_TIMEOUTRXM);
 
-		//------------------------ TPDO Mapping Start ------------------------------
+        // Map TPDO objects
+        mapping = leadshine_param_ptr->ERROR_CODE.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 
-		ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
-		// printf("len 2 = %d\n", num_entries);
-		num_entries = 0;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
-								EC_TIMEOUTRXM);
-		// add Error code 603F
-		mapping = leadshine_param_ptr->ERROR_CODE.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x01, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Statusword 6041
-		mapping = leadshine_param_ptr->STATUS_WORD.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Modes of operation display
-		mapping = leadshine_param_ptr->MODE_OF_OPERATION_DISPLAY.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Position actual value 6064
-		mapping = leadshine_param_ptr->ACTUAL_POSITION.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x04, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Actual velocity value 606C
-		mapping = leadshine_param_ptr->TOUCH_PROBE_STATUS.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x05, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Actual motor torque value 6077
-		mapping = leadshine_param_ptr->TOUCH_PROBE_1_POSITION_VALUE.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x06, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// add Digital inputs 60FD
-		mapping = leadshine_param_ptr->DIGITAL_INPUTS.address;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x07, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
-		// printf("TPD set num = %d\n", ret);
-		num_entries = 7;
-		l			= sizeof(num_entries);
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
-								EC_TIMEOUTRXM);
-		// ret += soem.ec_SDOread(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
-		// printf("len = %d\n", num_entries);
-		// printf("TPD ret = %d\n", ret);
+        mapping = leadshine_param_ptr->STATUS_WORD.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 
-		// SYNC PDO mapping
-		uint8_t num_pdo;
-		// set 0 change PDO mapping index
-		num_pdo = 0;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
-		// set to default PDO mapping 4
-		uint16_t idx_rxpdo = leadshine_param_ptr->RXPDO1.index;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x01, FALSE, sizeof(idx_rxpdo), &idx_rxpdo, EC_TIMEOUTRXM);
-		// set number of assigned PDOs
-		num_pdo = 1;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
-		// printf("RxPDO mapping object index %d = %04x ret=%d\n", slave_num, idx_rxpdo, ret);
+        mapping = leadshine_param_ptr->MODE_OF_OPERATION_DISPLAY.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x03, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 
-		// set 0 change PDO mapping index
-		num_pdo = 0;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
-		// set to default PDO mapping 4
-		uint16_t idx_txpdo = leadshine_param_ptr->TXPDO1.index;
-		ret +=
-			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x01, FALSE, sizeof(idx_txpdo), &idx_txpdo, EC_TIMEOUTRXM);
-		// set number of assigned PDOs
-		num_pdo = 1;
-		ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
-		// printf("TxPDO mapping object index %d = %04x ret=%d\n", slave_num, idx_txpdo, ret);
+        mapping = leadshine_param_ptr->ACTUAL_POSITION.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x04, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 
+        mapping = leadshine_param_ptr->TOUCH_PROBE_STATUS.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x05, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->TOUCH_PROBE_1_POSITION_VALUE.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x06, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->DIGITAL_INPUTS.address;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x07, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = 7;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->TXPDO1.index, 0x00, FALSE, sizeof(num_entries), &num_entries,
+                                EC_TIMEOUTRXM);
+
+        printf("TPDO configuration result: %d\n", ret);
+
+        //------------------------ SYNC Manager Configuration ------------------------------
+        uint8_t num_pdo;
+
+        // Configure Sync Manager 2 (RPDO) - FIXED: Use correct PDO index
+        num_pdo = 0;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+
+        uint16_t idx_rxpdo = leadshine_param_ptr->RXPDO1.index; // FIX: Use actual RPDO index (0x1600)
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x01, FALSE, sizeof(idx_rxpdo), &idx_rxpdo, EC_TIMEOUTRXM);
+
+        num_pdo = 1;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_2_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+
+        // Configure Sync Manager 3 (TPDO)
+        num_pdo = 0;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+
+        uint16_t idx_txpdo = leadshine_param_ptr->TXPDO1.index; // This is correct (0x1A00)
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x01, FALSE, sizeof(idx_txpdo), &idx_txpdo, EC_TIMEOUTRXM);
+
+        num_pdo = 1;
+        ret += soem.ec_SDOwrite(slave_num, leadshine_param_ptr->SYNC_MANAGER_3_PDO.index, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+
+        printf("Sync Manager configuration result: %d\n", ret);
     }
 
     void EthercatManager::configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)

@@ -105,10 +105,8 @@ namespace ar_control
 		if(commandType != CTR_CMD_WAIT) {
 			if(action_in_progress) {
 				RCLCPP_WARN(CLIENT_LOG, "ArControlClient: Previous action result discarded");
-				/// Need to reset action status here
 			}
 			goal_handle_future = client_ptr_->async_send_goal(goal);
-			// sendGoal(goal);
 			action_in_progress = true;
 			printf(COLOR_GRAY "%s ArControlClient: '%s' sent\n" COLOR_RESET, ar_utils::getCurrentTime().c_str(), actionName);
 			fflush(stdout);
@@ -148,6 +146,15 @@ namespace ar_control
 		auto goal			= ArControlAction::Goal();
 		goal.action			= HostCommand::PLANNING;
 		goal.planning_group = planningGroup;
+
+		return actionCommand(commandType, timeoutSec, goal);
+	}
+
+	int ArControlClient::setMotorStates(const std::vector<bool>& motorCmds, ControlCommandType commandType, int timeoutSec)
+	{
+		auto goal 			= ArControlAction::Goal();
+		goal.action 		= HostCommand::SET_MOTOR_STATE;
+		goal.motor_cmds 	= motorCmds;
 
 		return actionCommand(commandType, timeoutSec, goal);
 	}

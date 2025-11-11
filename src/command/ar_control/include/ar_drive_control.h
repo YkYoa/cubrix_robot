@@ -20,9 +20,11 @@ namespace ar_control
         void read();
         void write();
         void shutdown();
+        void motorOn();
+        void motorOff();
         
-        int getInputActualValueToStatus(tVectorS& jointNames, tVectorS& hardwareIds, 
-                                std::vector<uint32_t>& positionActualValues, std::vector<uint32_t>& velocityActualValues);
+        // int getInputActualValueToStatus(tVectorS& jointNames, tVectorS& hardwareIds, 
+        //                         std::vector<uint32_t>& positionActualValues, std::vector<uint32_t>& velocityActualValues);
 
         inline int portId()
         {

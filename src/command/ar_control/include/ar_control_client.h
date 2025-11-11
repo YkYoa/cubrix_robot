@@ -38,6 +38,7 @@ namespace ar_control
 
 		int setPlanningState(const std::string& planningGroup = "", ControlCommandType commandType = ar_control::CTR_CMD_SEND_WAIT,
 							 int timeoutSec = 5);
+		int setMotorStates(const std::vector<bool>& motorCmds, ControlCommandType commandType, int timeoutSec);
 
 	protected:
 		rclcpp_action::Client<ArControlAction>::SharedPtr client_ptr_;

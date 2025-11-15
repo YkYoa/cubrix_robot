@@ -111,17 +111,18 @@ namespace ar_control
                 ar_client->resetFaultDualJoint(input, output);
                 for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
                     output->axis[i].target_position = input->axis[i].actual_position;
+                    usleep(1000);
                 }
                 ar_client->writeOutputs(output);
 
                 memset(output, 0, sizeof(DualJointCyclicOutput));
 
                 for(int i = 0; i < 3; i++){
+                    usleep(20000);
                     for(size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++){
                         output->axis[j].control_word = enable_sequence[i];
                     }
                     ar_client->writeOutputs(output);
-                    usleep(30000);
                 }
             }
         }
@@ -140,12 +141,11 @@ namespace ar_control
                 memset(output, 0, sizeof(SingleJointCyclicOutput));
                                 
                 for(int i = 0; i < 3; i++){
-                    usleep(10000);
+                    usleep(20000);
                     output->control_word = enable_sequence[i];
                     ar_client->writeOutputs(output);
 
                     ar_client->readInputs(input);
-                    printf("Single Axis State %d: Status=0x%04X\n", i, input->status_word);
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace ar_control
                 ar_client->writeOutputs(output);
 
                 static int write_counter = 0;
-                if (++write_counter >= 100 && ENABLE_PRINT)
+                if (++write_counter >= 250 && ENABLE_PRINT)
                 {
                     printf(COLOR_BLUE "\n  [WRITE - Dual Axis]");
                     for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
@@ -268,7 +268,7 @@ namespace ar_control
 
 
                 static int write_counter_single = 0;
-                if (++write_counter_single >= 100 && ENABLE_PRINT)
+                if (++write_counter_single >= 250 && ENABLE_PRINT)
                 {
                     printf(COLOR_BLUE "\n  [WRITE - Single Axis] Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f"
                            , output->control_word, output->target_position, joint->joint_pos_cmd);
@@ -310,17 +310,18 @@ namespace ar_control
                 }
 
                 static int print_counter = 0;
-                if (++print_counter >= 100 && ENABLE_PRINT)
+                if (++print_counter >= 250 && ENABLE_PRINT)
                 {
                     printf(COLOR_GREEN "\n[READ - Dual Axis]");
                     for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
                     {
-                        printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f",
+                        printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
                                i,
                                input->axis[i].status_word,
                                input->axis[i].mode_of_operation_display,
                                input->axis[i].actual_position,
-                               joints[i]->joint_pos);
+                               joints[i]->joint_pos,
+                               input->axis[i].error_code);
                     }
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
@@ -337,7 +338,7 @@ namespace ar_control
                 joints[0]->joint_pos = (actual_pos - joints[0]->home_encoder_offset) / joints[0]->pulse_per_revolution;
 
                 static int print_counter_single = 0;
-                if (++print_counter_single >= 100 && ENABLE_PRINT)
+                if (++print_counter_single >= 250 && ENABLE_PRINT)
                 {
                     printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
                            , input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);

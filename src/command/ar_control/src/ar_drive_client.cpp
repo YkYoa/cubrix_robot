@@ -190,7 +190,7 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::dualMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x00, 0x80, 0b110};
+    const uint16 sequence[] = {0x00, 0x80, 0x00};
 
     for (uint16 cmd : sequence)
     {
@@ -199,7 +199,7 @@ namespace ar_control
         output->axis[i].control_word = cmd;
       }
       writeOutputs(output);
-      usleep(10000);
+      usleep(50000);
     }
 
     printf("\n[dualMotorOff] Motors for all axes are now OFF (complete).\n");
@@ -214,7 +214,7 @@ namespace ar_control
     {
       output->control_word = cmd;
       writeOutputs(output);
-      usleep(10000);
+      usleep(50000);
     }
   }
 
@@ -222,7 +222,7 @@ namespace ar_control
   void ArDriveClient::dualMotorOn(T *input, U *output)
   {
     for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
-      output->axis[i].control_word & 0x04;
+      output->axis[i].control_word |= 0x04;
     }
     writeOutputs(output);
   }
@@ -230,7 +230,7 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::singleMotorOn(T *input, U *output)
   {
-    output->control_word & 0x04;
+    output->control_word |= 0x04;
     writeOutputs(output);
   }
 

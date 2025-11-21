@@ -34,8 +34,11 @@ public:
 
     const ParameterFormat RXPDO1 = {0x1600, 0x00, UNSIGNED16, 0x16000003};
     const ParameterFormat CONTROL_WORD = {0x6040, 0x00, UNSIGNED16, 0x60400000};
+    const ParameterFormat MODE_OF_OPERATION = {0x6060, 0x00, INTEGER8, 0x60600001};
     const ParameterFormat TARGET_POSITION = {0x607A, 0x00, INTEGER32, 0x607A0000};
-    const ParameterFormat VL_TARGET_VELOCITY = {0x6092, 0x00, INTEGER32, 0x60920000};
+    const ParameterFormat TARGET_VELOCITY = {0x6081, 0x00, INTEGER32, 0x60810000};
+    const ParameterFormat PROFILE_ACCELERATION = {0x6083, 0x00, INTEGER32, 0x60830000};
+    const ParameterFormat PROFILE_DECELERATION = {0x6084, 0x00, INTEGER32, 0x60840000};
     const ParameterFormat TOUCH_PROBE_FUNCTION = {0x60B8, 0x00, UNSIGNED16, 0x60B80000};
     
     const ParameterFormat TXPDO1 = {0x1A00, 0x00, UNSIGNED16, 0x1A000007};

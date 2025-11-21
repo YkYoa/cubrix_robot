@@ -89,64 +89,97 @@ namespace ar_control
         printf(COLOR_DARKYELLOW "\n[Ar Drive Control] ---------------------- Initializing drive %d----------------------" COLOR_RESET,
                drive_id_);
 
-        if(!ar_client)
+        if (!ar_client)
             return;
 
         const uint16_t enable_sequence[] = {
             0x0006, // Switch On Disabled → Ready to Switch On
             0x0007, // Ready to Switch On → Switched On
-            0x000F,  // Switched On → Operation Enabled
-            // 0x001F  // Switched On → Operation Enabled
+            0x000F, // Switched On → Operation Enabled
+            0x001F  // Switched On → Operation Enabled
         };
 
-        if (drive_parameter.is_dual_axis == true)
+        if (drive_parameter.drive_mode == CyclicSynchronousPosition)
         {
-            DualJointCyclicInput *input = new DualJointCyclicInput();
-            DualJointCyclicOutput *output = new DualJointCyclicOutput();
-            driveInput = input;
-            driveOutput = output;
-
-            if (ar_client != nullptr)
+            if (drive_parameter.is_dual_axis == true)
             {
-                ar_client->resetFaultDualJoint(input, output);
-                for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
-                    output->axis[i].target_position = input->axis[i].actual_position;
-                    usleep(1000);
-                }
-                ar_client->writeOutputs(output);
-
+                DualJointCyclicInput *input = new DualJointCyclicInput();
+                DualJointCyclicOutput *output = new DualJointCyclicOutput();
+                driveInput = input;
+                driveOutput = output;
                 memset(output, 0, sizeof(DualJointCyclicOutput));
 
-                for(int i = 0; i < 3; i++){
-                    usleep(20000);
-                    for(size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++){
-                        output->axis[j].control_word = enable_sequence[i];
+                if (ar_client != nullptr)
+                {
+                    ar_client->resetFaultDualJoint(input, output);
+                    for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+                    {
+                        output->axis[i].target_position = input->axis[i].actual_position;
+                        usleep(1000);
                     }
                     ar_client->writeOutputs(output);
+
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        usleep(20000);
+                        for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
+                        {
+                            output->axis[j].control_word = enable_sequence[i];
+                        }
+                        ar_client->writeOutputs(output);
+                    }
+                }
+            }
+            else
+            {
+                SingleJointCyclicInput *input = new SingleJointCyclicInput();
+                SingleJointCyclicOutput *output = new SingleJointCyclicOutput();
+                driveInput = input;
+                driveOutput = output;
+                memset(output, 0, sizeof(SingleJointCyclicOutput));
+
+                if (ar_client != nullptr)
+                {
+                    ar_client->resetFaultSingleJoint(input, output);
+                    output->target_position = input->actual_position;
+                    ar_client->writeOutputs(output);
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        usleep(20000);
+                        output->control_word = enable_sequence[i];
+                        ar_client->writeOutputs(output);
+                    }
                 }
             }
         }
-        else
+        else if (drive_parameter.drive_mode == ProfilePosition)
         {
-            SingleJointCyclicInput *input = new SingleJointCyclicInput();
-            SingleJointCyclicOutput *output = new SingleJointCyclicOutput();
+            DualJointProFileOutput *output = new DualJointProFileOutput();
+            DualJointProFileInput *input = new DualJointProFileInput();
             driveInput = input;
             driveOutput = output;
 
-            if (ar_client != nullptr)
+            ar_client->resetFaultDualJoint(input, output);
+            for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
             {
-                ar_client->resetFaultSingleJoint(input, output);
-                output->target_position = input->actual_position;
-                ar_client->writeOutputs(output);
-                memset(output, 0, sizeof(SingleJointCyclicOutput));
-                                
-                for(int i = 0; i < 3; i++){
-                    usleep(20000);
-                    output->control_word = enable_sequence[i];
-                    ar_client->writeOutputs(output);
+                output->axis[i].profile_target_position = input->axis[i].actual_position;
+                output->axis[i].mode_of_operation = 1; // Profile Position Mode
+                usleep(1000);
+            }
+            ar_client->writeOutputs(output);
 
-                    ar_client->readInputs(input);
+            memset(output, 0, sizeof(DualJointProFileOutput));
+
+            for (int i = 0; i < 3; i++)
+            {
+                usleep(20000);
+                for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
+                {
+                    output->axis[j].control_word = enable_sequence[i];
                 }
+                ar_client->writeOutputs(output);
             }
         }
         return;
@@ -181,9 +214,9 @@ namespace ar_control
             DualJointCyclicInput *input = (DualJointCyclicInput *)driveInput;
             DualJointCyclicOutput *output = (DualJointCyclicOutput *)driveOutput;
             ar_client->readInputs(input);
-            for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
-                printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", input->axis[i].error_code
-                                    , input->axis[i].status_word, input->axis[i].mode_of_operation_display);
+            for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+            {
+                printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", input->axis[i].error_code, input->axis[i].status_word, input->axis[i].mode_of_operation_display);
             }
 
             ar_client->resetFaultDualJoint(input, output);
@@ -195,11 +228,11 @@ namespace ar_control
             SingleJointCyclicOutput *output = (SingleJointCyclicOutput *)driveOutput;
             ar_client->readInputs(input);
 
-            printf("\n error_code = %04x, status_word %04x, operation_mode = %2d", 
-                input->error_code, input->status_word, input->mode_of_operation_display);
+            printf("\n error_code = %04x, status_word %04x, operation_mode = %2d",
+                   input->error_code, input->status_word, input->mode_of_operation_display);
 
             ar_client->resetFaultSingleJoint(input, output);
-            ar_client->singleMotorOff(input,output);
+            ar_client->singleMotorOff(input, output);
         }
     }
 
@@ -226,6 +259,17 @@ namespace ar_control
             output->axis[i].target_position = int32(joints[i]->joint_pos_cmd * joints[i]->pulse_per_revolution);
         }
     }
+
+    template <>
+    void ArDriveControl::jointCmdToPulses<DualJointProFileOutput>(ArJointControl *joint, DualJointProFileOutput *output)
+    {
+        (void)joint;
+        for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+        {
+            output->axis[i].profile_target_position = int32(joints[i]->joint_pos_cmd * joints[i]->pulse_per_revolution);
+        }
+    }
+
 
     void ArDriveControl::write()
     {
@@ -266,20 +310,134 @@ namespace ar_control
                 jointCmdToPulses(joint, output);
                 ar_client->writeOutputs(output);
 
-
                 static int write_counter_single = 0;
                 if (++write_counter_single >= 250 && ENABLE_PRINT)
                 {
-                    printf(COLOR_BLUE "\n  [WRITE - Single Axis] Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f"
-                           , output->control_word, output->target_position, joint->joint_pos_cmd);
+                    printf(COLOR_BLUE "\n  [WRITE - Single Axis] Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f", output->control_word, output->target_position, joint->joint_pos_cmd);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
                     write_counter_single = 0;
                 }
             }
         }
-    }
+        else // Profile Position Mode
+        {
+            DualJointProFileOutput *output = (DualJointProFileOutput *)driveOutput;
+            DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
 
+            static bool test_initialized = false;
+            static int test_phase = 0;
+            static int test_counter = 0;
+
+            static bool new_setpoint_pending[LEADSHINE_DRIVER_MAX_JOINT_COUNT] = {false};
+
+            if (!test_initialized)
+            {
+                printf(COLOR_GREEN "\n[TEST] Starting Profile Position Mode Test for Drive %d" COLOR_RESET, drive_id_);
+                test_initialized = true;
+            }
+
+            test_counter++;
+            if (test_counter >= 500) // Change position every 2 seconds (500 cycles at 250Hz)
+            {
+                test_phase = (test_phase + 1) % 4;
+                test_counter = 0;
+
+                switch (test_phase)
+                {
+                case 0:
+                    for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+                    {
+                        joints[i]->joint_pos_cmd = 0.0;
+                    }
+                    printf(COLOR_GREEN "\n[TEST] Moving to position 0: All joints at 0 rad" COLOR_RESET);
+                    break;
+
+                case 1:
+                    if (joints.size() > 0)
+                        joints[0]->joint_pos_cmd = 0.7;
+                    if (joints.size() > 1)
+                        joints[1]->joint_pos_cmd = -0.5;
+                    printf(COLOR_GREEN "\n[TEST] Moving to position 1: J1=0.5 rad, J2=-0.3 rad" COLOR_RESET);
+                    break;
+
+                case 2:
+                    if (joints.size() > 0)
+                        joints[0]->joint_pos_cmd = -0.5;
+                    if (joints.size() > 1)
+                        joints[1]->joint_pos_cmd = 0.7;
+                    printf(COLOR_GREEN "\n[TEST] Moving to position 2: J1=-0.5 rad, J2=0.3 rad" COLOR_RESET);
+                    break;
+
+                case 3:
+                    if (joints.size() > 0)
+                        joints[0]->joint_pos_cmd = 0.4;
+                    if (joints.size() > 1)
+                        joints[1]->joint_pos_cmd = -0.4;
+                    printf(COLOR_GREEN "\n[TEST] Moving to position 3: J1=0.2 rad, J2=-0.2 rad" COLOR_RESET);
+                    break;
+                }
+
+                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+                {
+                    new_setpoint_pending[i] = true;
+                }
+            }
+
+            jointCmdToPulses(joint, output);
+
+            for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+            {
+                output->axis[i].mode_of_operation = 1;               // Profile Position Mode
+                output->axis[i].profile_velocity = 100000;           // Profile velocity
+                output->axis[i].profile_target_acceleration = 10000; // Profile acceleration
+                output->axis[i].profile_target_deceleration = 10000; // Profile deceleration
+
+                // Build control word with PP mode triggers
+                uint16_t control_word = 0x000F; // Base: operation enabled
+
+                // Check if drive has acknowledged previous setpoint
+                bool setpoint_ack = (input->axis[i].status_word & (1 << 12)) != 0;
+
+                if (new_setpoint_pending[i] && setpoint_ack)
+                {
+                    // Drive has acknowledged, clear the new setpoint bit
+                    new_setpoint_pending[i] = false;
+                    printf(COLOR_YELLOW "\n[TEST] Axis[%zu] setpoint acknowledged" COLOR_RESET, i);
+                }
+
+                if (new_setpoint_pending[i])
+                {
+                    control_word |= (1 << 4); // Bit 4: New setpoint
+                    control_word |= (1 << 5); // Bit 5: Change set immediately
+                    printf(COLOR_CYAN "\n[TEST] Axis[%zu] triggering new setpoint (CW: 0x%04X)" COLOR_RESET, i, control_word);
+                }
+
+                output->axis[i].control_word = control_word;
+            }
+
+            ar_client->writeOutputs(output);
+
+            static int write_counter = 0;
+            if (++write_counter >= 250 && ENABLE_PRINT)
+            {
+                printf(COLOR_BLUE "\n  [WRITE - PP Mode Dual Axis]");
+                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
+                {
+                    printf("\n  Axis[%zu] | Control: 0x%04X | Mode: %d | Target: %d | Cmd: %6.3f rad | Pending: %s",
+                           i,
+                           output->axis[i].control_word,
+                           output->axis[i].mode_of_operation,
+                           output->axis[i].profile_target_position,
+                           joints[i]->joint_pos_cmd,
+                           new_setpoint_pending[i] ? "YES" : "NO");
+                }
+                printf("\n" COLOR_RESET);
+                fflush(stdout);
+                write_counter = 0;
+            }
+        }
+    }
     void ArDriveControl::read()
     {
         if (ar_client == nullptr)
@@ -340,25 +498,122 @@ namespace ar_control
                 static int print_counter_single = 0;
                 if (++print_counter_single >= 250 && ENABLE_PRINT)
                 {
-                    printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
-                           , input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
+                    printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X", input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
                     print_counter_single = 0;
                 }
             }
         }
+        // else
+        // {
+        //     DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
+        //     ar_client->readInputs(input);
+        //     for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+        //     {
+        //         joints[i]->position_actual_value = input->axis[i].actual_position;
+        //         int32_t actual_pos = static_cast<int32_t>(input->axis[i].actual_position);
+        //         joints[i]->joint_pos = (actual_pos - joints[i]->home_encoder_offset) / joints[i]->pulse_per_revolution;
+        //     }
+
+        //     static int print_counter = 0;
+        //     if (++print_counter >= 250 && ENABLE_PRINT)
+        //     {
+        //         printf(COLOR_GREEN "\n[READ - Dual Axis]");
+        //         for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
+        //         {
+        //             printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
+        //                    i,
+        //                    input->axis[i].status_word,
+        //                    input->axis[i].mode_of_operation_display,
+        //                    input->axis[i].actual_position,
+        //                    joints[i]->joint_pos,
+        //                    input->axis[i].error_code);
+        //         }
+        //         printf("\n" COLOR_RESET);
+        //         fflush(stdout);
+        //         print_counter = 0;
+        //     }
+        // }
+
+        else // Profile Position Mode
+        {
+            DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
+            ar_client->readInputs(input);
+
+            for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+            {
+                joints[i]->position_actual_value = input->axis[i].actual_position;
+                int32_t actual_pos = static_cast<int32_t>(input->axis[i].actual_position);
+                joints[i]->joint_pos = (actual_pos - joints[i]->home_encoder_offset) / joints[i]->pulse_per_revolution;
+            }
+
+            static int print_counter = 0;
+            if (++print_counter >= 250 && ENABLE_PRINT)
+            {
+                printf(COLOR_GREEN "\n[READ - PP Mode Dual Axis]");
+                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
+                {
+                    // Check status word bits for PP mode
+                    uint16_t status = input->axis[i].status_word;
+                    bool target_reached = (status & (1 << 10)) != 0; // Bit 10: Target reached
+                    bool setpoint_ack = (status & (1 << 12)) != 0;   // Bit 12: Setpoint acknowledged
+
+                    printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f rad | Error: 0x%04X",
+                           i,
+                           status,
+                           input->axis[i].mode_of_operation_display,
+                           input->axis[i].actual_position,
+                           joints[i]->joint_pos,
+                           input->axis[i].error_code);
+
+                    // Additional status information
+                    printf(" | Target: %s | Setpoint: %s",
+                           target_reached ? "YES" : "NO",
+                           setpoint_ack ? "ACK" : "NO");
+                }
+                printf("\n" COLOR_RESET);
+                fflush(stdout);
+                print_counter = 0;
+            }
+
+            // TEST: Check if mode is correct
+            static int mode_check_counter = 0;
+            if (++mode_check_counter >= 1000) // Check every 4 seconds
+            {
+                bool mode_correct = true;
+                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+                {
+                    if (input->axis[i].mode_of_operation_display != 1)
+                    {
+                        mode_correct = false;
+                        printf(COLOR_RED "\n[TEST ERROR] Axis[%zu] is in mode %d, expected mode 1 (PP)" COLOR_RESET,
+                               i, input->axis[i].mode_of_operation_display);
+                    }
+                }
+                if (mode_correct)
+                {
+                    printf(COLOR_GREEN "\n[TEST OK] All axes in Profile Position Mode (mode 1)" COLOR_RESET);
+                }
+                mode_check_counter = 0;
+            }
+        }
     }
 
     void ArDriveControl::motorOn()
     {
-        if(!ar_client){
+        if (!ar_client)
+        {
             return;
         }
-        else{
-            if(is_dual_axis_){
+        else
+        {
+            if (is_dual_axis_)
+            {
                 ar_client->dualMotorOn((DualJointCyclicInput *)driveInput, (DualJointCyclicOutput *)driveOutput);
-            }else{
+            }
+            else
+            {
                 ar_client->singleMotorOn((SingleJointCyclicInput *)driveInput, (SingleJointCyclicOutput *)driveOutput);
             }
         }
@@ -366,13 +621,18 @@ namespace ar_control
 
     void ArDriveControl::motorOff()
     {
-        if(!ar_client){
+        if (!ar_client)
+        {
             return;
         }
-        else{
-            if(is_dual_axis_){
+        else
+        {
+            if (is_dual_axis_)
+            {
                 ar_client->dualMotorOff((DualJointCyclicInput *)driveInput, (DualJointCyclicOutput *)driveOutput);
-            }else{
+            }
+            else
+            {
                 ar_client->singleMotorOff((SingleJointCyclicInput *)driveInput, (SingleJointCyclicOutput *)driveOutput);
             }
         }
@@ -380,5 +640,6 @@ namespace ar_control
 
     template void ArDriveControl::jointCmdToPulses<SingleJointCyclicOutput>(ArJointControl *, SingleJointCyclicOutput *);
     template void ArDriveControl::jointCmdToPulses<DualJointCyclicOutput>(ArJointControl *, DualJointCyclicOutput *);
+    template void ArDriveControl::jointCmdToPulses<DualJointProFileOutput>(ArJointControl *, DualJointProFileOutput *);
 
 } // namespace ar_control

@@ -67,6 +67,10 @@ namespace ar_control
         DriveInput* driveInput;   ///< Pointer to the drive input structure
         DriveOutput* driveOutput; ///< Pointer to the drive output structure
 
+    private:
+        bool new_setpoint_pending_[LEADSHINE_DRIVER_MAX_JOINT_COUNT] = {false};
+
+
     };
 
 }  // namespace ar_control

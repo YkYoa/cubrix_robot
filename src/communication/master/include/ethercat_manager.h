@@ -56,7 +56,10 @@ namespace master
     struct DriverInfo
     {
     public:
-        DriverInfo() {};
+        DriverInfo() {
+            control_mode = 1;
+            is_dual_driver = false;
+        };
         ~DriverInfo() {};
 
         bool operator==(DriverInfo &source) const
@@ -73,6 +76,7 @@ namespace master
         std::string driver_type;
         std::string joint_name;
         bool is_dual_driver;
+        int control_mode;
 
         struct LeadshineDriveData{
             std::string com_port;

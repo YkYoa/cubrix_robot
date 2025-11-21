@@ -127,7 +127,8 @@ namespace master
                             if(!error_thread_param->soem.ec_slave[slave].state){
                                 error_thread_param->soem.ec_slave[slave].islost = true;
                                 delay_count[slave - 1] = 5;
-                                printf(COLOR_RED "[EtherCatManager] Error: Slave %d (%s) lost." COLOR_RESET "\n", slave, jointName);
+                                printf(COLOR_RED "%s [EtherCatManager] Error: Slave %d (%s) lost." COLOR_RESET "\n", ar_utils::getCurrentTime(false, false).c_str(), 
+                                                    slave, jointName);
                             }
                         }                        
                     }
@@ -331,6 +332,7 @@ namespace master
                 driver_info.is_dual_driver = drive_node["is_dual_axis"] ? drive_node["is_dual_axis"].as<bool>() : false;
             }
         }
+        driver_info.control_mode = driver_data.control_mode;
 
         if(driver_info.driver_type != soem.ec_slave[slave_no].name) {
 			printf(COLOR_YELLOW "WARNING the driver %d type is different from config file \n", slave_no);
@@ -469,100 +471,66 @@ namespace master
             readFromYamlFile(slave_id);
         }
 
-        // Check DC status for all slaves
-        printf("\n=== DC Status Check ===\n");
-        for (auto slave_id : slaveIds)
-        {
-            if (soem.ec_slave[slave_id].hasdc)
-            {
-                uint32_t sync0_time, cycle_time;
-                uint8_t sync_mode;
-                int l;
+        // config PDO 
+        for(auto slave_id : slaveIds) {
+            DriverInfo driver_info = getDriverInfo(slave_id);
 
-                l = sizeof(sync_mode);
-                soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
+            // uint32_t reset_objects = 0x64616F6C;
+            // soem.ec_SDOwrite(slave_id, 0x1010, 0x04, FALSE, sizeof(reset_objects), &reset_objects, EC_TIMEOUTTXM);
+            // printf(COLOR_YELLOW "[EtherCatManager] Slave %d (%s) reset obj 2000h-5000h to defaults." COLOR_RESET "\n", 
+            // slave_id, driver_info.driver_type.c_str());
+            // usleep(1000000);
 
-                l = sizeof(sync0_time);
-                soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_time, EC_TIMEOUTRXM);
+            // int8_t method = 2;
+            // soem.ec_SDOwrite(slave_id, 0x2151, 0x00, FALSE, sizeof(method), &method, EC_TIMEOUTTXM);
+            // usleep(1000);
 
-                l = sizeof(cycle_time);
-                soem.ec_SDOread(slave_id, 0x1c32, 0x02, FALSE, &l, &cycle_time, EC_TIMEOUTRXM);
+            // uint32_t save_objects = 0x65766173;
+            // soem.ec_SDOwrite(slave_id, 0x1010, 0x04, FALSE, sizeof(save_objects), &save_objects, EC_TIMEOUTTXM);
+            // usleep(1000000);
 
-                printf("Slave %d: SyncMode=%d, Sync0Time=%u, CycleTime=%u\n",
-                       slave_id, sync_mode, sync0_time, cycle_time);
+            printf(COLOR_YELLOW "[EtherCatManager] Slave %d save obj 2000h-5000h." COLOR_RESET "\n",
+                   slave_id);
+                   
+            fflush(stdout);
+
+            int8_t mode = (driver_info.control_mode == 1) ? 8 : 0;
+            if(driver_info.is_dual_driver){
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(1000);
+
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x01, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(1000);
+            }else{
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(1000);
             }
         }
-
-        // config PDO 
-        // for(auto slave_id : slaveIds) {
-        //     DriverInfo driver_info = getDriverInfo(slave_id);
-        //     if(driver_info.driver_type.find("CS3E-D503B") != std::string::npos){
-        //         configPDOProcess(slave_id);
-        //     }
-        // }
-
 
         //Config IO map
         int io_map_size = soem.ec_config_map(&iomap_);
         std::cout << COLOR_YELLOW "[EtherCatManager] IOMap size: " << io_map_size << COLOR_RESET << std::endl;
-        
-        //locate dc slaves
+
+        // locate DC slaves
         soem.ec_configdc();
-
-        uint32_t cycle_time = DRIVER_SYNCH_TIME * 1e+6; // ns
-        printf("  DC cycle time: %u ns (%d ms)\n", cycle_time, DRIVER_SYNCH_TIME);
-
-        for(auto slave_id : slaveIds){
-            if(soem.ec_slave[slave_id].hasdc){
-                soem.ec_dcsync0(slave_id, TRUE, cycle_time, 0);
-                printf("  Slave %d: DC SYNC0 configured\n", slave_id);
-            }
-
-            uint8_t sync_type = 2;
-            soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
-            usleep(50000);
-
-            int l = sizeof(cycle_time);
-            soem.ec_SDOwrite(slave_id, 0x1c32, 0x02, FALSE, l, &cycle_time, EC_TIMEOUTRXM);
-            usleep(50000);
-
-            soem.ec_SDOwrite(slave_id, 0x1c32, 0x0a, FALSE, l, &cycle_time, EC_TIMEOUTRXM);
-
-            usleep(50000);
-            printf("  Slave %d: Cycle time set to %u ns\n", slave_id, cycle_time);
-        }
 
         // for (auto slave_id : slaveIds)
         // {
-        //     printf("Configuring slave %d (%s)\n", slave_id, soem.ec_slave[slave_id].name);
-
-        //     if (strstr(soem.ec_slave[slave_id].name, "2CL3-EC403T") != nullptr)
-        //     {
-        //         soem.ec_dcsync0(slave_id, TRUE, cycle_time, 0);
-        //         printf("  Slave %d: DC SYNC0 configured\n", slave_id);
-
-        //         uint8_t sync_type = 2;
-        //         soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
-        //         usleep(50000);
-
-        //     }
-        //     else
-        //     {
-        //         soem.ec_dcsync0(slave_id, FALSE, cycle_time, 0);
-        //         printf("  Slave %d: DC SYNC0 configured\n", slave_id);
-
-        //         uint8_t sync_type = 2;
-        //         soem.ec_SDOwrite(slave_id, 0x1c32, 0x01, FALSE, sizeof(sync_type), &sync_type, EC_TIMEOUTRXM);
-        //         usleep(50000);
-        //     }
+            
         // }
+        uint32_t target_cycle_ns = DRIVER_SYNCH_TIME * 1e+6;
+
+        for(auto slave_id : slaveIds){
+            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, 0);
+        }
 
         // '0' here addresses all slaves
-		if(soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP) {
-			printf("Could not set EC_STATE_SAFE_OP\n");
-			fflush(stdout);
-			return false;
-		}
+        if (soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP)
+        {
+            printf("Could not set EC_STATE_SAFE_OP\n");
+            fflush(stdout);
+            return false;
+        }
 
         soem.ec_slave[0].state = EC_STATE_OPERATIONAL;
 		soem.ec_send_processdata();
@@ -643,14 +611,14 @@ namespace master
 
         printf(COLOR_BLUE "[EthercatManager] Config PDO for driver %s \n" COLOR_RESET ,driver_info.driver_type.c_str());
 
+        // if (driver_data.control_mode == 0)
+        // {
+        //     if (driver_info.is_dual_driver == true)
+        //         configPDODualCyclic(slave_num, leadshine_param_ptr);
+        //     else
+        //         configPDOCyclicPosition(slave_num, leadshine_param_ptr);
+        // }
         if (driver_data.control_mode == 0)
-        {
-            if (driver_info.is_dual_driver == true)
-                configPDODualCyclic(slave_num, leadshine_param_ptr);
-            else
-                configPDOCyclicPosition(slave_num, leadshine_param_ptr);
-        }
-        else if (driver_data.control_mode == 1)
         {
             configPDOProfilePosition(slave_num, leadshine_param_ptr);
         }
@@ -756,8 +724,149 @@ namespace master
     }
 
     void EthercatManager::configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
-    {   
-        // later
+    {
+        printf(COLOR_BLUE "[EtherCatManager] Configuring DUAL-AXIS PP for slave %d\n" COLOR_RESET, slave_num);
+
+        int ret = 0;
+        uint8_t num_entries;
+        int l = sizeof(num_entries);
+
+        // === AXIS 1 (RxPDO 0x1600, TxPDO 0x1A00) ===
+        printf("  Configuring Axis 1...\n");
+
+        // Clear RxPDO 0x1600
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1600, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Map Axis 1 RxPDO
+        uint32_t mapping;
+        uint8_t entry_idx = 1;
+
+        mapping = leadshine_param_ptr->CONTROL_WORD.address; // 0x60400010
+        ret += soem.ec_SDOwrite(slave_num, 0x1600, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->TARGET_POSITION.address; // 0x607A0020
+        ret += soem.ec_SDOwrite(slave_num, 0x1600, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->MODE_OF_OPERATION.address; // 0x60600008
+        ret += soem.ec_SDOwrite(slave_num, 0x1600, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = entry_idx - 1;
+        ret += soem.ec_SDOwrite(slave_num, 0x1600, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Clear TxPDO 0x1A00
+        ret += soem.ec_SDOread(slave_num, 0x1A00, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1A00, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Map Axis 1 TxPDO
+        entry_idx = 1;
+        mapping = leadshine_param_ptr->ERROR_CODE.address; // 0x603F0010
+        ret += soem.ec_SDOwrite(slave_num, 0x1A00, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->STATUS_WORD.address; // 0x60410010
+        ret += soem.ec_SDOwrite(slave_num, 0x1A00, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->ACTUAL_POSITION.address; // 0x60640020
+        ret += soem.ec_SDOwrite(slave_num, 0x1A00, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = entry_idx - 1;
+        ret += soem.ec_SDOwrite(slave_num, 0x1A00, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // === AXIS 2 (RxPDO 0x1601, TxPDO 0x1A01) ===
+        printf("  Configuring Axis 2...\n");
+
+        // Clear RxPDO 0x1601
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1601, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Map Axis 2 RxPDO (use same objects but Drive will differentiate by index)
+        entry_idx = 1;
+        mapping = leadshine_param_ptr->CONTROL_WORD.address; // 0x60400010
+        ret += soem.ec_SDOwrite(slave_num, 0x1601, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->TARGET_POSITION.address; // 0x607A0020
+        ret += soem.ec_SDOwrite(slave_num, 0x1601, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->MODE_OF_OPERATION.address; // 0x60600008
+        ret += soem.ec_SDOwrite(slave_num, 0x1601, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = entry_idx - 1;
+        ret += soem.ec_SDOwrite(slave_num, 0x1601, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Clear TxPDO 0x1A01
+        ret += soem.ec_SDOread(slave_num, 0x1A01, 0x00, FALSE, &l, &num_entries, EC_TIMEOUTRXM);
+        num_entries = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1A01, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // Map Axis 2 TxPDO
+        entry_idx = 1;
+        mapping = leadshine_param_ptr->ERROR_CODE.address; // 0x603F0010
+        ret += soem.ec_SDOwrite(slave_num, 0x1A01, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->STATUS_WORD.address; // 0x60410010
+        ret += soem.ec_SDOwrite(slave_num, 0x1A01, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        mapping = leadshine_param_ptr->ACTUAL_POSITION.address; // 0x60640020
+        ret += soem.ec_SDOwrite(slave_num, 0x1A01, entry_idx++, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
+
+        num_entries = entry_idx - 1;
+        ret += soem.ec_SDOwrite(slave_num, 0x1A01, 0x00, FALSE, sizeof(num_entries), &num_entries, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // === Sync Manager Assignment ===
+        printf("  Configuring Sync Managers...\n");
+
+        // SM2: RxPDO (0x1600 and 0x1601)
+        uint8_t num_pdo = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c12, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        uint16_t pdo_idx = 0x1600;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c12, 0x01, FALSE, sizeof(pdo_idx), &pdo_idx, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        pdo_idx = 0x1601;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c12, 0x02, FALSE, sizeof(pdo_idx), &pdo_idx, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        num_pdo = 2;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c12, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        // SM3: TxPDO (0x1A00 and 0x1A01)
+        num_pdo = 0;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c13, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        pdo_idx = 0x1A00;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c13, 0x01, FALSE, sizeof(pdo_idx), &pdo_idx, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        pdo_idx = 0x1A01;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c13, 0x02, FALSE, sizeof(pdo_idx), &pdo_idx, EC_TIMEOUTRXM);
+        usleep(5000);
+
+        num_pdo = 2;
+        ret += soem.ec_SDOwrite(slave_num, 0x1c13, 0x00, FALSE, sizeof(num_pdo), &num_pdo, EC_TIMEOUTRXM);
+        usleep(10000);
+
+        if (ret != 0)
+        {
+            printf(COLOR_YELLOW "[EtherCatManager] Warning: %d SDO operations had issues" COLOR_RESET "\n", ret);
+        }
+        else
+        {
+            printf(COLOR_GREEN "[EtherCatManager] Dual-axis PP configuration complete!" COLOR_RESET "\n");
+        }
+        fflush(stdout);
     }
 
     void EthercatManager::configPDODualCyclic(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr)
@@ -783,7 +892,7 @@ namespace master
 		printf("controlword debug = %d\n", ret);
             
 		// add target position 6092 (Leadshine specific)
-		mapping = leadshine_param_ptr->VL_TARGET_VELOCITY.address;
+		mapping = leadshine_param_ptr->TARGET_VELOCITY.address;
 		ret +=
 			soem.ec_SDOwrite(slave_num, leadshine_param_ptr->RXPDO1.index, 0x02, FALSE, sizeof(mapping), &mapping, EC_TIMEOUTRXM);
 		printf("target position (6092) debug = %d\n", ret);

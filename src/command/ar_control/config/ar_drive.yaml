@@ -4,14 +4,14 @@
 ### It is used to set up the hardware interface for the AR robot arm.
 ### Set up the port information, drive IDs, and joint specifications for the AR robot arm.
 ### 0 > simulation (run as a dummy joint), 1 > SOEM (EtherCAT)
-### driver mode : 0 > Cyclic position mode, 1 > Profile position mode
+### driver mode : 1 > Cyclic position mode, 0 > Profile position mode
 
 port_info:
   port_name: enp2s0
   # port_name: enx00e04c6806e8
 
 driver_info:
-  driver_mode: 0
+  driver_mode: 1
   # CS3E_D503B:
   #   product_code: 0x85000000
   #   vendor_id: 0x43210000
@@ -27,27 +27,27 @@ use_torque_offset: false
 
 port_ids: 
   drive_1: 1
-  drive_2: 0
-  drive_3: 0
+  drive_2: 1
+  drive_3: 1
   drive_4: 0
   drive_5: 0
-  # drive_6: 0   
+  # drive_6: 0
 
 
 drives:
-  drive_1:
-    is_dual_axis: true
-    driver_name: 2CL3-EC403T      
+  drive_4:
+    is_dual_axis: false
+    driver_name: 2LC3-403T    
     joints:
-      Arm_joint1:
+      Arm_joint4:
         gear_ratio: -50
-        encoder_res: 4000
+        encoder_res: 10000
         encoder_offset: 0
         # torque_gamma:
         log_joint: false
-      Arm_joint2:
-        gear_ratio: 50
-        encoder_res: 4000
+      Arm_joint5:
+        gear_ratio: 10
+        encoder_res: 10000
         encoder_offset: 0
         # torque_gamma:
         log_joint: false
@@ -55,17 +55,27 @@ drives:
   # drive_2:
   #   joints:
   #     Arm_joint2:
-  #       gear_ratio: 16
-  #       encoder_res: 256
+  #       gear_ratio: 50
+  #       encoder_res: 10000
   #       encoder_offset: 4000
   #       # torque_gamma:
   #       log_joint: false
   drive_2:
     is_dual_axis: false
+    driver_name: CS3E-D507B
+    joints:
+      Arm_joint2:
+        gear_ratio: -50
+        encoder_res: 10000
+        encoder_offset: 0
+        # torque_gamma:
+        log_joint: false
+  drive_1:
+    is_dual_axis: false
     driver_name: CS3E-D503B
     joints:
       Arm_joint3:
-        gear_ratio: 1
+        gear_ratio: 50
         encoder_res: 10000
         encoder_offset: 0
         # torque_gamma:
@@ -74,20 +84,10 @@ drives:
     is_dual_axis: false
     driver_name: CS3E-D503B
     joints:
-      Arm_joint4:
-        gear_ratio: 16
-        encoder_res: 256
-        encoder_offset: 4000
-        # torque_gamma:
-        log_joint: false
-  drive_4:
-    is_dual_axis: false
-    driver_name: CS3E-D503B
-    joints:
-      Arm_joint5:
-        gear_ratio: 16
-        encoder_res: 256
-        encoder_offset: 4000
+      Arm_joint1:
+        gear_ratio: 10
+        encoder_res: 10000
+        encoder_offset: 0
         # torque_gamma:
         log_joint: false
   drive_5:

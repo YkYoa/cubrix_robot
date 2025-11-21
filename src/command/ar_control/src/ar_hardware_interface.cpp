@@ -133,11 +133,13 @@ namespace ar_control
         }
         YAML::Node port_ids = config["port_ids"];
         YAML::Node drives = config["drives"];
+        YAML::Node drive_mode = config["driver_info"];
         soem_drives.clear();
 
         for (YAML::const_iterator it = port_ids.begin(); it != port_ids.end(); it++)
         {
             DriveParameter driveParam;
+            driveParam.drive_mode = drive_mode["driver_mode"].as<int>();
             std::string drive_id = it->first.as<std::string>();
             driveParam.drive_id = ar_utils::stringToId(drive_id);
             driveParam.port_id = it->second.as<int>();
@@ -186,6 +188,7 @@ namespace ar_control
                       << ", Port ID: " << drive.port_id 
                       << ", Slave Id: " << drive.slave_id
                       << ", Is Dual Axis: " << (drive.is_dual_axis ? "True" : "False")
+                      << ", Drive Mode: " << drive.drive_mode
                       << std::endl;
             for (const auto& joint : drive.joint_paramters) {
                 std::cout << "  Joint Name: " << joint.joint_name

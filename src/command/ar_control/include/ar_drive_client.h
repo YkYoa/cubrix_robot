@@ -63,6 +63,26 @@ namespace ar_control
         TxPDO axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
     };
 
+    struct TxProFileOutput
+    {
+        uint16_t control_word;
+        int32_t profile_target_position;
+        uint32_t profile_velocity;
+        uint32_t profile_target_acceleration;
+        uint32_t profile_target_deceleration;
+        uint8_t mode_of_operation;
+    };
+
+    struct DualJointProFileOutput : DriveOutput
+    {
+        TxProFileOutput axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
+    };
+
+    struct DualJointProFileInput : DriveInput
+    {
+        RxPDO axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
+    };
+
     class ArDriveClient
     {
     public:
@@ -76,6 +96,11 @@ namespace ar_control
         void readInputs(DualJointCyclicInput* input);
         void readOutputs(DualJointCyclicOutput* output);
         void writeOutputs(DualJointCyclicOutput* output);
+
+        void readInputs(DualJointProFileInput* input);
+        void readOutputs(DualJointProFileOutput* output);
+        void writeOutputs(DualJointProFileOutput* output);
+
 
         template <typename T, typename U> void resetFaultSingleJoint(T* input, U* output);
         template <typename T, typename U> void resetFaultDualJoint(T* input, U* output);

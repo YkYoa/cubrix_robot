@@ -53,7 +53,6 @@ namespace ar_control
 		comm_mutex.push_back(std::make_shared<boost::mutex>());
 		comm_mutex.push_back(std::make_shared<boost::mutex>());
 
-
 		// hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 		// hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 

@@ -15,16 +15,19 @@ namespace ar_control
 
     void ArDriveControl::InitializeDriveClient(master::EthercatManager *manager, int slaveId)
     {
-        printf(COLOR_BLUE "\n[Ar Drive Control] InitializeDriveClient called for drive %d, slaveId %d, manager %p" COLOR_RESET,
-               drive_id_, slaveId, (void *)manager);
+        printf(COLOR_BLUE "\n[Ar Drive Control] InitializeDriveClient called for drive %d, slaveId %d" COLOR_RESET,
+               drive_id_, slaveId);
 
         drive_id_ = slaveId;
         ar_client.reset();
         if (manager)
         {
-            printf(COLOR_GREEN "\n[Ar Drive Control] Creating ArDriveClient for drive %d" COLOR_RESET, drive_id_);
             ar_client = std::make_unique<ArDriveClient>(*manager, slaveId);
-            printf(COLOR_GREEN "\n[Ar Drive Control] ArDriveClient created successfully for drive %d" COLOR_RESET, drive_id_);
+            printf(COLOR_BLUE "\n[INIT] Drive ID %d -> Slave ID %d | Input: %d bytes | Output: %d bytes" COLOR_RESET,
+                   drive_id_, slaveId,
+                   manager->getInputBits(slaveId) / 8,
+                   manager->getOutputBits(slaveId) / 8);
+            fflush(stdout);
         }
         else
         {
@@ -33,7 +36,7 @@ namespace ar_control
     }
 
     void ArDriveControl::AddJoint(JointParameter &jointParam)
-    {
+    {        
         ArJointControl *joint = new ArJointControl(jointParam.joint_name);
         printf(COLOR_BLUE "\n[Ar Drive Control] Drive %d add joint: %s" COLOR_RESET, drive_id_, jointParam.joint_name.c_str());
         joint->rev_angle_convert_mode = jointParam.rev_angle_convert_mode;
@@ -51,9 +54,16 @@ namespace ar_control
 
         joints.push_back(joint);
 
+        joint->joint_pos_cmd = 0.0;
+        joint->joint_pos = 0.0;
+        joint->joint_vel = 0.0;
+        joint->joint_vel_cmd = 0.0;
+        joint->position_actual_value = 0;
+        joint->velocity_actual_value = 0;
+
         if (ar_client == nullptr)
         {
-            joint->joint_pos_cmd = joint->joint_pos = joint->joint_vel = joint->joint_vel_cmd = joint->home_encoder_offset = 0;
+            joint->home_encoder_offset = 0;
         }
 
         if (abs(jointParam.encoder_offset) > 4000)
@@ -95,8 +105,8 @@ namespace ar_control
         const uint16_t enable_sequence[] = {
             0x0006, // Switch On Disabled → Ready to Switch On
             0x0007, // Ready to Switch On → Switched On
-            0x000F, // Switched On → Operation Enabled
-            0x001F  // Switched On → Operation Enabled
+            0x000F // Switched On → Operation Enabled
+            // 0x001F  // Switched On → Operation Enabled
         };
 
         if (drive_parameter.drive_mode == CyclicSynchronousPosition)
@@ -120,7 +130,7 @@ namespace ar_control
                     ar_client->writeOutputs(output);
 
 
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         usleep(20000);
                         for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
@@ -145,7 +155,7 @@ namespace ar_control
                     output->target_position = input->actual_position;
                     ar_client->writeOutputs(output);
 
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         usleep(20000);
                         output->control_word = enable_sequence[i];
@@ -313,7 +323,8 @@ namespace ar_control
                 static int write_counter_single = 0;
                 if (++write_counter_single >= 250 && ENABLE_PRINT)
                 {
-                    printf(COLOR_BLUE "\n  [WRITE - Single Axis] Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f", output->control_word, output->target_position, joint->joint_pos_cmd);
+                    printf(COLOR_BLUE "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f"
+                        , drive_id_, output->control_word, output->target_position, joint->joint_pos_cmd);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
                     write_counter_single = 0;
@@ -393,15 +404,12 @@ namespace ar_control
                 output->axis[i].profile_target_acceleration = 10000; // Profile acceleration
                 output->axis[i].profile_target_deceleration = 10000; // Profile deceleration
 
-                // Build control word with PP mode triggers
                 uint16_t control_word = 0x000F; // Base: operation enabled
 
-                // Check if drive has acknowledged previous setpoint
                 bool setpoint_ack = (input->axis[i].status_word & (1 << 12)) != 0;
 
                 if (new_setpoint_pending[i] && setpoint_ack)
                 {
-                    // Drive has acknowledged, clear the new setpoint bit
                     new_setpoint_pending[i] = false;
                     printf(COLOR_YELLOW "\n[TEST] Axis[%zu] setpoint acknowledged" COLOR_RESET, i);
                 }
@@ -498,45 +506,16 @@ namespace ar_control
                 static int print_counter_single = 0;
                 if (++print_counter_single >= 250 && ENABLE_PRINT)
                 {
-                    printf(COLOR_GREEN "\n[READ - Single Axis] Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X", input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
+                    printf(COLOR_GREEN "\n[READ - Single Axis] Drive: %d | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
+                        , drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
                     print_counter_single = 0;
                 }
             }
         }
-        // else
-        // {
-        //     DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
-        //     ar_client->readInputs(input);
-        //     for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-        //     {
-        //         joints[i]->position_actual_value = input->axis[i].actual_position;
-        //         int32_t actual_pos = static_cast<int32_t>(input->axis[i].actual_position);
-        //         joints[i]->joint_pos = (actual_pos - joints[i]->home_encoder_offset) / joints[i]->pulse_per_revolution;
-        //     }
 
-        //     static int print_counter = 0;
-        //     if (++print_counter >= 250 && ENABLE_PRINT)
-        //     {
-        //         printf(COLOR_GREEN "\n[READ - Dual Axis]");
-        //         for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
-        //         {
-        //             printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
-        //                    i,
-        //                    input->axis[i].status_word,
-        //                    input->axis[i].mode_of_operation_display,
-        //                    input->axis[i].actual_position,
-        //                    joints[i]->joint_pos,
-        //                    input->axis[i].error_code);
-        //         }
-        //         printf("\n" COLOR_RESET);
-        //         fflush(stdout);
-        //         print_counter = 0;
-        //     }
-        // }
-
-        else // Profile Position Mode
+        else
         {
             DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
             ar_client->readInputs(input);
@@ -554,7 +533,6 @@ namespace ar_control
                 printf(COLOR_GREEN "\n[READ - PP Mode Dual Axis]");
                 for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
                 {
-                    // Check status word bits for PP mode
                     uint16_t status = input->axis[i].status_word;
                     bool target_reached = (status & (1 << 10)) != 0; // Bit 10: Target reached
                     bool setpoint_ack = (status & (1 << 12)) != 0;   // Bit 12: Setpoint acknowledged
@@ -574,10 +552,10 @@ namespace ar_control
                 }
                 printf("\n" COLOR_RESET);
                 fflush(stdout);
-                print_counter = 0;
+                print_counter = 0;            // TEST: Check if mode is correct
+
             }
 
-            // TEST: Check if mode is correct
             static int mode_check_counter = 0;
             if (++mode_check_counter >= 1000) // Check every 4 seconds
             {

@@ -286,11 +286,12 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::singleMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x00, 0x80, 0x00};
+    const uint16 sequence[] = {0x000F, 0x0007, 0x0006, 0x0000};
 
     for (uint16 cmd : sequence)
     {
       output->control_word = cmd;
+      output->target_position = input->actual_position;
       writeOutputs(output);
       usleep(50000);
     }

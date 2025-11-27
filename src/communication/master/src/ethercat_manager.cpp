@@ -471,58 +471,81 @@ namespace master
             readFromYamlFile(slave_id);
         }
 
-        // config PDO 
-        for(auto slave_id : slaveIds) {
+        for (auto slave_id : slaveIds)
+        {
             DriverInfo driver_info = getDriverInfo(slave_id);
 
-            // uint32_t reset_objects = 0x64616F6C;
-            // soem.ec_SDOwrite(slave_id, 0x1010, 0x04, FALSE, sizeof(reset_objects), &reset_objects, EC_TIMEOUTTXM);
-            // printf(COLOR_YELLOW "[EtherCatManager] Slave %d (%s) reset obj 2000h-5000h to defaults." COLOR_RESET "\n", 
-            // slave_id, driver_info.driver_type.c_str());
+            // uint32_t reset_cmd = 0x64616F6C;
+            // soem.ec_SDOwrite(slave_id, 0x1011, 0x01, FALSE, sizeof(reset_cmd), &reset_cmd, EC_TIMEOUTTXM);
             // usleep(1000000);
+
+            // Set control mode
+            int8_t mode = (driver_info.control_mode == 1) ? 8 : 0;
+            if (driver_info.is_dual_driver)
+            {
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(10000);
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x01, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(10000);
+                printf("  Set mode %d for both axes\n", mode);
+            }
+            else
+            {
+                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                usleep(10000);
+                printf("  Set mode %d for single axis\n", mode);
+            }
 
             // int8_t method = 2;
-            // soem.ec_SDOwrite(slave_id, 0x2151, 0x00, FALSE, sizeof(method), &method, EC_TIMEOUTTXM);
-            // usleep(1000);
 
-            // uint32_t save_objects = 0x65766173;
-            // soem.ec_SDOwrite(slave_id, 0x1010, 0x04, FALSE, sizeof(save_objects), &save_objects, EC_TIMEOUTTXM);
-            // usleep(1000000);
+            // if (driver_info.driver_type.find("CS3E") != std::string::npos)
+            // {
+            //     printf("  Detected CS3E drive - configuring single axis\n");
 
-            printf(COLOR_YELLOW "[EtherCatManager] Slave %d save obj 2000h-5000h." COLOR_RESET "\n",
-                   slave_id);
-                   
-            fflush(stdout);
+            //     soem.ec_SDOwrite(slave_id, 0x2151, 0x00, FALSE, sizeof(method), &method, EC_TIMEOUTTXM);
+            //     usleep(10000);
 
-            int8_t mode = (driver_info.control_mode == 1) ? 8 : 0;
-            if(driver_info.is_dual_driver){
-                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
-                usleep(1000);
+            // }
+            // else if (driver_info.driver_type.find("2CL3") != std::string::npos)
+            // {
+            //     printf("  Detected 2CL3 drive - configuring dual axis\n");
 
-                soem.ec_SDOwrite(slave_id, 0x6060, 0x01, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
-                usleep(1000);
-            }else{
-                soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
-                usleep(1000);
-            }
+            //     soem.ec_SDOwrite(slave_id, 0x2151, 0x00, FALSE, sizeof(method), &method, EC_TIMEOUTTXM);
+            //     usleep(10000);
+            //     soem.ec_SDOwrite(slave_id, 0x2951, 0x00, FALSE, sizeof(method), &method, EC_TIMEOUTTXM);
+            //     usleep(10000);
+            // }
+
+            // uint32_t save_cmd = 0x65766173; // "save"
+            // printf("  Saving parameters to EEPROM...");
+            // fflush(stdout);
+
+            // soem.ec_SDOwrite(slave_id, 0x1010, 0x04, FALSE, sizeof(save_cmd), &save_cmd, EC_TIMEOUTTXM);
+            // usleep(1000000); // Wait 1 full second for EEPROM write
+
+            // printf(COLOR_GREEN " DONE\n" COLOR_RESET);
+            // fflush(stdout);
         }
 
         //Config IO map
         int io_map_size = soem.ec_config_map(&iomap_);
         std::cout << COLOR_YELLOW "[EtherCatManager] IOMap size: " << io_map_size << COLOR_RESET << std::endl;
 
-        // locate DC slaves
         soem.ec_configdc();
 
-        // for (auto slave_id : slaveIds)
-        // {
-            
-        // }
         uint32_t target_cycle_ns = DRIVER_SYNCH_TIME * 1e+6;
 
-        for(auto slave_id : slaveIds){
-            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, 0);
+        printf(COLOR_YELLOW "\n=== Configuring DC Sync ===\n" COLOR_RESET);
+        for (auto slave_id : slaveIds)
+        {
+            printf("  Slave %d: target_cycle=%u ns, pdelay=%d ns\n",
+                   slave_id, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
+            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
         }
+
+        // soem.ec_dcsync0(1, TRUE, target_cycle_ns, 0);
+        // soem.ec_dcsync0(2, TRUE, target_cycle_ns, soem.ec_slave[1].pdelay);
+        // soem.ec_dcsync0(3, TRUE, target_cycle_ns, soem.ec_slave[2].pdelay);
 
         // '0' here addresses all slaves
         if (soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP)
@@ -545,7 +568,7 @@ namespace master
 			soem.ec_statecheck(0, EC_STATE_OPERATIONAL, 50000);	 // 50 ms wait for state check
 		} while(chk-- && (soem.ec_slave[0].state != EC_STATE_OPERATIONAL));
 
-		soem.ec_readstate();
+        soem.ec_readstate();
 		for(auto slave_id : slaveIds) {
 			printf("\nSlave:%d\n Name:%s\n Output size: %dbits\n Input size: %dbits\n State: %d\n Delay: %d[ns]\n Has DC: %d\n", slave_id,
 				   soem.ec_slave[slave_id].name, soem.ec_slave[slave_id].Obits, soem.ec_slave[slave_id].Ibits,

@@ -70,7 +70,6 @@ namespace ar_control
     private:
         bool new_setpoint_pending_[LEADSHINE_DRIVER_MAX_JOINT_COUNT] = {false};
 
-
     };
 
 }  // namespace ar_control

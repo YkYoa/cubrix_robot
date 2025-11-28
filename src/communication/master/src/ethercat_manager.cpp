@@ -477,7 +477,7 @@ namespace master
 
             // uint32_t reset_cmd = 0x64616F6C;
             // soem.ec_SDOwrite(slave_id, 0x1011, 0x01, FALSE, sizeof(reset_cmd), &reset_cmd, EC_TIMEOUTTXM);
-            // usleep(1000000);
+            // usleep(3000000);
 
             // Set control mode
             int8_t mode = (driver_info.control_mode == 1) ? 8 : 0;
@@ -535,17 +535,16 @@ namespace master
 
         uint32_t target_cycle_ns = DRIVER_SYNCH_TIME * 1e+6;
 
-        printf(COLOR_YELLOW "\n=== Configuring DC Sync ===\n" COLOR_RESET);
+        printf(COLOR_YELLOW "\n=== Configuring DC0 Sync ===\n" COLOR_RESET);
         for (auto slave_id : slaveIds)
         {
-            printf("  Slave %d: target_cycle=%u ns, pdelay=%d ns\n",
-                   slave_id, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
-            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
-        }
+            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, 0);
 
-        // soem.ec_dcsync0(1, TRUE, target_cycle_ns, 0);
-        // soem.ec_dcsync0(2, TRUE, target_cycle_ns, soem.ec_slave[1].pdelay);
-        // soem.ec_dcsync0(3, TRUE, target_cycle_ns, soem.ec_slave[2].pdelay);
+            uint32_t sync0_cycle = 0;
+            int l = sizeof(sync0_cycle);
+            soem.ec_SDOread(slave_id, 0x1C32, 0x0A, FALSE, &l, &sync0_cycle, EC_TIMEOUTRXM);
+            printf("Slave %d: Sync0 cycle time set to %u ns\n", slave_id, sync0_cycle);
+        }
 
         // '0' here addresses all slaves
         if (soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP)
@@ -591,6 +590,7 @@ namespace master
             uint32_t minimum_cycle_time;
             uint32_t sync0_cycle_time;
             uint16_t sync_type_support;
+            uint16_t status_word;
 
             l = sizeof(sync_mode);
             ret += soem.ec_SDOread(slave_id, 0x1c32, 0x01, FALSE, &l, &sync_mode, EC_TIMEOUTRXM);
@@ -602,8 +602,10 @@ namespace master
 			ret += soem.ec_SDOread(slave_id, 0x1c32, 0x0a, FALSE, &l, &sync0_cycle_time, EC_TIMEOUTRXM);
             l = sizeof(sync_type_support);
             ret += soem.ec_SDOread(slave_id, 0x1c32, 0x04, FALSE, &l, &sync_type_support, EC_TIMEOUTRXM);
-			printf("PDO syncmode %04x, cycle time %d ns (min %d), sync0 cycle time %d ns, sync type sp %d, ret = %d\n", sync_mode, cycle_time,
-				   minimum_cycle_time, sync0_cycle_time, sync_type_support, ret);
+            l = sizeof(status_word);
+            ret += soem.ec_SDOread(slave_id, 0x6041, 0x00, FALSE, &l, &status_word, EC_TIMEOUTRXM);
+			printf("PDO syncmode %04x, cycle time %d ns (min %d), sync0 cycle time %d ns, sync type sp %d,  status_word %d, ret = %d\n", sync_mode, cycle_time,
+				   minimum_cycle_time, sync0_cycle_time, sync_type_support, status_word, ret);
 
         }
 

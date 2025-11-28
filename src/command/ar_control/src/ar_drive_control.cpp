@@ -1,7 +1,7 @@
 #include <ar_drive_control.h>
 
 double LIMIT_SAFETY_OFFSET = 0.0001; ///< Safety offset for joint limits
-bool ENABLE_PRINT = true;            ///< Flag to enable or disable drive logging
+bool ENABLE_PRINT = false;            ///< Flag to enable or disable drive logging
 
 namespace ar_control
 {
@@ -320,14 +320,12 @@ namespace ar_control
                 jointCmdToPulses(joint, output);
                 ar_client->writeOutputs(output);
 
-                static int write_counter_single = 0;
-                if (++write_counter_single >= 250 && ENABLE_PRINT)
+                if (ENABLE_PRINT)
                 {
                     printf(COLOR_BLUE "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f"
                         , drive_id_, output->control_word, output->target_position, joint->joint_pos_cmd);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
-                    write_counter_single = 0;
                 }
             }
         }
@@ -503,14 +501,12 @@ namespace ar_control
                 int32_t actual_pos = static_cast<int32_t>(input->actual_position);
                 joints[0]->joint_pos = (actual_pos - joints[0]->home_encoder_offset) / joints[0]->pulse_per_revolution;
 
-                static int print_counter_single = 0;
-                if (++print_counter_single >= 250 && ENABLE_PRINT)
+                if (ENABLE_PRINT)
                 {
                     printf(COLOR_GREEN "\n[READ - Single Axis] Drive: %d | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
                         , drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
                     printf("\n" COLOR_RESET);
                     fflush(stdout);
-                    print_counter_single = 0;
                 }
             }
         }

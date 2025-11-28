@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
+    update_rate: 125  # Hz
 
     Arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -31,7 +31,7 @@ Arm_controller:
           stopped_velocity_tolerance: 0.02
           goal_time: 1.0
           Arm_joint1:
-            trajectory: 0.1
+            trajectory: 0.3
             goal: 0.01
           Arm_joint2:
             trajectory: 0.3

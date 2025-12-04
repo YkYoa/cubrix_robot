@@ -10,10 +10,11 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-#   add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-g -w -Wall -Wextra -Wpedantic -I/opt/etherlab/include -L/opt/etherlab/lib -lethercat -lpthread -lrt)
 endif()
 
-# find dependencies
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
 find_package(ament_cmake REQUIRED)
 find_package(soem REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -21,9 +22,18 @@ find_package(Boost REQUIRED COMPONENTS system filesystem thread)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(ar_utils)
 find_package(ar_common REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(Threads REQUIRED)
+
+# set(etherlab_include /opt/etherlab/include)
+# set(etherlab_lib /opt/etherlab/lib/libethercat.so.1.1.0)
+# set(igh_node_include ${CMAKE_CURRENT_SOURCE_DIR}/include/)
+# set(node_name "igh_node")
+
+# file(GLOB igh_node_SRC
+#      "src/*.cpp"  
+# )
+
+# add_executable(ecat_node ${ecat_node_SRC})
 
 ament_export_include_directories(
   include

@@ -50,7 +50,7 @@ namespace ar_control
         RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing ETHERCAT manager, drives and joints");
         portManager = nullptr;
 
-        if(!is_simulation){
+        if(!is_simulation || !is_ecat) {
             soem_drives.clear();
             for (const auto &driveParm : ar_drives.drive_parameters)
             {

@@ -75,13 +75,15 @@ def generate_launch_description():
 	simArg = LaunchConfiguration("sim")
 	uiArgument = DeclareLaunchArgument("ui", default_value="false", description="Ui mode on/off")
 	uiArg = LaunchConfiguration("ui")
+	ecatArgument = DeclareLaunchArgument("ecat", default_value="true", description="igh EtherCAT master on/off")
+	ecatArg = LaunchConfiguration("ecat")
 
 
 	delayPeriod = 0.0 if (IfCondition(simArg)) else 8.0
 
 	xacroPath =	os.path.join(get_package_share_directory("ar_moveit_config"),
 			"config", "ar_config.urdf.xacro")
-	robotDesc = {"robot_description": Command(['xacro ', xacroPath, ' sim:=', simArg, ' ui:=', uiArg])}
+	robotDesc = {"robot_description": Command(['xacro ', xacroPath, ' sim:=', simArg, ' ui:=', uiArg, ' ecat:=', ecatArg])}
 
 	robot_description_semantic_config = xacro.process_file(
 		os.path.join(
@@ -205,6 +207,7 @@ def generate_launch_description():
 		[
 			simArgument,
 			uiArgument,
+			ecatArgument,
 			staticTf,
 			robotStatePublisher,
 			ros2ControlNode,

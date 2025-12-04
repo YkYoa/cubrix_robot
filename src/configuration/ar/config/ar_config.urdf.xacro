@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ar">
 	<xacro:arg name="sim" default="false"/>
 	<xacro:arg name="ui" default="false"/>
+	<xacro:arg name="ecat" default="true"/>
 
 	<!-- Import ar urdf file -->
 	<xacro:include filename="$(find ar_moveit_config)/urdf/ar_base.xacro" />
@@ -9,5 +10,5 @@
 	<!-- Import ar ros2_control description -->
 	<xacro:include filename="$(find ar_moveit_config)/ros2_control/ar.ros2_control.xacro" />
 
-	<xacro:ar_control name="ArSystem" sim="$(arg sim)" ui="$(arg ui)"/>
+	<xacro:ar_control name="ArSystem" sim="$(arg sim)" ui="$(arg ui)" ecat="$(arg ecat)"/>
 </robot>

@@ -21,12 +21,13 @@ namespace ar_control
     }
 
     ArHardwareInterface::ArHardwareInterface(std::vector<std::shared_ptr<boost::mutex>> comm_mutex, pthread_cond_t& cond, 
-        pthread_mutex_t& cond_lock, std::string robotDesc, bool& bQuit, bool isSimulation, bool isUI) : b_quit_(bQuit)
+        pthread_mutex_t& cond_lock, std::string robotDesc, bool& bQuit, bool isSimulation, bool isUI, bool isEcat) : b_quit_(bQuit)
     {
         // Initialize the hardware interface
         control_server_thread = nullptr;
         is_simulation = isSimulation;
         is_ui = isUI;
+        is_ecat = isEcat;
 
         std::string robot_description;
         control_server_thread = new std::thread(&ArHardwareInterface::launchControlServer, this);

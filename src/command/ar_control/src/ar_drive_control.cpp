@@ -329,7 +329,7 @@ namespace ar_control
                 }
             }
         }
-        else // Profile Position Mode
+        else
         {
             DualJointProFileOutput *output = (DualJointProFileOutput *)driveOutput;
             DualJointProFileInput *input = (DualJointProFileInput *)driveInput;

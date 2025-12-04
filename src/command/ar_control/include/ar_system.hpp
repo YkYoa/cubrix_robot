@@ -71,6 +71,7 @@ namespace ar_control
         std::string robot_desc; ///< Description of the robot
         bool is_ui;             ///< Flag to indicate if the UI is enabled
 		bool is_simulation;     ///< Flag to indicate if the hardware is simulated
+        bool is_ecat;        ///< Flag to indicate if Igh EtherCAT Master is used
         bool b_quit;           ///< Flag to indicate if the system should quit
         std::vector<std::shared_ptr<boost::mutex>> comm_mutex; ///< Mutexes for communication
         boost::mutex control_mutex; ///< Mutex for control operations

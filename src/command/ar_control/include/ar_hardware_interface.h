@@ -25,7 +25,7 @@ namespace ar_control
 	{
 	public:
 		ArHardwareInterface(std::vector<std::shared_ptr<boost::mutex>> comm_mutex, pthread_cond_t &cond, pthread_mutex_t &cond_lock,
-							std::string robotDesc, bool &bQuit, bool isSimulation = false, bool isUi = false);
+							std::string robotDesc, bool &bQuit, bool isSimulation = false, bool isUi = false, bool isEcat = true);
 		~ArHardwareInterface();
 
 		void shutdown();
@@ -36,6 +36,7 @@ namespace ar_control
 
 		bool is_simulation; ///< Flag to indicate if the hardware is simulated
 		bool is_ui;			///< Flag to indicate if the UI is enabled
+		bool is_ecat;       ///< Flag to indicate if Igh EtherCAT Master is used
 		bool& b_quit_;		///< Reference to the quit flag
 
 		std::vector<int> soem_drives; ///< SOEM slave IDs detected (1-based indices)

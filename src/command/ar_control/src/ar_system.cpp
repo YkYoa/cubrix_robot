@@ -47,6 +47,7 @@ namespace ar_control
 		robot_desc = info_.hardware_parameters["desc"];
 		is_simulation  = info_.hardware_parameters["sim"] == "False" ? false : true;
 		is_ui  = info_.hardware_parameters["ui"] == "False" ? false : true;
+		is_ecat = info_.hardware_parameters["ecat"] == "False" ? false : true;
 		b_quit = false;
 
 		comm_mutex.push_back(std::make_shared<boost::mutex>());
@@ -56,10 +57,17 @@ namespace ar_control
 		// hw_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 		// hw_commands_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
-		RCLCPP_WARN(rclcpp::get_logger("ArSystemHardware"), "Init robot: %s, sim: %s (is_simulation=%d), ui: %s (is_ui=%d)", 
-		robot_desc.c_str(),	info_.hardware_parameters["sim"].c_str(), is_simulation, info_.hardware_parameters["ui"].c_str(), is_ui);
-
-		robot = std::make_shared<ArHardwareInterface>(comm_mutex, cond, lock, robot_desc, b_quit, is_simulation, is_ui);
+		RCLCPP_WARN(rclcpp::get_logger("ArSystemHardware"),
+					"Init robot: %s, sim: %s, simulation=%d, ui: %s, is_ui=%d, ecat: %s, is_ecat=%d",
+					robot_desc.c_str(),
+					info_.hardware_parameters["sim"].c_str(),
+					is_simulation,
+					info_.hardware_parameters["ui"].c_str(),
+					is_ui,
+					info_.hardware_parameters["ecat"].c_str(),
+					is_ecat
+		);
+		robot = std::make_shared<ArHardwareInterface>(comm_mutex, cond, lock, robot_desc, b_quit, is_simulation, is_ui, is_ecat);
 
 		for(const hardware_interface::ComponentInfo& joint : info_.joints) {
 			if(joint.command_interfaces.size() != 1) {

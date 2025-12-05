@@ -29,6 +29,10 @@
 
 namespace master
 {
+    enum MasterType{
+        MASTER_IGH = 0,
+        MASTER_SOEM,
+    };
 
     // ms, this parameter will be updated dynamically from the ROS controller configuration file
 	[[maybe_unused]] static unsigned DRIVER_SYNCH_TIME = 10;
@@ -112,7 +116,8 @@ namespace master
     class EthercatManager
     {
     public:
-        EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond, pthread_mutex_t &cond_lock, boost::mutex &mutex);
+        EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond
+                , pthread_mutex_t &cond_lock, boost::mutex &mutex);
         ~EthercatManager();
 
         bool initialize(bool &bQuit, std::vector<int> slaveIds);

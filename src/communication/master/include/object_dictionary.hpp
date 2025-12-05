@@ -47,20 +47,33 @@
 #define SM2_CYCLE_TIME_TOO_SMALL_COUNTER            0x1C32,0x0C
 
 #define CONTROL_WORD                                0x6040,0x00
+#define CONTROL_WORD_2							  	0x6840,0x00
 #define STATUS_WORD                                 0x6041,0x00
+#define STATUS_WORD_2                               0x6841,0x00
 
 #define MODE_OF_OPERATION                           0x6060,0x00
+#define MODE_OF_OPERATION_2                         0x6860,0x00
 #define MODE_OF_OPERATION_DISPLAY                   0x6061,0x00
+#define MODE_OF_OPERATION_DISPLAY_2                 0x6861,0x00
 
 #define TARGET_POSITION                             0x607A,0x00
+#define TARGET_POSITION_2                           0x687A,0x00
 #define ACTUAL_POSITION                             0x6064,0x00
+#define ACTUAL_POSITION_2                           0x6864,0x00
 #define TOUCH_PROBE_FUNCTION                        0x60B8,0x00
+#define TOUCH_PROBE_FUNCTION_2                      0x68B8,0x00
 #define TOUCH_PROBE_STATUS                          0x60B9,0x00
-#define TOUCH_PROBE_1_POSITION_VALUE                0x60BA,0x01
+#define TOUCH_PROBE_STATUS_2                        0x68B9,0x00
+#define TOUCH_PROBE_1_POSITIVE_VALUE                0x60BA,0x00
+#define TOUCH_PROBE_1_POSITIVE_VALUE_2              0x68BA,0x00
 #define DIGITAL_INPUTS                              0x60FD,0x00
+#define DIGITAL_INPUTS_2                            0x68FD,0x00
 
 #define INTERPOLATED_TIME_VALUE                     0x60C2,0x01
 #define INTERPOLATED_TIME_UNIT                      0x60C2,0x02
+
+#define ERROR_CODE                                 	0x603F,0x00
+#define ERROR_CODE_2                                0x683F,0x00
 
 /*************************************************************/
 // CiA402 State Machine Definitions start.

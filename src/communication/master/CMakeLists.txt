@@ -24,16 +24,8 @@ find_package(ar_utils)
 find_package(ar_common REQUIRED)
 find_package(Threads REQUIRED)
 
-# set(etherlab_include /opt/etherlab/include)
-# set(etherlab_lib /opt/etherlab/lib/libethercat.so.1.1.0)
-# set(igh_node_include ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-# set(node_name "igh_node")
-
-# file(GLOB igh_node_SRC
-#      "src/*.cpp"  
-# )
-
-# add_executable(ecat_node ${ecat_node_SRC})
+find_library(ETHERCAT_LIBRARY ethercat PATHS /opt/etherlab/lib /usr/local/lib REQUIRED)
+include_directories(/opt/etherlab/include /usr/local/include)
 
 ament_export_include_directories(
   include
@@ -55,6 +47,7 @@ target_include_directories(
   ${soem_INCLUDE_DIRS}/soem
   ${Boost_INCLUDE_DIRS}
   ar_utils
+  ETHERCAT_LIBRARY
 )
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})

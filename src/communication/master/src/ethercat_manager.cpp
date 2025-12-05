@@ -312,7 +312,7 @@ namespace master
     bool EthercatManager::readFromYamlFile(int slave_no)
     {
         DriverInfo driver_info;
-        DriverInfo::LeadshineDriveData driver_data;
+        DriverInfo::LeadshineDriveData driver_data; 
 
         driver_data.com_port = ethercat_config_["port_info"]["port_name"].as<std::string>();
         driver_data.control_mode = ethercat_config_["driver_info"]["driver_mode"].as<int>();

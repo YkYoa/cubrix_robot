@@ -4,7 +4,7 @@
 
 namespace ar_control
 {
-  ArDriveClient::ArDriveClient(master::EthercatManager &manager, int slaveId) : manager_(manager), slave_id_(slaveId)
+  ArDriveClient::ArDriveClient(master::EthercatMasterInterface &manager, int slaveId) : manager_(manager), slave_id_(slaveId)
   {
     input_map_size = (int)(manager_.getInputBits(slave_id_) / 8);
     output_map_size = (int)(manager_.getOutputBits(slave_id_) / 8);
@@ -209,11 +209,31 @@ namespace ar_control
   {
     readInputs(input);
     fflush(stdout);
+
+    bool fault = (input->error_code == 0);
     if (input->error_code == 0)
       return;
 
-    output->control_word = 0x80;
-    writeOutputs(output);
+    int loop = 0;
+    while (loop++ < 100)
+    {
+      readInputs(input);
+
+      if (input->error_code == 0)
+        break;
+
+      if (loop % 10 == 0)
+      {
+        printf("[resetFaultSingleJoint] loop %d: err=0x%04x stat=0x%04x mode=%d pos=%08x\n",
+               loop,
+               input->error_code, input->status_word,
+               input->mode_of_operation_display, input->actual_position);
+      }
+      if(!fault){
+        output->control_word = 0x80;
+        usleep(10000);
+      }
+    }
   }
 
   template <typename T, typename U>

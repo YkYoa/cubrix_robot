@@ -37,6 +37,8 @@ add_library(
   SHARED
   src/ethercat_manager.cpp
   src/soem_cpp.cpp
+  src/igh_manager.cpp
+  src/igh_slave.cpp
 )
 
 target_include_directories(
@@ -50,7 +52,7 @@ target_include_directories(
   ETHERCAT_LIBRARY
 )
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${ETHERCAT_LIBRARY})
 
 ament_target_dependencies(
   ${PROJECT_NAME}

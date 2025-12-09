@@ -5,6 +5,7 @@
 #include "ar_utils.h"
 #include "ethercat_manager.h"
 #include "ar_drive_client.h"
+#include "igh_manager.hpp"
 
 namespace ar_control
 {
@@ -13,7 +14,7 @@ namespace ar_control
     public:
         ArDriveControl(DriveParameter& driveParam, bool uiState = false);
         ~ArDriveControl();
-        void InitializeDriveClient(master::EthercatManager* manager, int slaveId);
+        void InitializeDriveClient(master::EthercatMasterInterface* manager, int slaveId);
         
         void AddJoint(JointParameter& jointParam);
         void InitializeDrive();
@@ -63,6 +64,8 @@ namespace ar_control
         bool is_dual_axis_; ///< Flag to indicate if the drive is dual axis
         int drive_id_;  ///< Unique identifier for the drive
         std::unique_ptr<ar_control::ArDriveClient> ar_client; ///< Pointer to the drive client
+        master::IghManager* igh_manager_; ///< Pointer to IGH manager for DC sync control
+        int slave_id_; ///< Slave ID for this drive
 
         DriveInput* driveInput;   ///< Pointer to the drive input structure
         DriveOutput* driveOutput; ///< Pointer to the drive output structure

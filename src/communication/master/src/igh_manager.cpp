@@ -11,7 +11,8 @@ struct timespec      g_sync_timer ;                 // timer for DC sync
 uint32_t             g_sync_ref_counter = 0;        // reference counter for DC sync
 
 
-IghManager::IghManager()
+IghManager::IghManager(pthread_cond_t& cond, pthread_mutex_t& cond_lock, boost::mutex& mutex)
+    : cond_(cond), cond_lock_(cond_lock), iomap_mutex_(mutex), stop_flag_(false), num_slaves_(0)
 {
 
 }
@@ -23,7 +24,7 @@ IghManager::~IghManager()
 
 int IghManager::configMaster()
 {
-    g_master = erct_request_master(0);
+    g_master = ecrt_request_master(0);
     if(!g_master){
         printf("Failed to get master!\n");
         return -1;
@@ -37,21 +38,58 @@ int IghManager::configMaster()
 }
 
 void IghManager::getAllSlavesInfo()
-{
-    for(int i = 0; i < max_slave_num_; i++){
-        ecrt_master_get_slave(g_master, i, &slave_[i].slave_info_);
+{    
+    ec_master_info_t master_info;
+    if(ecrt_master(g_master, &master_info) != 0) {
+        printf("Failed to get master info\n");
+        return;
     }
+    
+    int num_slaves = master_info.slave_count;
+    if(num_slaves > max_slave_num_) {
+        num_slaves = max_slave_num_;
+    }
+    
+    printf("Detected %d slaves on the bus\n", num_slaves);
+    
+    for(int i = 0; i < num_slaves; i++) {
+        ec_slave_info_t slave_info;
+        if(ecrt_master_get_slave(g_master, i, &slave_info) == 0) {
+            slave_[i].slave_info_.alias = slave_info.alias;
+            slave_[i].slave_info_.position = slave_info.position;
+            slave_[i].slave_info_.vendor_id = slave_info.vendor_id;
+            slave_[i].slave_info_.product_code = slave_info.product_code;
+            strncpy(slave_[i].slave_info_.name, slave_info.name, sizeof(slave_[i].slave_info_.name) - 1);
+            
+            printf("Slave %d: %s (Vendor: 0x%08x, Product: 0x%08x)\n",
+                   i, slave_info.name, slave_info.vendor_id, slave_info.product_code);
+        } else {
+            printf("Failed to get info for slave %d\n", i);
+        }
+    }
+    
+    printf("Configured slave info for %d slaves\n", num_slaves);
+    num_slaves_ = num_slaves;  // Store for later use
 }
 
 int IghManager::configSlaves()
 {
-    for (int i = 0; i < max_slave_num_; i++){
-        slaves_[i].slave_config_ = ecrt_master_slave_config(g_master, slaves_[i].slave_info_.alias,
-                                                            slaves_[i].slave_info_.position,
-                                                            slaves_[i].slave_info_.vendor_id,
-                                                            slaves_[i].slave_info_.product_code);
-        if (!slaves_[i].slave_config_){
-            printf("Failed to  configure slave ! ");
+    // Configure only the first 4 slaves (we have 5 slots but only 4 slaves)
+    int actual_slaves = num_slaves_;
+    
+    for (int i = 0; i < actual_slaves; i++){
+        printf("Configuring slave %d: alias=%d, pos=%d, vendor=0x%08x, product=0x%08x\n",
+               i, slave_[i].slave_info_.alias, slave_[i].slave_info_.position,
+               slave_[i].slave_info_.vendor_id, slave_[i].slave_info_.product_code);
+               
+        slave_[i].slave_config_ = ecrt_master_slave_config(g_master, 
+                                                            slave_[i].slave_info_.alias,
+                                                            slave_[i].slave_info_.position,
+                                                            slave_[i].slave_info_.vendor_id,
+                                                            slave_[i].slave_info_.product_code);
+        if (!slave_[i].slave_config_){
+            printf("Failed to configure slave %d\n", i);
+            perror("ecrt_master_slave_config");
             return -1;
         }
     }
@@ -60,132 +98,175 @@ int IghManager::configSlaves()
 
 int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
 {
-    if(slave.slave_info_.name == std::string("CS3E")){
-        ec_pdo_entry_info_t cs3e_pdo_entries[] = {
-            {CONTROL_WORD, 16},
-            {TARGET_POSITION, 32},
-            {TOUCH_PROBE_FUNCTION, 8},
+    std::string slave_name(slave.slave_info_.name);
     
-            {ERROR_CODE, 16},
-            {STATUS_WORD, 16},
-            {MODE_OF_OPERATION_DISPLAY, 8},
-            {ACTUAL_POSITION, 32},
-            {TOUCH_PROBE_FUNCTION, 16},
-            {TOUCH_PROBE_1_POSITIVE_VALUE, 32},
-            {DIGITAL_INPUTS, 16},
-        };
-    
-        ec_pdo_info_t cs3e_pdos[] = {
-            {0x1600, 3, &cs3e_pdo_entries[0]}, // RxPDO
-            {0x1A00, 7, &cs3e_pdo_entries[3]}, // TxPDO
-        };
-    
-        ec_sync_info_t cs32_syncs[] = {
-            {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-            {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-            {2, EC_DIR_OUTPUT, 1, cs3e_pdos + 0, EC_WD_DISABLE},
-            {3, EC_DIR_INPUT, 1, cs3e_pdos + 1, EC_WD_DISABLE},
-            {0xff}
-        };
-        slave.slave_sync_info_ = cs32_syncs;
-    }
-    else if (slave.slave_info_.name == std::string("2CL3")){
-        ec_pdo_entry_info_t d403t_pdo_rx_entries [] = {
-            {CONTROL_WORD, 16},
-            {TARGET_POSITION, 32},
-            {TOUCH_PROBE_FUNCTION, 8},
-    
-            {CONTROL_WORD_2, 16},
-            {TARGET_POSITION_2, 32},
-            {TOUCH_PROBE_FUNCTION_2, 8},
-        };
+    // Use static arrays so they don't go out of scope
+    static ec_pdo_entry_info_t cs3e_pdo_entries[] = {
+        {0x6040, 0x00, 16}, // CONTROL_WORD
+        {0x607A, 0x00, 32}, // TARGET_POSITION
+        {0x60B8, 0x00, 16}, // TOUCH_PROBE_FUNCTION
 
-        ec_pdo_entry_info_t d403t_pdo_tx_entries [] ={
-            {ERROR_CODE, 16},
-            {STATUS_WORD, 16},
-            {MODE_OF_OPERATION_DISPLAY, 8},
-            {ACTUAL_POSITION, 32},
-            {TOUCH_PROBE_FUNCTION, 16},
-            {TOUCH_PROBE_1_POSITIVE_VALUE, 32},
-            {DIGITAL_INPUTS, 16},
+        {0x603F, 0x00, 16}, // ERROR_CODE
+        {0x6041, 0x00, 16}, // STATUS_WORD
+        {0x6061, 0x00, 8},  // MODE_OF_OPERATION_DISPLAY
+        {0x6064, 0x00, 32}, // ACTUAL_POSITION
+        {0x60B9, 0x00, 16}, // TOUCH_PROBE_STATUS
+        {0x60BA, 0x00, 32}, // TOUCH_PROBE_1_POSITIVE_VALUE
+        {0x60FD, 0x00, 32}, // DIGITAL_INPUTS (32-bit fix)
+    };
+
+    static ec_pdo_info_t cs3e_pdos[] = {
+        {0x1600, 3, &cs3e_pdo_entries[0]}, // RxPDO
+        {0x1A00, 7, &cs3e_pdo_entries[3]}, // TxPDO
+    };
+
+    static ec_sync_info_t cs3e_syncs[] = {
+        {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
+        {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
+        {2, EC_DIR_OUTPUT, 1, cs3e_pdos + 0, EC_WD_ENABLE},  // Enable DC for outputs
+        {3, EC_DIR_INPUT, 1, cs3e_pdos + 1, EC_WD_DISABLE},   // Enable DC for inputs
+        {0xff}
+    };
     
-            {ERROR_CODE_2, 16},
-            {STATUS_WORD_2, 16},
-            {MODE_OF_OPERATION_DISPLAY_2, 8},
-            {ACTUAL_POSITION_2, 32},
-            {TOUCH_PROBE_FUNCTION_2, 16},
-            {TOUCH_PROBE_1_POSITIVE_VALUE_2, 32},
-            {DIGITAL_INPUTS_2, 16},
-        };
-        ec_pdo_info_t d403t_pdos [] = {
-            {0x1600, 3, d403t_pdo_rx_entries + 0},
-            {0x1610, 3, d403t_pdo_tx_entries + 3},
-            {0x1A00, 7, d403t_pdo_tx_entries + 0},
-            {0x1A10, 7, d403t_pdo_tx_entries + 7},
-        };
+    static ec_pdo_entry_info_t d403t_pdo_rx_entries[] = {
+        {0x6040, 0x00, 16}, // CONTROL_WORD
+        {0x607A, 0x00, 32}, // TARGET_POSITION
+        {0x60B8, 0x00, 16}, // TOUCH_PROBE_FUNCTION
+
+        {0x6840, 0x00, 16}, // CONTROL_WORD_2
+        {0x687A, 0x00, 32}, // TARGET_POSITION_2
+        {0x68B8, 0x00, 16}, // TOUCH_PROBE_FUNCTION_2
+    };
+
+    static ec_pdo_entry_info_t d403t_pdo_tx_entries[] = {
+        {0x603F, 0x00, 16}, // ERROR_CODE
+        {0x6041, 0x00, 16}, // STATUS_WORD
+        {0x6061, 0x00, 8},  // MODE_OF_OPERATION_DISPLAY
+        {0x6064, 0x00, 32}, // ACTUAL_POSITION
+        {0x60B9, 0x00, 16}, // TOUCH_PROBE_STATUS
+        {0x60BA, 0x00, 32}, // TOUCH_PROBE_1_POSITIVE_VALUE
+        {0x60FD, 0x00, 32}, // DIGITAL_INPUTS
+
+        {0x683F, 0x00, 16}, // ERROR_CODE_2
+        {0x6841, 0x00, 16}, // STATUS_WORD_2
+        {0x6861, 0x00, 8},  // MODE_OF_OPERATION_DISPLAY_2
+        {0x6864, 0x00, 32}, // ACTUAL_POSITION_2
+        {0x68B9, 0x00, 16}, // TOUCH_PROBE_STATUS_2
+        {0x68BA, 0x00, 32}, // TOUCH_PROBE_1_POSITIVE_VALUE_2
+        {0x68FD, 0x00, 32}, // DIGITAL_INPUTS_2
+    };
     
-        ec_sync_info_t d403t_syncs [5] = {
-            {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
-            {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
-            {2, EC_DIR_OUTPUT, 2, d403t_pdos + 0, EC_WD_DISABLE},
-            {3, EC_DIR_INPUT, 2, d403t_pdos + 2, EC_WD_DISABLE},
-            {0xff}
-        };
-        slave.slave_sync_info_ = d403t_syncs;
+    static ec_pdo_info_t d403t_pdos[] = {
+        {0x1600, 3, d403t_pdo_rx_entries + 0},
+        {0x1610, 3, d403t_pdo_rx_entries + 3},
+        {0x1A00, 7, d403t_pdo_tx_entries + 0},
+        {0x1A10, 7, d403t_pdo_tx_entries + 7},
+    };
+
+    static ec_sync_info_t d403t_syncs[] = {
+        {0, EC_DIR_OUTPUT, 0, NULL, EC_WD_DISABLE},
+        {1, EC_DIR_INPUT, 0, NULL, EC_WD_DISABLE},
+        {2, EC_DIR_OUTPUT, 2, d403t_pdos + 0, EC_WD_ENABLE},  // Enable DC for outputs
+        {3, EC_DIR_INPUT, 2, d403t_pdos + 2, EC_WD_DISABLE},   // Enable DC for inputs
+        {0xff}
+    };
+    
+    // Select appropriate sync info based on slave type
+    ec_sync_info_t *sync_info = NULL;
+    if(slave_name.find("CS3E") != std::string::npos) {
+        sync_info = cs3e_syncs;
+        printf("Configuring CS3E PDOs for slave %d\n", position);
+    }
+    else if(slave_name.find("2CL3") != std::string::npos) {
+        sync_info = d403t_syncs;
+        printf("Configuring 2CL3 PDOs for slave %d\n", position);
+    }
+    else {
+        printf("Unknown slave type: %s\n", slave_name.c_str());
+        return -1;
     }
     
-    if(ecrt_slave_config_pdos(slave.slave_config_, EC_END, slave.slave_sync_info_)){
-        printf("Failed to map PDOs for slave at position %d\n", position);
+    // Configure PDOs
+    if(ecrt_slave_config_pdos(slave.slave_config_, EC_END, sync_info)) {
+        printf("Failed to config PDOs for slave %d\n", position);
+        perror("ecrt_slave_config_pdos");
         return -1;
     }
 
-    if(slave.slave_info_.name == std::string("CS3E")){
-        slave.offset_.actual_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ACTUAL_POSITION, g_master_domain, NULL);
-        slave.offset_.target_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TARGET_POSITION, g_master_domain, NULL);
-        slave.offset_.control_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, CONTROL_WORD, g_master_domain, NULL);
-        slave.offset_.status_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, STATUS_WORD, g_master_domain, NULL);
-        slave.offset_.error_code = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ERROR_CODE, g_master_domain, NULL);
-        slave.offset_.mode_of_operation_display = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, MODE_OF_OPERATION_DISPLAY, g_master_domain, NULL);
+    // Register PDO entries for CS3E
+    if(slave_name.find("CS3E") != std::string::npos) {
+        slave.offset_.control_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6040, 0x00, g_master_domain, NULL);
+        slave.offset_.target_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x607A, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_function = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60B8, 0x00, g_master_domain, NULL);
 
-        if(slave.offset_.actual_pos == 0 ||
-           slave.offset_.target_pos == 0 ||
-           slave.offset_.control_word == 0 ||
-           slave.offset_.status_word == 0 ||
-           slave.offset_.error_code == 0 ||
-           slave.offset_.mode_of_operation_display == 0){
-            printf("Failed to register PDO entries for slave at position %d\n", position);
-            return -1;
-        }
+        slave.offset_.error_code = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x603F, 0x00, g_master_domain, NULL);
+        slave.offset_.status_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6041, 0x00, g_master_domain, NULL);
+        slave.offset_.mode_of_operation_display = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6061, 0x00, g_master_domain, NULL);
+        slave.offset_.actual_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6064, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_status = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60B9, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_1_positive_value = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60BA, 0x00, g_master_domain, NULL);
+        slave.offset_.digital_input = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60FD, 0x00, g_master_domain, NULL);
+
+        printf("Slave %d CS3E PDO offsets registered: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
+               position,
+               slave.offset_.control_word,
+               slave.offset_.target_pos,
+               slave.offset_.error_code,
+               slave.offset_.status_word,
+               slave.offset_.mode_of_operation_display,
+               slave.offset_.actual_pos);
+        
+        // Store base offsets (first entry of each PDO type)
+        slave.base_output_offset_ = slave.offset_.control_word;
+        slave.base_input_offset_ = slave.offset_.error_code;
+        
+        printf("Successfully registered CS3E PDO entries for slave %d\n", position);
     }
-    else if (slave.slave_info_.name == std::string("2CL3")){
-        slave.offset_.actual_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ACTUAL_POSITION, g_master_domain, NULL);
-        slave.offset_.target_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TARGET_POSITION, g_master_domain, NULL);
-        slave.offset_.control_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, CONTROL_WORD, g_master_domain, NULL);
-        slave.offset_.status_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, STATUS_WORD, g_master_domain, NULL);
-        slave.offset_.error_code = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ERROR_CODE, g_master_domain, NULL);
-        slave.offset_.mode_of_operation_display = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, MODE_OF_OPERATION_DISPLAY, g_master_domain, NULL);
+    // Register PDO entries for 2CL3
+    else if(slave_name.find("2CL3") != std::string::npos) {
+        slave.offset_.control_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6040, 0x00, g_master_domain, NULL);
+        slave.offset_.target_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x607A, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_function = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60B8, 0x00, g_master_domain, NULL);
 
-        slave.offset_.actual_pos_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ACTUAL_POSITION_2, g_master_domain, NULL);
-        slave.offset_.target_pos_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TARGET_POSITION_2, g_master_domain, NULL);
+        slave.offset_.error_code = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x603F, 0x00, g_master_domain, NULL);
+        slave.offset_.status_word = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6041, 0x00, g_master_domain, NULL);
+        slave.offset_.mode_of_operation_display = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6061, 0x00, g_master_domain, NULL);
+        slave.offset_.actual_pos = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x6064, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_status = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60B9, 0x00, g_master_domain, NULL);
+        slave.offset_.touch_probe_1_positive_value = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60BA, 0x00, g_master_domain, NULL);
+        slave.offset_.digital_input = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60FD, 0x00, g_master_domain, NULL);
+
         slave.offset_.control_word_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, CONTROL_WORD_2, g_master_domain, NULL);
-        slave.offset_.status_word_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, STATUS_WORD_2, g_master_domain, NULL);
+        slave.offset_.target_pos_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TARGET_POSITION_2, g_master_domain, NULL);
+        slave.offset_.touch_probe_function_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TOUCH_PROBE_FUNCTION_2, g_master_domain, NULL);
+
         slave.offset_.error_code_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ERROR_CODE_2, g_master_domain, NULL);
+        slave.offset_.status_word_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, STATUS_WORD_2, g_master_domain, NULL);
         slave.offset_.mode_of_operation_display_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, MODE_OF_OPERATION_DISPLAY_2, g_master_domain, NULL);
-        if(slave.offset_.actual_pos == 0 ||
-           slave.offset_.target_pos == 0 ||
-           slave.offset_.control_word == 0 ||
-           slave.offset_.status_word == 0 ||
-           slave.offset_.error_code == 0 ||
-           slave.offset_.mode_of_operation_display == 0 ||
-           slave.offset_.actual_pos_2 == 0 ||
-           slave.offset_.target_pos_2 == 0 ||
-           slave.offset_.control_word_2 == 0 ||
-           slave.offset_.status_word_2 == 0 ||
-           slave.offset_.error_code_2 == 0 ||
-           slave.offset_.mode_of_operation_display_2 == 0){
-            printf("Failed to register PDO entries for slave at position %d\n", position);
-            return -1;
-        }
+        slave.offset_.actual_pos_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, ACTUAL_POSITION_2, g_master_domain, NULL);
+        slave.offset_.touch_probe_status_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TOUCH_PROBE_STATUS_2, g_master_domain, NULL);
+        slave.offset_.touch_probe_1_positive_value_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TOUCH_PROBE_1_POSITIVE_VALUE_2, g_master_domain, NULL);
+        slave.offset_.digital_input_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, DIGITAL_INPUTS_2, g_master_domain, NULL);
+
+        printf("Successfully registered 2CL3 PDO entries for slave %d\n", position);
+        printf("  Axis1 offsets: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
+               slave.offset_.control_word,
+               slave.offset_.target_pos,
+               slave.offset_.error_code,
+               slave.offset_.status_word,
+               slave.offset_.mode_of_operation_display,
+               slave.offset_.actual_pos);
+        printf("  Axis2 offsets: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
+               slave.offset_.control_word_2,
+               slave.offset_.target_pos_2,
+               slave.offset_.error_code_2,
+               slave.offset_.status_word_2,
+               slave.offset_.mode_of_operation_display_2,
+               slave.offset_.actual_pos_2);
+        
+        // Store base offsets (first entry of each PDO type)
+        slave.base_output_offset_ = slave.offset_.control_word;
+        slave.base_input_offset_ = slave.offset_.error_code;
     }
 
     return 0;
@@ -193,7 +274,410 @@ int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
 
 void IghManager::configDcSyncDefault()
 {
-    for(int i = 0; i < max_slave_num_; i++){
-
+    // TEMPORARY: Disable DC sync to test if it's preventing OP state transition
+    // If slaves reach OPERATIONAL without DC, the issue is DC configuration parameters
+    printf("DC sync temporarily disabled for testing\n");
+    return;
+    
+    int actual_slaves = num_slaves_;
+    for(int i = 0; i < actual_slaves; i++){
+        ecrt_slave_config_dc(slave_[i].slave_config_, 0x0007, PERIOD_NS, slave_[i].sync0_shift_, 0, 0);
     }
 }
+
+int IghManager::activateMaster()
+{
+    if(ecrt_master_activate(g_master)){
+        printf("Failed to activate master!\n");
+        return -1;
+    }
+    return 0;
+}
+
+int IghManager::registerDomain()
+{
+    int actual_slaves = num_slaves_;
+    for(int i = 0; i < actual_slaves; i++){
+        slave_[i].slave_pdo_domain_ = ecrt_domain_data(g_master_domain);
+        if(!slave_[i].slave_pdo_domain_){
+            printf("Failed to get domain data for slave %d\n", i);
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int IghManager::setCyclicPositionParameters()
+{
+    int actual_slaves = num_slaves_;
+    for(int i = 0; i < actual_slaves; i++){
+        if(ecrt_slave_config_sdo8(slave_[i].slave_config_, 0x6060, 0x00, CyclicPosition)){
+            printf("Failed to set operation mode to Cyclic Position for slave %d\n", i);
+            return -1;
+        }
+
+        if(ecrt_slave_config_sdo32(slave_[i].slave_config_, 0x60C2, 0x01, 0)){
+            printf("Failed to set cyclic target position for slave %d\n", i);
+            return -1;
+        }
+    }
+    return 0;
+}
+
+int IghManager::openEthercatMaster()
+{
+    fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
+    if(fd){
+        printf( "Opening EtherCAT master...");
+        std::system("cd ~; sudo ethercatctl start");
+        usleep(2e6);
+        fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
+        if(fd){
+            printf( "Error : EtherCAT device not found.");
+            return -1;
+            }else {
+                return 0 ;
+            }
+    }
+    return configMaster();
+}
+
+int IghManager::getNumbOfConnectedSlaves()
+{
+    return num_slaves_;
+}
+
+int IghManager::waitForOpMode()
+{
+    int actual_slaves = num_slaves_;
+    int try_cnt = 0;
+    int check_state_cnt = 0;
+    int time_out = 20e3;
+    while (g_master_state.al_states != EC_AL_STATE_OP)
+    {
+        if(try_cnt < time_out){
+            clock_gettime(CLOCK_MONOTONIC, &g_sync_timer);
+            ecrt_master_application_time(g_master, TIMESPEC2NS(g_sync_timer));
+
+            ecrt_master_receive(g_master);
+            ecrt_domain_process(g_master_domain);
+            usleep(PERIOD_US);
+
+            if(!check_state_cnt){
+                checkMasterState();
+                checkMasterDomainState();
+                for(int i = 0; i < actual_slaves; i++){
+                    slave_[i].checkSlaveConfigState();
+                }
+                check_state_cnt = PERIOD_US;
+            }
+
+            ecrt_domain_queue(g_master_domain);
+            ecrt_master_sync_slave_clocks(g_master);
+            ecrt_master_sync_reference_clock_to(g_master, TIMESPEC2NS(g_sync_timer));
+            ecrt_master_send(g_master);
+
+            try_cnt++;
+            check_state_cnt--;
+        }else{
+            ecrt_master_deactivate(g_master);
+            ecrt_release_master(g_master);
+            return -1;
+        }
+    }
+    
+    return 0;
+}
+
+void IghManager::deactivateMaster()
+{
+    if(g_master){
+        ecrt_master_deactivate(g_master);
+    }
+}
+
+void IghManager::releaseMaster()
+{
+    if(g_master){
+        ecrt_release_master(g_master);
+        g_master = NULL;
+    }
+}
+
+int IghManager::shutdown()
+{
+    stop_flag_ = true;
+    
+    // Wait for cyclic thread to finish
+    if(cyclic_thread_){
+        pthread_join(cyclic_thread_, NULL);
+    }
+    
+    deactivateMaster();
+    releaseMaster();
+    
+    printf("IGH EtherCAT master shut down\n");
+    return 0;
+}
+
+int IghManager::checkMasterState()
+{
+    int actual_slaves = num_slaves_;
+    ecrt_master_state(g_master, &g_master_state);
+    
+    if(g_master_state.slaves_responding != actual_slaves){
+        printf("Warning: Only %u/%d slaves responding\n", 
+               g_master_state.slaves_responding, actual_slaves);
+        return -1;
+    }
+    
+    return 0;
+}
+
+void IghManager::checkMasterDomainState()
+{
+    ecrt_domain_state(g_master_domain, &g_master_domain_state);
+    
+    if(g_master_domain_state.working_counter != g_master_domain_state.wc_state){
+        printf("Domain state mismatch - working_counter: %u, wc_state: %u\n",
+               g_master_domain_state.working_counter, 
+               g_master_domain_state.wc_state);
+    }
+}
+
+uint8_t IghManager::SDOread(SDO_data& pack)
+{
+    uint8_t ret = ecrt_master_sdo_upload(g_master, pack.slave_position, 
+                                          pack.index, pack.subindex,
+                                          (uint8_t*)&pack.data, pack.data_sz, 
+                                          &pack.result_sz, &pack.error_code);
+    if(ret){
+        printf("Failed to read SDO: slave=%d, index=0x%04X, subindex=0x%02X, error=%u\n",
+               pack.slave_position, pack.index, pack.subindex, pack.error_code);
+    }
+    return ret;
+}
+
+uint8_t IghManager::SDOwrite(SDO_data& pack)
+{
+    uint8_t ret = ecrt_master_sdo_download(g_master, pack.slave_position,
+                                            pack.index, pack.subindex,
+                                            (uint8_t*)&pack.data, pack.data_sz,
+                                            &pack.error_code);
+    if(ret){
+        printf("Failed to write SDO: slave=%d, index=0x%04X, subindex=0x%02X, error=%u\n",
+               pack.slave_position, pack.index, pack.subindex, pack.error_code);
+    }
+    return ret;
+}
+
+int IghManager::setSlaves(IghSlave slave, int position)
+{
+    if(position >= 0 && position < max_slave_num_){
+        slave_[position] = slave;
+        return 0;
+    }
+    return -1;
+}
+
+int IghManager::setProFilePositionParameters(ProFilePositionParm& P)
+{
+    // TODO: Implement profile position mode parameters setting
+    // This would write profile velocity, acceleration, deceleration via SDO
+    printf("ProFilePositionParameters not yet implemented\n");
+    return 0;
+}
+
+void IghManager::configDcSync(uint16_t assign_activated, int position)
+{
+    if(position >= 0 && position < max_slave_num_){
+        ecrt_slave_config_dc(slave_[position].slave_config_, 
+                            assign_activated, PERIOD_NS, 0, 0, 0);
+    }
+}
+
+void IghManager::toggleDcSync(int slave_position, uint32_t delay_us)
+{
+    if(slave_position < 0 || slave_position >= max_slave_num_) {
+        printf("Invalid slave position %d for DC sync toggle\n", slave_position);
+        return;
+    }
+    
+    printf("[DC Sync Toggle] Slave %d: Disabling DC sync...\n", slave_position);
+    
+    // Disable DC sync (assign_activate = 0x0000)
+    ecrt_slave_config_dc(slave_[slave_position].slave_config_, 
+                        0x0000, PERIOD_NS, 0, 0, 0);
+    
+    // Wait for the specified delay
+    usleep(delay_us);
+    
+    printf("[DC Sync Toggle] Slave %d: Re-enabling DC sync (0x0300) after %u us delay...\n", 
+           slave_position, delay_us);
+    
+    // Re-enable DC sync (SYNC0 + SYNC1 = 0x0300)
+    ecrt_slave_config_dc(slave_[slave_position].slave_config_, 
+                        0x0300, PERIOD_NS, slave_[slave_position].sync0_shift_, 0, 0);
+    
+    printf("[DC Sync Toggle] Slave %d: DC sync toggle complete\n", slave_position);
+}
+
+
+// ============================================================================
+// Cyclic Communication Implementation
+// ============================================================================
+
+void* IghManager::cyclicThread(void* arg)
+{
+    IghManager* mgr = static_cast<IghManager*>(arg);
+    mgr->cyclicLoop();
+    return NULL;
+}
+
+void IghManager::cyclicLoop()
+{
+    struct timespec wakeup_time, current_time;
+    clock_gettime(CLOCK_MONOTONIC, &wakeup_time);
+    
+    printf("IGH cyclic communication thread started at 250Hz\n");
+    
+    uint32_t cycle_counter = 0;
+    uint8_t sync_ref_counter = 0;
+    const uint32_t LOG_INTERVAL = 250; // Log every second (250 cycles at 250Hz)
+    
+    while(!stop_flag_) {
+        // Add cycle period to wakeup time
+        wakeup_time.tv_nsec += PERIOD_NS;
+        while (wakeup_time.tv_nsec >= 1000000000L) {
+            wakeup_time.tv_nsec -= 1000000000L;
+            wakeup_time.tv_sec++;
+        }
+        
+        // Sleep until next cycle
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wakeup_time, NULL);
+        
+        // CRITICAL: Set application time FIRST, right after wakeup
+        // This must be done before receive/process for proper DC sync
+        ecrt_master_application_time(g_master, TIMESPEC2NS(wakeup_time));
+        
+        // Receive process data from slaves
+        ecrt_master_receive(g_master);
+        ecrt_domain_process(g_master_domain);
+        
+        // Signal condition variable for controller to process data
+        pthread_cond_signal(&cond_);
+        
+        if(cycle_counter % 1000 == 0) {
+            // checkMasterState(); // Check master state occasionally
+            if(g_master_domain_state.wc_state == EC_WC_INCOMPLETE){
+                printf("Domain working counter incomplete: %u\n", g_master_domain_state.working_counter);
+            }
+        }
+        
+        // CRITICAL: DC synchronization - sync reference clock with actual time
+        // The reference implementation syncs every cycle (sync_ref_counter = 1)
+        if (sync_ref_counter) {
+            sync_ref_counter--;
+        } else {
+            sync_ref_counter = 1; // sync every cycle
+            
+            // Get current time and sync reference clock to it
+            clock_gettime(CLOCK_MONOTONIC, &current_time);
+            ecrt_master_sync_reference_clock_to(g_master, TIMESPEC2NS(current_time));
+        }
+        
+        // CRITICAL: Synchronize all slave clocks to the reference clock
+        ecrt_master_sync_slave_clocks(g_master);
+        
+        // Queue and send process data to slaves
+        ecrt_domain_queue(g_master_domain);
+        ecrt_master_send(g_master);
+        
+        cycle_counter++;
+    }
+    
+    printf("IGH cyclic communication thread stopped\n");
+}
+
+int IghManager::startCyclicCommunication()
+{
+    stop_flag_ = false;
+    
+    if(pthread_create(&cyclic_thread_, NULL, &IghManager::cyclicThread, this) != 0) {
+        printf("Failed to create cyclic communication thread\n");
+        return -1;
+    }
+    
+    printf("IGH cyclic communication started\n");
+    return 0;
+}
+
+void IghManager::stopCyclicCommunication()
+{
+    if(cyclic_thread_) {
+        stop_flag_ = true;
+        pthread_join(cyclic_thread_, NULL);
+        cyclic_thread_ = 0;
+        printf("IGH cyclic communication stopped\n");
+    }
+}
+
+// ============================================================================
+// PDO Data Access Methods (match EthercatManager API)
+// ============================================================================
+
+void IghManager::write(int slave_no, uint8_t channel, uint8_t value)
+{
+    if(slave_no < 0 || slave_no >= 4) {
+        return;
+    }
+    
+    uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
+    if(domain) {
+        domain[slave_[slave_no].base_output_offset_ + channel] = value;
+    }
+}
+
+uint8_t IghManager::readInput(int slave_no, uint8_t channel) const
+{
+    if(slave_no < 0 || slave_no >= 4) {
+        return 0;
+    }
+    
+    uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
+    return domain ? domain[slave_[slave_no].base_input_offset_ + channel] : 0;
+}
+
+uint8_t IghManager::readOutput(int slave_no, uint8_t channel) const
+{
+    if(slave_no < 0 || slave_no >= 4) {
+        return 0;
+    }
+    
+    uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
+    return domain ? domain[slave_[slave_no].base_output_offset_ + channel] : 0;
+}
+
+// Interface implementation
+int IghManager::getInputBits(int slave_no) const
+{
+    if(slave_no < 0 || slave_no >= 4) return 0;
+    
+    // Based on PDO mapping:
+    // Slave 0, 1, 2 (CS3E): 152 bits
+    // Slave 3 (2CL3 Dual): 304 bits
+    if(slave_no <= 2) return 152;
+    return 304; 
+}
+
+int IghManager::getOutputBits(int slave_no) const
+{
+    if(slave_no < 0 || slave_no >= 4) return 0;
+    
+    // Based on PDO mapping:
+    // CS3E: 16+32+16 = 64 bits
+    // 2CL3: (16+32+16)*2 = 128 bits
+    if(slave_no <= 2) return 64;
+    return 128;
+}
+

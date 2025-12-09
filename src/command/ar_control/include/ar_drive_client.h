@@ -86,7 +86,7 @@ namespace ar_control
     class ArDriveClient
     {
     public:
-        ArDriveClient(master::EthercatManager& manager, int slaveId);
+        ArDriveClient(master::EthercatMasterInterface& manager, int slaveId);
         ~ArDriveClient ();
 
         void readInputs(SingleJointCyclicInput* input);
@@ -109,7 +109,7 @@ namespace ar_control
         template <typename T, typename U> void dualMotorOff(T* input, U* output);
         template <typename T, typename U> void singleMotorOff(T* input, U* output);
 
-		inline master::EthercatManager& getManager()
+		inline master::EthercatMasterInterface& getManager()
 		{
 			return manager_;
 		}
@@ -117,7 +117,7 @@ namespace ar_control
         std::shared_ptr<master::DriverInfo> driver_info_;
 
     private:
-        master::EthercatManager& manager_;
+        master::EthercatMasterInterface& manager_;
         // Private members and methods
         template <typename T> void ErrorHandling(const T* input);
 

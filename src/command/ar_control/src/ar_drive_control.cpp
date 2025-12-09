@@ -1,7 +1,8 @@
 #include <ar_drive_control.h>
 
 double LIMIT_SAFETY_OFFSET = 0.0001; ///< Safety offset for joint limits
-bool ENABLE_PRINT = false;            ///< Flag to enable or disable drive logging
+bool ENABLE_PRINT = true;            ///< Flag to enable or disable drive logging
+FILE* g_debug_log = nullptr;         ///< Log file for debug output
 
 namespace ar_control
 {
@@ -11,14 +12,15 @@ namespace ar_control
         is_dual_axis_ = driveParm.is_dual_axis;
         driveInput = nullptr;
         driveOutput = nullptr;
+        igh_manager_ = nullptr;
+        slave_id_ = -1;
     }
 
-    void ArDriveControl::InitializeDriveClient(master::EthercatManager *manager, int slaveId)
+    void ArDriveControl::InitializeDriveClient(master::EthercatMasterInterface *manager, int slaveId)
     {
         printf(COLOR_BLUE "\n[Ar Drive Control] InitializeDriveClient called for drive %d, slaveId %d" COLOR_RESET,
                drive_id_, slaveId);
 
-        drive_id_ = slaveId;
         ar_client.reset();
         if (manager)
         {
@@ -28,6 +30,9 @@ namespace ar_control
                    manager->getInputBits(slaveId) / 8,
                    manager->getOutputBits(slaveId) / 8);
             fflush(stdout);
+            
+            igh_manager_ = dynamic_cast<master::IghManager*>(manager);
+            slave_id_ = slaveId;
         }
         else
         {
@@ -297,21 +302,23 @@ namespace ar_control
                 jointCmdToPulses(joint, output);
                 ar_client->writeOutputs(output);
 
-                static int write_counter = 0;
-                if (++write_counter >= 250 && ENABLE_PRINT)
-                {
-                    printf(COLOR_BLUE "\n  [WRITE - Dual Axis]");
-                    for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
-                    {
-                        printf("\n  Axis[%zu] | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f",
-                               i,
-                               output->axis[i].control_word,
-                               output->axis[i].target_position,
-                               joints[i]->joint_pos_cmd);
+                if (ENABLE_PRINT){
+                    if (!g_debug_log){
+                        g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
-                    printf("\n" COLOR_RESET);
-                    fflush(stdout);
-                    write_counter = 0;
+
+                    if (g_debug_log){
+                        fprintf(g_debug_log, COLOR_BLUE "\n  [WRITE - Dual Axis]");
+                        for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i){
+                            fprintf(g_debug_log, "\n  Axis[%zu] | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f",
+                                    i,
+                                    output->axis[i].control_word,
+                                    output->axis[i].target_position,
+                                    joints[i]->joint_pos_cmd);
+                        }
+                        fprintf(g_debug_log, "\n" COLOR_RESET);
+                        fflush(g_debug_log);
+                    }
                 }
             }
             else
@@ -322,10 +329,17 @@ namespace ar_control
 
                 if (ENABLE_PRINT)
                 {
-                    printf(COLOR_BLUE "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f"
-                        , drive_id_, output->control_word, output->target_position, joint->joint_pos_cmd);
-                    printf("\n" COLOR_RESET);
-                    fflush(stdout);
+                    if (!g_debug_log){
+                        g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
+                    }
+
+                    const char* msg = "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f";
+                    
+                    if(g_debug_log) {
+                        fprintf(g_debug_log, msg, drive_id_, output->control_word, output->target_position, joint->joint_pos_cmd);
+                        fprintf(g_debug_log, "\n");
+                        fflush(g_debug_log);
+                    }
                 }
             }
         }
@@ -473,23 +487,28 @@ namespace ar_control
                     joints[i]->joint_pos = (actual_pos - joints[i]->home_encoder_offset) / joints[i]->pulse_per_revolution;
                 }
 
-                static int print_counter = 0;
-                if (++print_counter >= 250 && ENABLE_PRINT)
+                if (ENABLE_PRINT)
                 {
-                    printf(COLOR_GREEN "\n[READ - Dual Axis]");
-                    for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
-                    {
-                        printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
-                               i,
-                               input->axis[i].status_word,
-                               input->axis[i].mode_of_operation_display,
-                               input->axis[i].actual_position,
-                               joints[i]->joint_pos,
-                               input->axis[i].error_code);
+                    if(!g_debug_log) {
+                        g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
-                    printf("\n" COLOR_RESET);
-                    fflush(stdout);
-                    print_counter = 0;
+                    
+                    if(g_debug_log) {
+                        fprintf(g_debug_log, "\n[READ - Dual Axis] Drive: %d", drive_id_);
+                        
+                        for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
+                        {
+                            fprintf(g_debug_log, "\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
+                                   i,
+                                   input->axis[i].status_word,
+                                   input->axis[i].mode_of_operation_display,
+                                   input->axis[i].actual_position,
+                                   joints[i]->joint_pos,
+                                   input->axis[i].error_code);
+                        }
+                        fprintf(g_debug_log, "\n");
+                        fflush(g_debug_log);
+                    }
                 }
             }
             else
@@ -503,10 +522,16 @@ namespace ar_control
 
                 if (ENABLE_PRINT)
                 {
-                    printf(COLOR_GREEN "\n[READ - Single Axis] Drive: %d | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X"
-                        , drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
-                    printf("\n" COLOR_RESET);
-                    fflush(stdout);
+                    if(!g_debug_log) {
+                        g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
+                    }
+                    
+                    if(g_debug_log) {
+                        fprintf(g_debug_log, "\n[READ - Single Axis] Drive: %d | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
+                               drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
+                        fprintf(g_debug_log, "\n");
+                        fflush(g_debug_log);
+                    }
                 }
             }
         }

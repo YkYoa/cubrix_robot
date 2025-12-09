@@ -113,7 +113,19 @@ namespace master
         bool process_data = false;
     };
 
-    class EthercatManager
+    class EthercatMasterInterface
+    {
+    public:
+        virtual ~EthercatMasterInterface() = default;
+        
+        virtual void write(int slave_no, uint8_t channel, uint8_t value) = 0;
+        virtual uint8_t readInput(int slave_no, uint8_t channel) const = 0;
+        virtual uint8_t readOutput(int slave_no, uint8_t channel) const = 0;
+        virtual int getInputBits(int slave_no) const = 0;
+        virtual int getOutputBits(int slave_no) const = 0;
+    };
+
+    class EthercatManager : public EthercatMasterInterface
     {
     public:
         EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond

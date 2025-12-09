@@ -49,8 +49,9 @@ namespace ar_control
 
         RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing ETHERCAT manager, drives and joints");
         portManager = nullptr;
+        ighManager = nullptr;
 
-        if(!is_simulation || !is_ecat) {
+        if(!is_simulation && !is_ecat) {
             soem_drives.clear();
             for (const auto &driveParm : ar_drives.drive_parameters)
             {
@@ -64,10 +65,78 @@ namespace ar_control
             if (!portManager->initialize(b_quit_, soem_drives))
             {
                 b_quit_ = true;
-                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to initialize ETHERCAT manager. Exiting.");
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to initialize SOEM ETHERCAT manager. Exiting.");
                 return;
             }
-            RCLCPP_INFO(rclcpp::get_logger("Ar"), "ETHERCAT manager initialized for %zu SOEM drives", soem_drives.size());
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "SOEM ETHERCAT manager initialized for %zu SOEM drives", soem_drives.size());
+        }
+        else if(!is_simulation && is_ecat) {
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Initializing IGH EtherCAT master...");
+            
+            ighManager = new master::IghManager(cond, cond_lock, *comm_mutex[PORT_SOEM]);
+            
+            if(ighManager->openEthercatMaster() != 0) {
+                b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to open IGH EtherCAT master. Exiting.");
+                delete ighManager;
+                ighManager = nullptr;
+                return;
+            }
+            
+            ighManager->getAllSlavesInfo();
+            int num_slaves = ighManager->getNumbOfConnectedSlaves();
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "IGH master configured, detected %d slaves", num_slaves);
+            
+            if(ighManager->configSlaves() != 0) {
+                b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to configure IGH slaves. Exiting.");
+                delete ighManager;
+                ighManager = nullptr;
+                return;
+            }
+            
+            for(int i = 0; i < num_slaves; i++) {
+                if(ighManager->mapDefaultPDOs(ighManager->slave_[i], i) != 0) {
+                    RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to map PDOs for slave %d", i);
+                }
+            }
+
+            ighManager->configDcSyncDefault();
+            
+            if(ighManager->activateMaster() != 0) {
+                b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to activate IGH master. Exiting.");
+                delete ighManager;
+                ighManager = nullptr;
+                return;
+            }
+            
+            if(ighManager->registerDomain() != 0) {
+                b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to register IGH domain. Exiting.");
+                delete ighManager;
+                ighManager = nullptr;
+                return;
+            }
+            
+            if(ighManager->startCyclicCommunication() != 0) {
+                b_quit_ = true;
+                RCLCPP_ERROR(rclcpp::get_logger("Ar"), "Failed to start IGH cyclic communication. Exiting.");
+                delete ighManager;
+                ighManager = nullptr;
+                return;
+            }
+                        
+            if(ighManager->waitForOpMode() != 0) {
+                RCLCPP_WARN(rclcpp::get_logger("Ar"), "Some slaves did not reach OPERATIONAL state in time");
+            }
+            
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Setting cyclic position mode via SDO...");
+            if(ighManager->setCyclicPositionParameters() != 0) {
+                RCLCPP_WARN(rclcpp::get_logger("Ar"), "Failed to set cyclic position parameters via SDO");
+            }
+            
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "IGH EtherCAT master initialized successfully");
         }
 
         for(auto& driveParm : ar_drives.drive_parameters){
@@ -78,6 +147,8 @@ namespace ar_control
                     "Initializing drive client for drive %d with slave_id %d", 
                     driveParm.drive_id, driveParm.slave_id);
                 drives[driveParm.drive_id]->InitializeDriveClient(portManager, driveParm.slave_id);
+            } else if(!is_simulation && is_ecat && ighManager && driveParm.port_id == PORT_SOEM) {
+                drives[driveParm.drive_id]->InitializeDriveClient(ighManager, driveParm.slave_id);
             }
 
             for(auto& jointParm : driveParm.joint_paramters){
@@ -112,8 +183,15 @@ namespace ar_control
             }
         }
 		if(portManager) {
-			RCLCPP_INFO(rclcpp::get_logger("Ar"), "Delete manager");
+			RCLCPP_INFO(rclcpp::get_logger("Ar"), "Shutting down SOEM manager");
 			delete portManager;
+			portManager = nullptr;
+		}
+		if(ighManager) {
+			RCLCPP_INFO(rclcpp::get_logger("Ar"), "Shutting down IGH manager");
+			ighManager->shutdown();
+			delete ighManager;
+			ighManager = nullptr;
 		}
 		if(control_server_thread)
 			control_server_thread->join();
@@ -152,7 +230,7 @@ namespace ar_control
             }
             else if(driveParam.port_id == PORT_SOEM)
             {
-                driveParam.slave_id = static_cast<int>(soem_drives.size()) + 1;
+                driveParam.slave_id = static_cast<int>(soem_drives.size());
                 soem_drives.push_back(driveParam.slave_id); 
             }
             else

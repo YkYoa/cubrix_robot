@@ -31,7 +31,7 @@
 
 /****************************************************************************/
 
-#define FREQUENCEY 250;
+#define FREQUENCEY 250
 
 const uint32_t g_kNsPerSec = 1000000000;                        /// nanoseconds per second
 #define PERIOD_NS (g_kNsPerSec / FREQUENCEY)                    /// cycle period in nanoseconds
@@ -149,36 +149,46 @@ enum MotorStates
 
 typedef struct
 {
-    ec_sdo_request * profile_acc ;    
-    ec_sdo_request * profile_dec ;      
-    ec_sdo_request * profile_vel ;  
-    ec_sdo_request * quick_stop_dec ;
-    ec_sdo_request * motion_profile_type ;
-    ec_sdo_request * max_profile_vel ;
-    ec_sdo_request * max_fol_err ;
-    ec_sdo_request * speed_for_switch_search;
-    ec_sdo_request * speed_for_zero_search;
-    ec_sdo_request * homing_acc;
-    ec_sdo_request * home_offset;
-    ec_sdo_request * homing_method;		
+    // ec_sdo_request * profile_acc ;    
+    // ec_sdo_request * profile_dec ;      
+    // ec_sdo_request * profile_vel ;  
+    // ec_sdo_request * quick_stop_dec ;
+    // ec_sdo_request * motion_profile_type ;
+    // ec_sdo_request * max_profile_vel ;
+    // ec_sdo_request * max_fol_err ;
+    // ec_sdo_request * speed_for_switch_search;
+    // ec_sdo_request * speed_for_zero_search;
+    // ec_sdo_request * homing_acc;
+    // ec_sdo_request * home_offset;
+    // ec_sdo_request * homing_method;		
 } SdoRequest;
 
 typedef struct
 {
+    uint16_t control_word;
     uint32_t target_pos;
-    uint32_t target_vel;
-    uint32_t target_tor;
-    uint32_t control_word;
-    uint32_t profile_acc ;
-    uint32_t profile_dec ;
-    uint32_t quick_stop_dec ;
-    uint32_t profile_vel ;
+    uint32_t touch_probe_function;
 
-    uint32_t actual_pos ;
-    uint32_t actual_vel ;
-    uint32_t status_word ;
-    uint32_t op_mode_display ;
-    uint32_t error_code ;
+    uint16_t error_code;
+    uint16_t status_word;
+    uint8_t mode_of_operation_display;
+    uint32_t actual_pos;
+    uint16_t touch_probe_status;
+    uint32_t touch_probe_1_positive_value;
+    uint32_t digital_input;
+
+    // For 2nd motor in D403T
+    uint16_t control_word_2;
+    uint32_t target_pos_2;
+    uint32_t touch_probe_function_2;
+    
+    uint16_t error_code_2;
+    uint16_t status_word_2;
+    uint8_t mode_of_operation_display_2;
+    uint32_t actual_pos_2;
+    uint16_t touch_probe_status_2;
+    uint32_t touch_probe_1_positive_value_2;
+    uint32_t digital_input_2;
 } OffsetPDO;
 
 typedef struct
@@ -192,6 +202,7 @@ typedef struct
 typedef struct
 {
     uint32_t cyclic_target_position;
+    uint8_t op_mode;
 }  CyclicPositionParm;
 
 

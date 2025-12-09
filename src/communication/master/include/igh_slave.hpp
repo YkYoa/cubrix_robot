@@ -15,7 +15,7 @@ class IghSlave
     /// Slave configuration parameters, assign for each slave
     ec_slave_config_t       * slave_config_;
     /// Slave state handle to check if slave is online + slave state machine status
-    ec_slave_config_state_t * slave_config_state_;
+    ec_slave_config_state_t   slave_config_state_;  // Changed from pointer to value
     /// PDO config
     ec_pdo_info_t           * slave_pdo_info_;
     ec_pdo_entry_info_t     * slave_pdo_entry_info_;
@@ -34,4 +34,9 @@ class IghSlave
     OffsetPDO offset_;
     /// Received data from servo drivers.
     DataReceived data_;
+    
+    /// Base offset where this slave's input PDO data starts in the domain
+    unsigned int base_input_offset_;
+    /// Base offset where this slave's output PDO data starts in the domain
+    unsigned int base_output_offset_;
 };

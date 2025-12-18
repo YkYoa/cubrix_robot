@@ -25,6 +25,7 @@ if(WIN32)
 elseif(UNIX AND NOT APPLE)
   set(OS "linux")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-stringop-truncation")
   set(OS_LIBS pthread rt)
 elseif(APPLE)
   # This must come *before* linux or MacOSX will identify as Unix.

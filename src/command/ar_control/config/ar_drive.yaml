@@ -29,7 +29,7 @@ port_ids:
   drive_1: 1
   drive_2: 1
   drive_3: 1
-  drive_4: 1
+  drive_4: 0
   drive_5: 0
   # drive_6: 0
 

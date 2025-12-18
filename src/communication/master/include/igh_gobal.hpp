@@ -152,15 +152,6 @@ typedef struct
     // ec_sdo_request * profile_acc ;    
     // ec_sdo_request * profile_dec ;      
     // ec_sdo_request * profile_vel ;  
-    // ec_sdo_request * quick_stop_dec ;
-    // ec_sdo_request * motion_profile_type ;
-    // ec_sdo_request * max_profile_vel ;
-    // ec_sdo_request * max_fol_err ;
-    // ec_sdo_request * speed_for_switch_search;
-    // ec_sdo_request * speed_for_zero_search;
-    // ec_sdo_request * homing_acc;
-    // ec_sdo_request * home_offset;
-    // ec_sdo_request * homing_method;		
 } SdoRequest;
 
 typedef struct
@@ -177,7 +168,6 @@ typedef struct
     uint32_t touch_probe_1_positive_value;
     uint32_t digital_input;
 
-    // For 2nd motor in D403T
     uint16_t control_word_2;
     uint32_t target_pos_2;
     uint32_t touch_probe_function_2;

@@ -2,7 +2,6 @@
 
 #include "igh_gobal.hpp"
 
-// Undefine macros from object_dictionary.hpp that conflict with driver_parameters.h
 #undef CONTROL_WORD
 #undef STATUS_WORD
 #undef MODE_OF_OPERATION
@@ -15,6 +14,10 @@
 #undef DIGITAL_INPUTS
 
 #include "ethercat_manager.h"
+
+namespace master {
+    class IghErrorHandler;
+}
 
 class IghSlave;
 #include "igh_slave.hpp"
@@ -38,7 +41,6 @@ class IghManager : public EthercatMasterInterface
         int mapDefaultPDOs(IghSlave& slave, int position);
         void configDcSyncDefault();
         void configDcSync(uint16_t assign_activated, int position);
-        void toggleDcSync(int slave_position, uint32_t delay_us = 50000);
         int checkMasterState();
         void checkMasterDomainState();
         int openEthercatMaster();
@@ -71,16 +73,19 @@ class IghManager : public EthercatMasterInterface
 
         int fd;
         
+        friend class IghErrorHandler;
+        
     private:
         int file_description;
         bool stop_flag_;
         pthread_t cyclic_thread_;
-        int num_slaves_;  // Dynamically detected slave count
+        int num_slaves_;
         
-        // Synchronization with controller manager
         pthread_cond_t& cond_;
         pthread_mutex_t& cond_lock_;
         boost::mutex& iomap_mutex_;
+        
+        IghErrorHandler* error_handler_;
 };
 
 }   // namespace master

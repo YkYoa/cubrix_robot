@@ -39,6 +39,7 @@ add_library(
   src/soem_cpp.cpp
   src/igh_manager.cpp
   src/igh_slave.cpp
+  src/igh_error_handler.cpp
 )
 
 target_include_directories(

@@ -11,7 +11,7 @@ class IghSlave
 
     int checkSlaveConfigState();
 
-    const static uint32_t   sync0_shift_ = 0;                     /// Sync0 shift setting 
+    uint32_t sync0_shift_ = 0;                     /// Sync0 shift setting 
     /// Slave configuration parameters, assign for each slave
     ec_slave_config_t       * slave_config_;
     /// Slave state handle to check if slave is online + slave state machine status

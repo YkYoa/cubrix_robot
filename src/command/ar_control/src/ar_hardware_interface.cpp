@@ -94,6 +94,11 @@ namespace ar_control
                 ighManager = nullptr;
                 return;
             }
+
+            if(ighManager->setCyclicPositionParameters() != 0) {
+                RCLCPP_WARN(rclcpp::get_logger("Ar"), "Failed to set cyclic position parameters via SDO");
+            }
+
             
             for(int i = 0; i < num_slaves; i++) {
                 if(ighManager->mapDefaultPDOs(ighManager->slave_[i], i) != 0) {
@@ -126,14 +131,9 @@ namespace ar_control
                 ighManager = nullptr;
                 return;
             }
-                        
+            
             if(ighManager->waitForOpMode() != 0) {
                 RCLCPP_WARN(rclcpp::get_logger("Ar"), "Some slaves did not reach OPERATIONAL state in time");
-            }
-            
-            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Setting cyclic position mode via SDO...");
-            if(ighManager->setCyclicPositionParameters() != 0) {
-                RCLCPP_WARN(rclcpp::get_logger("Ar"), "Failed to set cyclic position parameters via SDO");
             }
             
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "IGH EtherCAT master initialized successfully");
@@ -156,7 +156,8 @@ namespace ar_control
                 drives[driveParm.drive_id]->AddJoint(jointParm);
             }
         }
-
+        
+        RCLCPP_INFO(rclcpp::get_logger("Ar"), "Initializing drive state machines...");
         std::vector<ArDriveControl*> drives_ptr;
 
         for(auto& drive : drives){
@@ -165,7 +166,6 @@ namespace ar_control
         }
         
         InitializeDrives(drives_ptr);
-
     }
 
     ArHardwareInterface::~ArHardwareInterface()
@@ -230,6 +230,7 @@ namespace ar_control
             }
             else if(driveParam.port_id == PORT_SOEM)
             {
+                // driveParam.slave_id = static_cast<int>(soem_drives.size()) + 1;
                 driveParam.slave_id = static_cast<int>(soem_drives.size());
                 soem_drives.push_back(driveParam.slave_id); 
             }

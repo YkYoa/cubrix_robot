@@ -485,7 +485,7 @@ namespace master
             {
                 soem.ec_SDOwrite(slave_id, 0x6060, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
                 usleep(10000);
-                soem.ec_SDOwrite(slave_id, 0x6060, 0x01, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
+                soem.ec_SDOwrite(slave_id, 0x6860, 0x00, FALSE, sizeof(mode), &mode, EC_TIMEOUTTXM);
                 usleep(10000);
                 printf("  Set mode %d for both axes\n", mode);
             }
@@ -535,10 +535,10 @@ namespace master
 
         uint32_t target_cycle_ns = DRIVER_SYNCH_TIME * 1e+6;
 
-        printf(COLOR_YELLOW "\n=== Configuring DC0 Sync ===\n" COLOR_RESET);
+        // printf(COLOR_YELLOW "\n=== Configuring DC0 Sync ===\n" COLOR_RESET);
         for (auto slave_id : slaveIds)
         {
-            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, 0);
+            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
 
             uint32_t sync0_cycle = 0;
             int l = sizeof(sync0_cycle);

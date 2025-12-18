@@ -72,7 +72,8 @@ namespace ar_control
 
     private:
         bool new_setpoint_pending_[LEADSHINE_DRIVER_MAX_JOINT_COUNT] = {false};
+        bool initialization_in_progress_ = false;  ///< Prevents cyclic write interference during init
 
-    };
+};
 
 }  // namespace ar_control

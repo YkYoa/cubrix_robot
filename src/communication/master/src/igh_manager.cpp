@@ -323,19 +323,19 @@ int IghManager::setCyclicPositionParameters()
 
 int IghManager::openEthercatMaster()
 {
-    // fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
-    // if(fd){
-    //     printf( "Opening EtherCAT master...");
-    //     std::system("cd ~; sudo ethercatctl start");
-    //     usleep(2e6);
-    //     fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
-    //     if(fd){
-    //         printf( "Error : EtherCAT device not found.");
-    //         return -1;
-    //         }else {
-    //             return 0 ;
-    //         }
-    // }
+    fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
+    if(fd){
+        printf( "Opening EtherCAT master...");
+        std::system("cd ~; sudo ethercatctl start");
+        usleep(2e6);
+        fd = std::system("ls /dev | grep EtherCAT* > /dev/null");
+        if(fd){
+            printf( "Error : EtherCAT device not found.");
+            return -1;
+            }else {
+                return 0 ;
+            }
+    }
     return configMaster();
 }
 
@@ -498,8 +498,6 @@ int IghManager::setSlaves(IghSlave slave, int position)
 
 int IghManager::setProFilePositionParameters(ProFilePositionParm& P)
 {
-    // TODO: Implement profile position mode parameters setting
-    // This would write profile velocity, acceleration, deceleration via SDO
     printf("ProFilePositionParameters not yet implemented\n");
     return 0;
 }
@@ -541,34 +539,32 @@ void IghManager::cyclicLoop()
         }
         
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wakeup_time, NULL);
-        
         ecrt_master_application_time(g_master, TIMESPEC2NS(wakeup_time));
         
         ecrt_master_receive(g_master);
         ecrt_domain_process(g_master_domain);
         
         pthread_cond_signal(&cond_);
+        usleep(1000);
         
-        if(cycle_counter % 1000 == 0) {
-            // checkMasterState(); // Check master state occasionally
-            if(g_master_domain_state.wc_state == EC_WC_INCOMPLETE){
-                printf("Domain working counter incomplete: %u\n", g_master_domain_state.working_counter);
-            }
+        if(cycle_counter % 1000 == 0 && g_master_domain_state.wc_state == EC_WC_INCOMPLETE) {
+            printf("Domain WC incomplete: %u\n", g_master_domain_state.working_counter);
         }
         
         if (sync_ref_counter) {
             sync_ref_counter--;
         } else {
-            sync_ref_counter = 1; // sync every cycle
-            
+            sync_ref_counter = 1;
             clock_gettime(CLOCK_MONOTONIC, &current_time);
             ecrt_master_sync_reference_clock_to(g_master, TIMESPEC2NS(current_time));
         }
-        
         ecrt_master_sync_slave_clocks(g_master);
         
-        ecrt_domain_queue(g_master_domain);
-        ecrt_master_send(g_master);
+        {
+            boost::mutex::scoped_lock lock(iomap_mutex_);
+            ecrt_domain_queue(g_master_domain);
+            ecrt_master_send(g_master);
+        }
         
         cycle_counter++;
     }
@@ -583,26 +579,21 @@ int IghManager::startCyclicCommunication()
     pthread_attr_t attr;
     struct sched_param param;
     
-    // Initialize thread attributes
     if (pthread_attr_init(&attr) != 0) {
         printf("ERROR: Failed to initialize thread attributes\n");
         return -1;
     }
     
-    // Set stack size (256KB is sufficient for cyclic thread)
     if (pthread_attr_setstacksize(&attr, 4096 * 64) != 0) {
         printf("ERROR: Failed to set stack size\n");
         pthread_attr_destroy(&attr);
         return -1;
     }
     
-    // Set scheduling policy to SCHED_FIFO (real-time)
     if (pthread_attr_setschedpolicy(&attr, SCHED_FIFO) != 0) {
         printf("WARNING: Failed to set SCHED_FIFO policy (root required). Running with normal priority.\n");
-        // Continue without RT priority - still functional but less deterministic
         pthread_attr_destroy(&attr);
         
-        // Fallback to default thread creation
         if(pthread_create(&cyclic_thread_, NULL, &IghManager::cyclicThread, this) != 0) {
             printf("ERROR: Failed to create cyclic communication thread\n");
             return -1;
@@ -611,7 +602,6 @@ int IghManager::startCyclicCommunication()
         return 0;
     }
     
-    // Set priority to 98 (kernel EtherCAT RT thread uses 99)
     param.sched_priority = 98;
     if (pthread_attr_setschedparam(&attr, &param) != 0) {
         printf("ERROR: Failed to set scheduling parameters\n");
@@ -619,14 +609,12 @@ int IghManager::startCyclicCommunication()
         return -1;
     }
     
-    // Use explicit scheduling (don't inherit from parent)
     if (pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED) != 0) {
         printf("ERROR: Failed to set inherit sched\n");
         pthread_attr_destroy(&attr);
         return -1;
     }
     
-    // Create thread with real-time attributes
     if (pthread_create(&cyclic_thread_, &attr, &IghManager::cyclicThread, this) != 0) {
         printf("ERROR: Failed to create cyclic communication thread\n");
         pthread_attr_destroy(&attr);
@@ -659,54 +647,36 @@ void IghManager::stopCyclicCommunication()
 // ============================================================================
 
 void IghManager::write(int slave_no, uint8_t channel, uint8_t value)
-{
-    if(slave_no < 0 || slave_no >= 4) {
-        return;
-    }
+{    
+    boost::mutex::scoped_lock lock(iomap_mutex_);
     
     uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
     if(domain) {
-        domain[slave_[slave_no].base_output_offset_ + channel] = value;
+        unsigned int offset = slave_[slave_no].base_output_offset_ + channel;
+        domain[offset] = value;
     }
 }
 
 uint8_t IghManager::readInput(int slave_no, uint8_t channel) const
-{
-    if(slave_no < 0 || slave_no >= 4) {
-        return 0;
-    }
-    
+{    
     uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
     return domain ? domain[slave_[slave_no].base_input_offset_ + channel] : 0;
 }
 
 uint8_t IghManager::readOutput(int slave_no, uint8_t channel) const
-{
-    if(slave_no < 0 || slave_no >= 4) {
-        return 0;
-    }
-    
+{    
     uint8_t* domain = slave_[slave_no].slave_pdo_domain_;
     return domain ? domain[slave_[slave_no].base_output_offset_ + channel] : 0;
 }
 
-// Interface implementation
 int IghManager::getInputBits(int slave_no) const
 {
-    
-    // Based on PDO mapping:
-    // Slave 0, 1, 2 (CS3E): 152 bits
-    // Slave 3 (2CL3 Dual): 304 bits
     if(slave_no <= 2) return 152;
     return 304; 
 }
 
 int IghManager::getOutputBits(int slave_no) const
 {
-    
-    // Based on PDO mapping:
-    // CS3E: 16+32+16 = 64 bits
-    // 2CL3: (16+32+16)*2 = 128 bits
     if(slave_no <= 2) return 64;
     return 128;
 }

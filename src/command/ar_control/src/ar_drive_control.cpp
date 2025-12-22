@@ -184,10 +184,8 @@ namespace ar_control
             driveOutput = output;
             memset(output, 0, sizeof(DualJointProFileOutput));
 
-            // Reset faults first
             ar_client->resetFaultDualJoint(input, output);
             
-            // Initialize all axes with Profile Position mode and current position
             for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
             {
                 output->axis[i].mode_of_operation = 1;  // Profile Position Mode
@@ -197,15 +195,13 @@ namespace ar_control
                 output->axis[i].profile_target_deceleration = 10000;
             }
             ar_client->writeOutputs(output);
-            usleep(50000);  // Wait for mode to be accepted (increased from 20ms to 50ms)
+            usleep(50000);  
 
-            // Execute DS402 state machine: Switch On Disabled → Operation Enabled
             for (int i = 0; i < 3; i++)
             {
                 for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
                 {
                     output->axis[j].control_word = enable_sequence[i];
-                    // Keep mode and profile parameters set during enable sequence
                     output->axis[j].mode_of_operation = 1;
                     output->axis[j].profile_velocity = 100000;
                     output->axis[j].profile_target_acceleration = 10000;
@@ -213,10 +209,8 @@ namespace ar_control
                 }
                 ar_client->writeOutputs(output);
                 
-                // Wait for transition (increased from 20ms to 50ms)
                 usleep(50000);
                 
-                // Verify transition
                 ar_client->readInputs(input);
                 for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
                 {
@@ -228,7 +222,6 @@ namespace ar_control
             printf(COLOR_GREEN "\n[Ar Drive Control] Profile Position mode initialized for drive %d" COLOR_RESET, drive_id_);
         }
         
-        // Clear flag - cyclic writes can resume
         initialization_in_progress_ = false;
         return;
     }
@@ -339,6 +332,7 @@ namespace ar_control
                 DualJointCyclicOutput *output = (DualJointCyclicOutput *)driveOutput;
                 
                 for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++) {
+                    output->axis[i].control_word = CW_ENABLE_OPERATION;
                 }
                 
                 jointCmdToPulses(joint, output);
@@ -366,7 +360,7 @@ namespace ar_control
             else
             {
                 SingleJointCyclicOutput *output = (SingleJointCyclicOutput *)driveOutput;
-                                
+                output->control_word = CW_ENABLE_OPERATION;
                 jointCmdToPulses(joint, output);
                 ar_client->writeOutputs(output);
 
@@ -385,13 +379,7 @@ namespace ar_control
                     }
                 }
             }
-        }
-        else
-        {
-            DualJointProFileOutput *output = (DualJointProFileOutput *)driveOutput;
-            DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
-        }
-            
+        } 
     }
     void ArDriveControl::read()
     {
@@ -468,68 +456,6 @@ namespace ar_control
                         fflush(g_debug_log);
                     }
                 }
-            }
-        }
-
-        else
-        {
-            DualJointProFileInput *input = (DualJointProFileInput *)driveInput;
-            ar_client->readInputs(input);
-
-            for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-            {
-                joints[i]->position_actual_value = input->axis[i].actual_position;
-                int32_t actual_pos = static_cast<int32_t>(input->axis[i].actual_position);
-                joints[i]->joint_pos = (actual_pos - joints[i]->home_encoder_offset) / joints[i]->pulse_per_revolution;
-            }
-
-            static int print_counter = 0;
-            if (++print_counter >= 250 && ENABLE_PRINT)
-            {
-                printf(COLOR_GREEN "\n[READ - PP Mode Dual Axis]");
-                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
-                {
-                    uint16_t status = input->axis[i].status_word;
-                    bool target_reached = (status & (1 << 10)) != 0; // Bit 10: Target reached
-                    bool setpoint_ack = (status & (1 << 12)) != 0;   // Bit 12: Setpoint acknowledged
-
-                    printf("\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f rad | Error: 0x%04X",
-                           i,
-                           status,
-                           input->axis[i].mode_of_operation_display,
-                           input->axis[i].actual_position,
-                           joints[i]->joint_pos,
-                           input->axis[i].error_code);
-
-                    // Additional status information
-                    printf(" | Target: %s | Setpoint: %s",
-                           target_reached ? "YES" : "NO",
-                           setpoint_ack ? "ACK" : "NO");
-                }
-                printf("\n" COLOR_RESET);
-                fflush(stdout);
-                print_counter = 0;            // TEST: Check if mode is correct
-
-            }
-
-            static int mode_check_counter = 0;
-            if (++mode_check_counter >= 1000) // Check every 4 seconds
-            {
-                bool mode_correct = true;
-                for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
-                {
-                    if (input->axis[i].mode_of_operation_display != 1)
-                    {
-                        mode_correct = false;
-                        printf(COLOR_RED "\n[TEST ERROR] Axis[%zu] is in mode %d, expected mode 1 (PP)" COLOR_RESET,
-                               i, input->axis[i].mode_of_operation_display);
-                    }
-                }
-                if (mode_correct)
-                {
-                    printf(COLOR_GREEN "\n[TEST OK] All axes in Profile Position Mode (mode 1)" COLOR_RESET);
-                }
-                mode_check_counter = 0;
             }
         }
     }

@@ -230,8 +230,11 @@ namespace ar_control
             }
             else if(driveParam.port_id == PORT_SOEM)
             {
-                // driveParam.slave_id = static_cast<int>(soem_drives.size()) + 1;
-                driveParam.slave_id = static_cast<int>(soem_drives.size());
+                if(is_ecat){
+                    driveParam.slave_id = static_cast<int>(soem_drives.size());
+                }else{
+                    driveParam.slave_id = static_cast<int>(soem_drives.size()) + 1;
+                }
                 soem_drives.push_back(driveParam.slave_id); 
             }
             else

@@ -536,15 +536,15 @@ namespace master
         uint32_t target_cycle_ns = DRIVER_SYNCH_TIME * 1e+6;
 
         // printf(COLOR_YELLOW "\n=== Configuring DC0 Sync ===\n" COLOR_RESET);
-        for (auto slave_id : slaveIds)
-        {
-            soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
+        // for (auto slave_id : slaveIds)
+        // {
+        //     soem.ec_dcsync0(slave_id, TRUE, target_cycle_ns, soem.ec_slave[slave_id].pdelay);
 
-            uint32_t sync0_cycle = 0;
-            int l = sizeof(sync0_cycle);
-            soem.ec_SDOread(slave_id, 0x1C32, 0x0A, FALSE, &l, &sync0_cycle, EC_TIMEOUTRXM);
-            printf("Slave %d: Sync0 cycle time set to %u ns\n", slave_id, sync0_cycle);
-        }
+        //     uint32_t sync0_cycle = 0;
+        //     int l = sizeof(sync0_cycle);
+        //     soem.ec_SDOread(slave_id, 0x1C32, 0x0A, FALSE, &l, &sync0_cycle, EC_TIMEOUTRXM);
+        //     printf("Slave %d: Sync0 cycle time set to %u ns\n", slave_id, sync0_cycle);
+        // }
 
         // '0' here addresses all slaves
         if (soem.ec_statecheck(0, EC_STATE_SAFE_OP, EC_TIMEOUTSTATE * 4) != EC_STATE_SAFE_OP)

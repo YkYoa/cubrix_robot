@@ -186,16 +186,17 @@ namespace ar_control
 
 	hardware_interface::return_type ArSystemHardware::write(const rclcpp::Time& time, const rclcpp::Duration& period)
 	{
-        // Fix this to some faster protocol
         (void) time;
 		(void) period;
-		fflush(stdout);
-		robot->write();
-
-		/// Control loop waits in this write function - to sync with the comm loop
+		
+		// Wait for cyclic loop signal FIRST - this ensures we write when cyclic is ready to send
 		if(!is_simulation){
 			pthread_cond_wait(&cond, &lock);
 		}
+		
+		// Now write to PDO buffer - cyclic loop will send this data
+		robot->write();
+		fflush(stdout);
 
 		return hardware_interface::return_type::OK;
 	}

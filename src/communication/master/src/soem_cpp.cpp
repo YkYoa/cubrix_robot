@@ -26,7 +26,7 @@ namespace master
 	 * @return IOmap size
 	 * @see ecx_config_map_group
 	 */
-	int SOEM::ec_config_map_group(void* pIOmap, uint8 group)
+	int SOEM::ec_config_map_group(void *pIOmap, uint8 group)
 	{
 		return ecx_config_map_group(&ecx_context, pIOmap, group);
 	}
@@ -39,7 +39,7 @@ namespace master
 	 * @return IOmap size
 	 * @see ecx_config_overlap_map_group
 	 */
-	int SOEM::ec_config_overlap_map_group(void* pIOmap, uint8 group)
+	int SOEM::ec_config_overlap_map_group(void *pIOmap, uint8 group)
 	{
 		return ecx_config_overlap_map_group(&ecx_context, pIOmap, group);
 	}
@@ -50,7 +50,7 @@ namespace master
 	 * @param[out] pIOmap     = pointer to IOmap
 	 * @return IOmap size
 	 */
-	int SOEM::ec_config_map(void* pIOmap)
+	int SOEM::ec_config_map(void *pIOmap)
 	{
 		return ec_config_map_group(pIOmap, 0);
 	}
@@ -61,7 +61,7 @@ namespace master
 	 * @param[out] pIOmap     = pointer to IOmap
 	 * @return IOmap size
 	 */
-	int SOEM::ec_config_overlap_map(void* pIOmap)
+	int SOEM::ec_config_overlap_map(void *pIOmap)
 	{
 		return ec_config_overlap_map_group(pIOmap, 0);
 	}
@@ -72,11 +72,12 @@ namespace master
 	 * @param[out] pIOmap     = pointer to IOmap
 	 * @return Workcounter of slave discover datagram = number of slaves found
 	 */
-	int SOEM::ec_config(uint8 usetable, void* pIOmap)
+	int SOEM::ec_config(uint8 usetable, void *pIOmap)
 	{
 		int wkc;
 		wkc = ec_config_init(usetable);
-		if(wkc) {
+		if (wkc)
+		{
 			ec_config_map(pIOmap);
 		}
 		return wkc;
@@ -88,11 +89,12 @@ namespace master
 	 * @param[out] pIOmap     = pointer to IOmap
 	 * @return Workcounter of slave discover datagram = number of slaves found
 	 */
-	int SOEM::ec_config_overlap(uint8 usetable, void* pIOmap)
+	int SOEM::ec_config_overlap(uint8 usetable, void *pIOmap)
 	{
 		int wkc;
 		wkc = ec_config_init(usetable);
-		if(wkc) {
+		if (wkc)
+		{
 			ec_config_overlap_map(pIOmap);
 		}
 		return wkc;
@@ -122,12 +124,12 @@ namespace master
 		return ecx_reconfig_slave(&ecx_context, slave, timeout);
 	}
 
-	void SOEM::ec_pusherror(const ec_errort* Ec)
+	void SOEM::ec_pusherror(const ec_errort *Ec)
 	{
 		ecx_pusherror(&ecx_context, Ec);
 	}
 
-	boolean SOEM::ec_poperror(ec_errort* Ec)
+	boolean SOEM::ec_poperror(ec_errort *Ec)
 	{
 		return ecx_poperror(&ecx_context, Ec);
 	}
@@ -147,7 +149,7 @@ namespace master
 	 * @return >0 if OK
 	 * @see ecx_init
 	 */
-	int SOEM::ec_init(const char* ifname)
+	int SOEM::ec_init(const char *ifname)
 	{
 		return ecx_init(&ecx_context, ifname);
 	}
@@ -158,7 +160,7 @@ namespace master
 	 * @return >0 if OK
 	 * @see ecx_init_redundant
 	 */
-	int SOEM::ec_init_redundant(const char* ifname, char* if2name)
+	int SOEM::ec_init_redundant(const char *ifname, char *if2name)
 	{
 		return ecx_init_redundant(&ecx_context, &ecx_redport, ifname, if2name);
 	}
@@ -201,7 +203,7 @@ namespace master
 	 *  @param[in]  Sn     = string number
 	 *  @see ecx_siistring
 	 */
-	void SOEM::ec_siistring(char* str, uint16 slave, uint16 Sn)
+	void SOEM::ec_siistring(char *str, uint16 slave, uint16 Sn)
 	{
 		ecx_siistring(&ecx_context, str, slave, Sn);
 	}
@@ -212,7 +214,7 @@ namespace master
 	 *  @return number of FMMU's defined in section
 	 *  @see ecx_siiFMMU
 	 */
-	uint16 SOEM::ec_siiFMMU(uint16 slave, ec_eepromFMMUt* FMMU)
+	uint16 SOEM::ec_siiFMMU(uint16 slave, ec_eepromFMMUt *FMMU)
 	{
 		return ecx_siiFMMU(&ecx_context, slave, FMMU);
 	}
@@ -223,7 +225,7 @@ namespace master
 	 *  @return number of SM's defined in section
 	 *  @see ecx_siiSM
 	 */
-	uint16 SOEM::ec_siiSM(uint16 slave, ec_eepromSMt* SM)
+	uint16 SOEM::ec_siiSM(uint16 slave, ec_eepromSMt *SM)
 	{
 		return ecx_siiSM(&ecx_context, slave, SM);
 	}
@@ -235,7 +237,7 @@ namespace master
 	 *  @return >0 if OK
 	 *  @see ecx_siiSMnext
 	 */
-	uint16 SOEM::ec_siiSMnext(uint16 slave, ec_eepromSMt* SM, uint16 n)
+	uint16 SOEM::ec_siiSMnext(uint16 slave, ec_eepromSMt *SM, uint16 n)
 	{
 		return ecx_siiSMnext(&ecx_context, slave, SM, n);
 	}
@@ -247,7 +249,7 @@ namespace master
 	 *  @return mapping size in bits of PDO
 	 *  @see ecx_siiPDO
 	 */
-	int SOEM::ec_siiPDO(uint16 slave, ec_eepromPDOt* PDO, uint8 t)
+	int SOEM::ec_siiPDO(uint16 slave, ec_eepromPDOt *PDO, uint8 t)
 	{
 		return ecx_siiPDO(&ecx_context, slave, PDO, t);
 	}
@@ -303,7 +305,7 @@ namespace master
 	 * @return Work counter (>0 is success)
 	 * @see ecx_mbxsend
 	 */
-	int SOEM::ec_mbxsend(uint16 slave, ec_mbxbuft* mbx, int timeout)
+	int SOEM::ec_mbxsend(uint16 slave, ec_mbxbuft *mbx, int timeout)
 	{
 		return ecx_mbxsend(&ecx_context, slave, mbx, timeout);
 	}
@@ -316,7 +318,7 @@ namespace master
 	 * @return Work counter (>0 is success)
 	 * @see ecx_mbxreceive
 	 */
-	int SOEM::ec_mbxreceive(uint16 slave, ec_mbxbuft* mbx, int timeout)
+	int SOEM::ec_mbxreceive(uint16 slave, ec_mbxbuft *mbx, int timeout)
 	{
 		return ecx_mbxreceive(&ecx_context, slave, mbx, timeout);
 	}
@@ -326,7 +328,7 @@ namespace master
 	 * @param[out] esibuf   = EEPROM data buffer, make sure it is big enough.
 	 * @see ecx_esidump
 	 */
-	void SOEM::ec_esidump(uint16 slave, uint8* esibuf)
+	void SOEM::ec_esidump(uint16 slave, uint8 *esibuf)
 	{
 		ecx_esidump(&ecx_context, slave, esibuf);
 	}
@@ -371,28 +373,31 @@ namespace master
 		return ecx_eeprom2pdi(&ecx_context, slave);
 	}
 
-	uint16 ecx_eeprom_waitnotbusyAP(ecx_contextt* context, uint16 aiadr, uint16* estat, int timeout)
+	uint16 ecx_eeprom_waitnotbusyAP(ecx_contextt *context, uint16 aiadr, uint16 *estat, int timeout)
 	{
 		int wkc, cnt = 0, retval = 0;
 		osal_timert timer;
 
 		osal_timer_start(&timer, timeout);
-		do {
-			if(cnt++) {
+		do
+		{
+			if (cnt++)
+			{
 				osal_usleep(EC_LOCALDELAY);
 			}
 			*estat = 0;
-			wkc	   = ecx_APRD(context->port, aiadr, ECT_REG_EEPSTAT, sizeof(*estat), estat, EC_TIMEOUTRET);
+			wkc = ecx_APRD(context->port, aiadr, ECT_REG_EEPSTAT, sizeof(*estat), estat, EC_TIMEOUTRET);
 			*estat = etohs(*estat);
-		} while(((wkc <= 0) || ((*estat & EC_ESTAT_BUSY) > 0)) && (osal_timer_is_expired(&timer) == FALSE)); /* wait for eeprom ready */
-		if((*estat & EC_ESTAT_BUSY) == 0) {
+		} while (((wkc <= 0) || ((*estat & EC_ESTAT_BUSY) > 0)) && (osal_timer_is_expired(&timer) == FALSE)); /* wait for eeprom ready */
+		if ((*estat & EC_ESTAT_BUSY) == 0)
+		{
 			retval = 1;
 		}
 
 		return retval;
 	}
 
-	uint16 SOEM::ec_eeprom_waitnotbusyAP(uint16 aiadr, uint16* estat, int timeout)
+	uint16 SOEM::ec_eeprom_waitnotbusyAP(uint16 aiadr, uint16 *estat, int timeout)
 	{
 		return ecx_eeprom_waitnotbusyAP(&ecx_context, aiadr, estat, timeout);
 	}
@@ -421,27 +426,30 @@ namespace master
 		return ecx_writeeepromAP(&ecx_context, aiadr, eeproma, data, timeout);
 	}
 
-	uint16 ecx_eeprom_waitnotbusyFP(ecx_contextt* context, uint16 configadr, uint16* estat, int timeout)
+	uint16 ecx_eeprom_waitnotbusyFP(ecx_contextt *context, uint16 configadr, uint16 *estat, int timeout)
 	{
 		int wkc, cnt = 0, retval = 0;
 		osal_timert timer;
 
 		osal_timer_start(&timer, timeout);
-		do {
-			if(cnt++) {
+		do
+		{
+			if (cnt++)
+			{
 				osal_usleep(EC_LOCALDELAY);
 			}
 			*estat = 0;
-			wkc	   = ecx_FPRD(context->port, configadr, ECT_REG_EEPSTAT, sizeof(*estat), estat, EC_TIMEOUTRET);
+			wkc = ecx_FPRD(context->port, configadr, ECT_REG_EEPSTAT, sizeof(*estat), estat, EC_TIMEOUTRET);
 			*estat = etohs(*estat);
-		} while(((wkc <= 0) || ((*estat & EC_ESTAT_BUSY) > 0)) && (osal_timer_is_expired(&timer) == FALSE)); /* wait for eeprom ready */
-		if((*estat & EC_ESTAT_BUSY) == 0) {
+		} while (((wkc <= 0) || ((*estat & EC_ESTAT_BUSY) > 0)) && (osal_timer_is_expired(&timer) == FALSE)); /* wait for eeprom ready */
+		if ((*estat & EC_ESTAT_BUSY) == 0)
+		{
 			retval = 1;
 		}
 
 		return retval;
 	}
-	uint16 SOEM::ec_eeprom_waitnotbusyFP(uint16 configadr, uint16* estat, int timeout)
+	uint16 SOEM::ec_eeprom_waitnotbusyFP(uint16 configadr, uint16 *estat, int timeout)
 	{
 		return ecx_eeprom_waitnotbusyFP(&ecx_context, configadr, estat, timeout);
 	}
@@ -587,7 +595,7 @@ namespace master
 	 * @return Workcounter from last slave response
 	 * @see ecx_SDOread
 	 */
-	int SOEM::ec_SDOread(uint16 slave, uint16 index, uint8 subindex, boolean CA, int* psize, void* p, int timeout) const
+	int SOEM::ec_SDOread(uint16 slave, uint16 index, uint8 subindex, boolean CA, int *psize, void *p, int timeout) const
 	{
 		return ecx_SDOread(&ecx_context, slave, index, subindex, CA, psize, p, timeout);
 	}
@@ -609,7 +617,7 @@ namespace master
 	 * @return Workcounter from last slave response
 	 * @see ecx_SDOwrite
 	 */
-	int SOEM::ec_SDOwrite(uint16 Slave, uint16 Index, uint8 SubIndex, boolean CA, int psize, void* p, int Timeout) const
+	int SOEM::ec_SDOwrite(uint16 Slave, uint16 Index, uint8 SubIndex, boolean CA, int psize, void *p, int Timeout) const
 	{
 		return ecx_SDOwrite(&ecx_context, Slave, Index, SubIndex, CA, psize, p, Timeout);
 	}
@@ -625,7 +633,7 @@ namespace master
 	 * @return Workcounter from last slave response
 	 * @see ecx_RxPDO
 	 */
-	int SOEM::ec_RxPDO(uint16 Slave, uint16 RxPDOnumber, int psize, void* p)
+	int SOEM::ec_RxPDO(uint16 Slave, uint16 RxPDOnumber, int psize, void *p)
 	{
 		return ecx_RxPDO(&ecx_context, Slave, RxPDOnumber, psize, p);
 	}
@@ -642,7 +650,7 @@ namespace master
 	 * @return Workcounter from last slave response
 	 * @see ecx_TxPDO
 	 */
-	int SOEM::ec_TxPDO(uint16 slave, uint16 TxPDOnumber, int* psize, void* p, int timeout)
+	int SOEM::ec_TxPDO(uint16 slave, uint16 TxPDOnumber, int *psize, void *p, int timeout)
 	{
 		return ecx_TxPDO(&ecx_context, slave, TxPDOnumber, psize, p, timeout);
 	}
@@ -653,50 +661,56 @@ namespace master
 	 * @param[in]  PDOassign     = PDO assign object
 	 * @return total bitlength of PDO assign
 	 */
-	int ecx_readPDOassign(ecx_contextt* context, uint16 Slave, uint16 PDOassign)
+	int ecx_readPDOassign(ecx_contextt *context, uint16 Slave, uint16 PDOassign)
 	{
 		uint16 idxloop, nidx, subidxloop, rdat, idx, subidx;
 		uint8 subcnt;
 		int wkc, bsize = 0, rdl;
 		int32 rdat2;
 
-		rdl	 = sizeof(rdat);
+		rdl = sizeof(rdat);
 		rdat = 0;
 		/* read PDO assign subindex 0 ( = number of PDO's) */
-		wkc	 = ecx_SDOread(context, Slave, PDOassign, 0x00, FALSE, &rdl, &rdat, EC_TIMEOUTRXM);
+		wkc = ecx_SDOread(context, Slave, PDOassign, 0x00, FALSE, &rdl, &rdat, EC_TIMEOUTRXM);
 		rdat = etohs(rdat);
 		/* positive result from slave ? */
-		if((wkc > 0) && (rdat > 0)) {
+		if ((wkc > 0) && (rdat > 0))
+		{
 			/* number of available sub indexes */
-			nidx  = rdat;
+			nidx = rdat;
 			bsize = 0;
 			/* read all PDO's */
-			for(idxloop = 1; idxloop <= nidx; idxloop++) {
-				rdl	 = sizeof(rdat);
+			for (idxloop = 1; idxloop <= nidx; idxloop++)
+			{
+				rdl = sizeof(rdat);
 				rdat = 0;
 				/* read PDO assign */
-				wkc = ecx_SDOread(context, Slave, PDOassign, (uint8) idxloop, FALSE, &rdl, &rdat, EC_TIMEOUTRXM);
+				wkc = ecx_SDOread(context, Slave, PDOassign, (uint8)idxloop, FALSE, &rdl, &rdat, EC_TIMEOUTRXM);
 				/* result is index of PDO */
 				idx = etohs(rdat);
-				if(idx > 0) {
-					rdl	   = sizeof(subcnt);
+				if (idx > 0)
+				{
+					rdl = sizeof(subcnt);
 					subcnt = 0;
 					/* read number of subindexes of PDO */
-					wkc	   = ecx_SDOread(context, Slave, idx, 0x00, FALSE, &rdl, &subcnt, EC_TIMEOUTRXM);
+					wkc = ecx_SDOread(context, Slave, idx, 0x00, FALSE, &rdl, &subcnt, EC_TIMEOUTRXM);
 					subidx = subcnt;
 					/* for each subindex */
-					for(subidxloop = 1; subidxloop <= subidx; subidxloop++) {
-						rdl	  = sizeof(rdat2);
+					for (subidxloop = 1; subidxloop <= subidx; subidxloop++)
+					{
+						rdl = sizeof(rdat2);
 						rdat2 = 0;
 						/* read SDO that is mapped in PDO */
-						wkc	  = ecx_SDOread(context, Slave, idx, (uint8) subidxloop, FALSE, &rdl, &rdat2, EC_TIMEOUTRXM);
+						wkc = ecx_SDOread(context, Slave, idx, (uint8)subidxloop, FALSE, &rdl, &rdat2, EC_TIMEOUTRXM);
 						rdat2 = etohl(rdat2);
 						/* extract bitlength of SDO */
-						if(LO_BYTE(rdat2) < 0xff) {
+						if (LO_BYTE(rdat2) < 0xff)
+						{
 							bsize += LO_BYTE(rdat2);
 						}
-						else {
-							rdl	 = sizeof(rdat);
+						else
+						{
+							rdl = sizeof(rdat);
 							rdat = htoes(0xff);
 							/* read Object Entry in Object database */
 							//                  wkc = ec_readOEsingle(idx, (uint8)SubCount, pODlist, pOElist);
@@ -727,32 +741,36 @@ namespace master
 	 * @param[in]  PDOassign     = PDO assign object
 	 * @return total bitlength of PDO assign
 	 */
-	int ecx_readPDOassignCA(ecx_contextt* context, uint16 Slave, int Thread_n, uint16 PDOassign)
+	int ecx_readPDOassignCA(ecx_contextt *context, uint16 Slave, int Thread_n, uint16 PDOassign)
 	{
 		uint16 idxloop, nidx, subidxloop, idx, subidx;
 		int wkc, bsize = 0, rdl;
 
 		/* find maximum size of PDOassign buffer */
-		rdl							   = sizeof(ec_PDOassignt);
+		rdl = sizeof(ec_PDOassignt);
 		context->PDOassign[Thread_n].n = 0;
 		/* read rxPDOassign in CA mode, all subindexes are read in one struct */
 		wkc = ecx_SDOread(context, Slave, PDOassign, 0x00, TRUE, &rdl, &(context->PDOassign[Thread_n]), EC_TIMEOUTRXM);
 		/* positive result from slave ? */
-		if((wkc > 0) && (context->PDOassign[Thread_n].n > 0)) {
-			nidx  = context->PDOassign[Thread_n].n;
+		if ((wkc > 0) && (context->PDOassign[Thread_n].n > 0))
+		{
+			nidx = context->PDOassign[Thread_n].n;
 			bsize = 0;
 			/* for each PDO do */
-			for(idxloop = 1; idxloop <= nidx; idxloop++) {
+			for (idxloop = 1; idxloop <= nidx; idxloop++)
+			{
 				/* get index from PDOassign struct */
 				idx = etohs(context->PDOassign[Thread_n].index[idxloop - 1]);
-				if(idx > 0) {
-					rdl							 = sizeof(ec_PDOdesct);
+				if (idx > 0)
+				{
+					rdl = sizeof(ec_PDOdesct);
 					context->PDOdesc[Thread_n].n = 0;
 					/* read SDO's that are mapped in PDO, CA mode */
-					wkc	   = ecx_SDOread(context, Slave, idx, 0x00, TRUE, &rdl, &(context->PDOdesc[Thread_n]), EC_TIMEOUTRXM);
+					wkc = ecx_SDOread(context, Slave, idx, 0x00, TRUE, &rdl, &(context->PDOdesc[Thread_n]), EC_TIMEOUTRXM);
 					subidx = context->PDOdesc[Thread_n].n;
 					/* extract all bitlengths of SDO's */
-					for(subidxloop = 1; subidxloop <= subidx; subidxloop++) {
+					for (subidxloop = 1; subidxloop <= subidx; subidxloop++)
+					{
 						bsize += LO_BYTE(etohl(context->PDOdesc[Thread_n].PDO[subidxloop - 1]));
 					}
 				}
@@ -787,7 +805,7 @@ namespace master
 	 * @param[out] Isize   = Size in bits of input mapping (txPDO) found
 	 * @return >0 if mapping succesful.
 	 */
-	int SOEM::ec_readPDOmap(uint16 Slave, int* Osize, int* Isize)
+	int SOEM::ec_readPDOmap(uint16 Slave, int *Osize, int *Isize)
 	{
 		return ecx_readPDOmap(&ecx_context, Slave, Osize, Isize);
 	}
@@ -805,7 +823,7 @@ namespace master
 	 * @return >0 if mapping succesful.
 	 * @see ecx_readPDOmap ec_readPDOmapCA
 	 */
-	int SOEM::ec_readPDOmapCA(uint16 Slave, int Thread_n, int* Osize, int* Isize)
+	int SOEM::ec_readPDOmapCA(uint16 Slave, int Thread_n, int *Osize, int *Isize)
 	{
 		return ecx_readPDOmapCA(&ecx_context, Slave, Thread_n, Osize, Isize);
 	}
@@ -817,7 +835,7 @@ namespace master
 	 * @return Workcounter of slave response.
 	 * @see ecx_readODlist
 	 */
-	int SOEM::ec_readODlist(uint16 Slave, ec_ODlistt* pODlist)
+	int SOEM::ec_readODlist(uint16 Slave, ec_ODlistt *pODlist)
 	{
 		return ecx_readODlist(&ecx_context, Slave, pODlist);
 	}
@@ -829,12 +847,12 @@ namespace master
 	 * @return Workcounter of slave response.
 	 * @see ecx_readODdescription
 	 */
-	int SOEM::ec_readODdescription(uint16 Item, ec_ODlistt* pODlist)
+	int SOEM::ec_readODdescription(uint16 Item, ec_ODlistt *pODlist)
 	{
 		return ecx_readODdescription(&ecx_context, Item, pODlist);
 	}
 
-	int SOEM::ec_readOEsingle(uint16 Item, uint8 SubI, ec_ODlistt* pODlist, ec_OElistt* pOElist)
+	int SOEM::ec_readOEsingle(uint16 Item, uint8 SubI, ec_ODlistt *pODlist, ec_OElistt *pOElist)
 	{
 		return ecx_readOEsingle(&ecx_context, Item, SubI, pODlist, pOElist);
 	}
@@ -847,7 +865,7 @@ namespace master
 	 * @return Workcounter of slave response.
 	 * @see ecx_readOE
 	 */
-	int SOEM::ec_readOE(uint16 Item, ec_ODlistt* pODlist, ec_OElistt* pOElist)
+	int SOEM::ec_readOE(uint16 Item, ec_ODlistt *pODlist, ec_OElistt *pOElist)
 	{
 		return ecx_readOE(&ecx_context, Item, pODlist, pOElist);
 	}
@@ -867,4 +885,4 @@ namespace master
 		return ecx_configdc(&ecx_context);
 	}
 
-}  // namespace master
+} // namespace master

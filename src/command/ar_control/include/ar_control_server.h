@@ -30,14 +30,14 @@ namespace ar_control
         using ArControlAction = ar_action::action::ArControl;
         using ArControlServerGoalHandle = rclcpp_action::ServerGoalHandle<ArControlAction>;
 
-        explicit ArControlServer(ArHardwareInterface* robotArg = nullptr, const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+        explicit ArControlServer(ArHardwareInterface *robotArg = nullptr, const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
         ~ArControlServer();
-    	void startActionServer();
+        void startActionServer();
 
-	private:
+    private:
         rclcpp_action::Server<ArControlAction>::SharedPtr action_server;
 
-        rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID & uuid,
+        rclcpp_action::GoalResponse handle_goal(const rclcpp_action::GoalUUID &uuid,
                                                 std::shared_ptr<const ArControlAction::Goal> goal);
 
         rclcpp_action::CancelResponse handle_cancel(const std::shared_ptr<ArControlServerGoalHandle> goal_handle);
@@ -46,14 +46,14 @@ namespace ar_control
 
         void execute(const std::shared_ptr<ArControlServerGoalHandle> goal_handle);
 
-	private:
-		// boost::mutex& control_mutex_;
-        ArHardwareInterface* robot;
+    private:
+        // boost::mutex& control_mutex_;
+        ArHardwareInterface *robot;
         std::map<int, std::shared_ptr<ArDriveControl>> drive_map_;
         rclcpp::CallbackGroup::SharedPtr server_cb_group;
 
-		rclcpp::Subscription<moveit_msgs::msg::DisplayTrajectory>::SharedPtr trajectory_topic_sub;
-		rclcpp::Subscription<trajectory_msgs::msg::JointTrajectory>::SharedPtr trajectory_servo_sub;
-		bool planning_state;
-	};
+        rclcpp::Subscription<moveit_msgs::msg::DisplayTrajectory>::SharedPtr trajectory_topic_sub;
+        rclcpp::Subscription<trajectory_msgs::msg::JointTrajectory>::SharedPtr trajectory_servo_sub;
+        bool planning_state;
+    };
 }

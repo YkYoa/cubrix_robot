@@ -1,10 +1,8 @@
-#pragma once 
-
+#pragma once
 
 #include <map>
 #include <string>
 #include <stdint.h>
-
 
 namespace ar_control
 {
@@ -15,7 +13,8 @@ namespace ar_control
         CTR_CMD_SEND_WAIT,
     };
 
-    enum HostCommand{
+    enum HostCommand
+    {
         PLANNING,
         SET_MOTOR_STATE,
         UNKNOWN_CMD
@@ -23,14 +22,13 @@ namespace ar_control
 
     enum ErrorCode
     {
-        //Add later due to driver API
+        // Add later due to driver API
     };
 
     static std::map<int, std::string> HostCommandToName = {
         {PLANNING, "PLANNING"},
         {SET_MOTOR_STATE, "SET_MOTOR_STATE"},
-        {UNKNOWN_CMD, "UNKNOWN_CMD"}
-    };
+        {UNKNOWN_CMD, "UNKNOWN_CMD"}};
 
     enum ControlErrorCode
     {

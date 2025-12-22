@@ -2,13 +2,13 @@
 
 double LIMIT_SAFETY_OFFSET = 0.0001; ///< Safety offset for joint limits
 bool ENABLE_PRINT = true;            ///< Flag to enable or disable drive logging
-FILE* g_debug_log = nullptr;         ///< Log file for debug output
+FILE *g_debug_log = nullptr;         ///< Log file for debug output
 
 // DS402 Control Words
-const uint16_t CW_SHUTDOWN = 0x0006;           // Switch On Disabled → Ready to Switch On
-const uint16_t CW_SWITCH_ON = 0x0007;          // Ready to Switch On → Switched On  
-const uint16_t CW_ENABLE_OPERATION = 0x000F;   // Switched On → Operation Enabled
-const uint16_t CW_DISABLE_VOLTAGE = 0x0000;    // Any State → Switch On Disabled
+const uint16_t CW_SHUTDOWN = 0x0006;         // Switch On Disabled → Ready to Switch On
+const uint16_t CW_SWITCH_ON = 0x0007;        // Ready to Switch On → Switched On
+const uint16_t CW_ENABLE_OPERATION = 0x000F; // Switched On → Operation Enabled
+const uint16_t CW_DISABLE_VOLTAGE = 0x0000;  // Any State → Switch On Disabled
 
 namespace ar_control
 {
@@ -36,8 +36,8 @@ namespace ar_control
                    manager->getInputBits(slaveId) / 8,
                    manager->getOutputBits(slaveId) / 8);
             fflush(stdout);
-            
-            igh_manager_ = dynamic_cast<master::IghManager*>(manager);
+
+            igh_manager_ = dynamic_cast<master::IghManager *>(manager);
             slave_id_ = slaveId;
         }
         else
@@ -47,7 +47,7 @@ namespace ar_control
     }
 
     void ArDriveControl::AddJoint(JointParameter &jointParam)
-    {        
+    {
         ArJointControl *joint = new ArJointControl(jointParam.joint_name);
         printf(COLOR_BLUE "\n[Ar Drive Control] Drive %d add joint: %s" COLOR_RESET, drive_id_, jointParam.joint_name.c_str());
         joint->rev_angle_convert_mode = jointParam.rev_angle_convert_mode;
@@ -112,7 +112,8 @@ namespace ar_control
 
         initialization_in_progress_ = true;
 
-        if (!ar_client) {
+        if (!ar_client)
+        {
             initialization_in_progress_ = false;
             return;
         }
@@ -142,7 +143,6 @@ namespace ar_control
                         usleep(1000);
                     }
                     ar_client->writeOutputs(output);
-
 
                     for (int i = 0; i < 3; i++)
                     {
@@ -185,17 +185,17 @@ namespace ar_control
             memset(output, 0, sizeof(DualJointProFileOutput));
 
             ar_client->resetFaultDualJoint(input, output);
-            
+
             for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
             {
-                output->axis[i].mode_of_operation = 1;  // Profile Position Mode
+                output->axis[i].mode_of_operation = 1; // Profile Position Mode
                 output->axis[i].profile_target_position = input->axis[i].actual_position;
                 output->axis[i].profile_velocity = 100000;
                 output->axis[i].profile_target_acceleration = 10000;
                 output->axis[i].profile_target_deceleration = 10000;
             }
             ar_client->writeOutputs(output);
-            usleep(50000);  
+            usleep(50000);
 
             for (int i = 0; i < 3; i++)
             {
@@ -208,20 +208,20 @@ namespace ar_control
                     output->axis[j].profile_target_deceleration = 10000;
                 }
                 ar_client->writeOutputs(output);
-                
+
                 usleep(50000);
-                
+
                 ar_client->readInputs(input);
                 for (size_t j = 0; j < LEADSHINE_DRIVER_MAX_JOINT_COUNT; j++)
                 {
-                    printf("[Drive %d PP] Axis[%zu] Status after CW=0x%04X: 0x%04X\n", 
+                    printf("[Drive %d PP] Axis[%zu] Status after CW=0x%04X: 0x%04X\n",
                            drive_id_, j, enable_sequence[i], input->axis[j].status_word);
                 }
             }
-            
+
             printf(COLOR_GREEN "\n[Ar Drive Control] Profile Position mode initialized for drive %d" COLOR_RESET, drive_id_);
         }
-        
+
         initialization_in_progress_ = false;
         return;
     }
@@ -311,7 +311,6 @@ namespace ar_control
         }
     }
 
-
     void ArDriveControl::write()
     {
         if (ar_client == nullptr)
@@ -330,22 +329,27 @@ namespace ar_control
             if (is_dual_axis_)
             {
                 DualJointCyclicOutput *output = (DualJointCyclicOutput *)driveOutput;
-                
-                for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++) {
+
+                for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+                {
                     output->axis[i].control_word = CW_ENABLE_OPERATION;
                 }
-                
+
                 jointCmdToPulses(joint, output);
                 ar_client->writeOutputs(output);
 
-                if (ENABLE_PRINT){
-                    if (!g_debug_log){
+                if (ENABLE_PRINT)
+                {
+                    if (!g_debug_log)
+                    {
                         g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
 
-                    if (g_debug_log){
+                    if (g_debug_log)
+                    {
                         fprintf(g_debug_log, COLOR_BLUE "\n  [WRITE - Dual Axis]");
-                        for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i){
+                        for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
+                        {
                             fprintf(g_debug_log, "\n  Axis[%zu] | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f",
                                     i,
                                     output->axis[i].control_word,
@@ -366,20 +370,22 @@ namespace ar_control
 
                 if (ENABLE_PRINT)
                 {
-                    if (!g_debug_log){
+                    if (!g_debug_log)
+                    {
                         g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
 
-                    const char* msg = "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f";
-                    
-                    if(g_debug_log) {
+                    const char *msg = "\n  [WRITE - Single Axis] Drive: %d | Control Word: 0x%04X | Target Pos: %d | Cmd Pos: %6.3f";
+
+                    if (g_debug_log)
+                    {
                         fprintf(g_debug_log, msg, drive_id_, output->control_word, output->target_position, joint->joint_pos_cmd);
                         fprintf(g_debug_log, "\n");
                         fflush(g_debug_log);
                     }
                 }
             }
-        } 
+        }
     }
     void ArDriveControl::read()
     {
@@ -412,22 +418,24 @@ namespace ar_control
 
                 if (ENABLE_PRINT)
                 {
-                    if(!g_debug_log) {
+                    if (!g_debug_log)
+                    {
                         g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
-                    
-                    if(g_debug_log) {
+
+                    if (g_debug_log)
+                    {
                         fprintf(g_debug_log, "\n[READ - Dual Axis] Drive: %d", drive_id_);
-                        
+
                         for (size_t i = 0; i < joints.size() && i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; ++i)
                         {
                             fprintf(g_debug_log, "\n  Axis[%zu] | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
-                                   i,
-                                   input->axis[i].status_word,
-                                   input->axis[i].mode_of_operation_display,
-                                   input->axis[i].actual_position,
-                                   joints[i]->joint_pos,
-                                   input->axis[i].error_code);
+                                    i,
+                                    input->axis[i].status_word,
+                                    input->axis[i].mode_of_operation_display,
+                                    input->axis[i].actual_position,
+                                    joints[i]->joint_pos,
+                                    input->axis[i].error_code);
                         }
                         fprintf(g_debug_log, "\n");
                         fflush(g_debug_log);
@@ -445,13 +453,15 @@ namespace ar_control
 
                 if (ENABLE_PRINT)
                 {
-                    if(!g_debug_log) {
+                    if (!g_debug_log)
+                    {
                         g_debug_log = fopen("/tmp/ar_drive_debug.log", "a");
                     }
-                    
-                    if(g_debug_log) {
+
+                    if (g_debug_log)
+                    {
                         fprintf(g_debug_log, "\n[READ - Single Axis] Drive: %d | Status: 0x%04X | Mode: %2d | Pos: %8d | Joint: %6.3f | Error: 0x%04X",
-                               drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
+                                drive_id_, input->status_word, input->mode_of_operation_display, input->actual_position, joints[0]->joint_pos, input->error_code);
                         fprintf(g_debug_log, "\n");
                         fflush(g_debug_log);
                     }

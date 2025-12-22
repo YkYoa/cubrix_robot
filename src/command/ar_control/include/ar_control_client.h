@@ -18,7 +18,6 @@
 #include <control_def.h>
 #include <ar_utils.h>
 
-
 namespace ar_control
 {
 	class ArControlClient : public rclcpp::Node
@@ -27,18 +26,18 @@ namespace ar_control
 		using ArControlAction = ar_action::action::ArControl;
 		using ArControlClientGoalHandle = rclcpp_action::ClientGoalHandle<ArControlAction>;
 
-		explicit ArControlClient(const std::string& serverName	  = "ar_control_server",
-								   const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+		explicit ArControlClient(const std::string &serverName = "ar_control_server",
+								 const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 		~ArControlClient();
 
 		bool waitForServer();
 
-		bool sendGoal(const ArControlAction::Goal& goal, bool waitServer = false);
-		int actionCommand(ControlCommandType commandType, int timeoutSec, const ArControlAction::Goal& goal);
+		bool sendGoal(const ArControlAction::Goal &goal, bool waitServer = false);
+		int actionCommand(ControlCommandType commandType, int timeoutSec, const ArControlAction::Goal &goal);
 
-		int setPlanningState(const std::string& planningGroup = "", ControlCommandType commandType = ar_control::CTR_CMD_SEND_WAIT,
+		int setPlanningState(const std::string &planningGroup = "", ControlCommandType commandType = ar_control::CTR_CMD_SEND_WAIT,
 							 int timeoutSec = 5);
-		int setMotorStates(const std::vector<bool>& motorCmds, ControlCommandType commandType, int timeoutSec);
+		int setMotorStates(const std::vector<bool> &motorCmds, ControlCommandType commandType, int timeoutSec);
 
 	protected:
 		rclcpp_action::Client<ArControlAction>::SharedPtr client_ptr_;
@@ -48,10 +47,10 @@ namespace ar_control
 
 		void goal_response_callback(std::shared_future<ArControlClientGoalHandle::SharedPtr> future);
 		void feedback_callback(ArControlClientGoalHandle::SharedPtr, const std::shared_ptr<const ArControlAction::Feedback> feedback);
-		void result_callback(const ArControlClientGoalHandle::WrappedResult& result);
+		void result_callback(const ArControlClientGoalHandle::WrappedResult &result);
 		rclcpp::CallbackGroup::SharedPtr client_cb_group;
 		typename rclcpp_action::Client<ArControlAction>::SendGoalOptions send_goal_options;
 	};
-}  // namespace ar_control
+} // namespace ar_control
 
 typedef std::shared_ptr<ar_control::ArControlClient> tControlClientPtr;

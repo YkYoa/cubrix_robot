@@ -115,7 +115,7 @@ namespace ar_control
       map[i * 8 + 3] = (output->axis[i].target_position >> 8) & 0x00ff;
       map[i * 8 + 4] = (output->axis[i].target_position >> 16) & 0x00ff;
       map[i * 8 + 5] = (output->axis[i].target_position >> 24) & 0x00ff;
-      
+
       map[i * 8 + 6] = (output->axis[i].touch_probe_function) & 0x00ff;
       map[i * 8 + 7] = (output->axis[i].touch_probe_function >> 8) & 0x00ff;
     }
@@ -179,7 +179,7 @@ namespace ar_control
       map[i * 8 + 3] = (output->axis[i].profile_target_position >> 8) & 0x00ff;
       map[i * 8 + 4] = (output->axis[i].profile_target_position >> 16) & 0x00ff;
       map[i * 8 + 5] = (output->axis[i].profile_target_position >> 24) & 0x00ff;
-      
+
       map[i * 8 + 6] = (output->axis[i].profile_velocity) & 0x00ff;
       map[i * 8 + 7] = (output->axis[i].profile_velocity >> 8) & 0x00ff;
       map[i * 8 + 8] = (output->axis[i].profile_velocity >> 16) & 0x00ff;
@@ -229,7 +229,8 @@ namespace ar_control
                input->error_code, input->status_word,
                input->mode_of_operation_display, input->actual_position);
       }
-      if(!fault){
+      if (!fault)
+      {
         output->control_word = 0x80;
         usleep(10000);
       }
@@ -320,7 +321,8 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::dualMotorOn(T *input, U *output)
   {
-    for(size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++){
+    for (size_t i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
+    {
       output->axis[i].control_word |= 0x04;
     }
     writeOutputs(output);
@@ -343,7 +345,7 @@ namespace ar_control
                                                                                                 DualJointCyclicOutput *output);
 
   template void ArDriveClient::resetFaultDualJoint<DualJointProFileInput, DualJointProFileOutput>(DualJointProFileInput *input,
-                                                                                                DualJointProFileOutput *output);
+                                                                                                  DualJointProFileOutput *output);
 
   template void ArDriveClient::dualMotorOn<DualJointCyclicInput, DualJointCyclicOutput>(DualJointCyclicInput *input,
                                                                                         DualJointCyclicOutput *output);

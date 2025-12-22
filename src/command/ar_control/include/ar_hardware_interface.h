@@ -37,11 +37,11 @@ namespace ar_control
 
 		bool is_simulation; ///< Flag to indicate if the hardware is simulated
 		bool is_ui;			///< Flag to indicate if the UI is enabled
-		bool is_ecat;       ///< Flag to indicate if Igh EtherCAT Master is used
-		bool& b_quit_;		///< Reference to the quit flag
+		bool is_ecat;		///< Flag to indicate if Igh EtherCAT Master is used
+		bool &b_quit_;		///< Reference to the quit flag
 
 		std::vector<int> soem_drives; ///< SOEM slave IDs detected (1-based indices)
- 
+
 	private:
 		ArDrives ar_drives;						///< Holds all drive parameters and joint names
 		urdf::Model urdf_model;					///< URDF model of the robot
@@ -56,9 +56,9 @@ namespace ar_control
 		void readConfigFromYaml();
 		void launchControlServer();
 
-		int no_of_port_connected_ = 0;			   ///< Number of connected ports
+		int no_of_port_connected_ = 0; ///< Number of connected ports
 
 		master::EthercatManager *portManager; ///< Port manager for handling communication ports (SOEM)
-		master::IghManager *ighManager;       ///< IGH EtherCAT manager pointer
+		master::IghManager *ighManager;		  ///< IGH EtherCAT manager pointer
 	};
 } // namespace ar_control

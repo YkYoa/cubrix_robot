@@ -7,10 +7,10 @@ namespace ar_control
 {
 	using namespace std::placeholders;
 
-	ArControlServer::ArControlServer(ArHardwareInterface* robotArg, const rclcpp::NodeOptions& options)
+	ArControlServer::ArControlServer(ArHardwareInterface *robotArg, const rclcpp::NodeOptions &options)
 		: Node("ar_control_server", options)
 	{
-		robot		   = robotArg;
+		robot = robotArg;
 		planning_state = false;
 	}
 
@@ -29,13 +29,13 @@ namespace ar_control
 	{
 	}
 
-	rclcpp_action::GoalResponse ArControlServer::handle_goal(const rclcpp_action::GoalUUID& uuid,
-															   std::shared_ptr<const ArControlAction::Goal> goal)
+	rclcpp_action::GoalResponse ArControlServer::handle_goal(const rclcpp_action::GoalUUID &uuid,
+															 std::shared_ptr<const ArControlAction::Goal> goal)
 	{
 		printf(COLOR_GRAY "%s ArControlServer: Received goal request with action %d\n" COLOR_RESET, ar_utils::getCurrentTime().c_str(),
 			   goal->action);
 		fflush(stdout);
-		(void) uuid;
+		(void)uuid;
 		return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
 	}
 
@@ -43,7 +43,7 @@ namespace ar_control
 	{
 		printf(COLOR_GRAY "%s ArControlServer: Received request to cancel goal\n" COLOR_RESET, ar_utils::getCurrentTime().c_str());
 		fflush(stdout);
-		(void) goal_handle;
+		(void)goal_handle;
 		return rclcpp_action::CancelResponse::ACCEPT;
 	}
 
@@ -63,10 +63,12 @@ namespace ar_control
 		fflush(stdout);
 
 		auto result = std::make_shared<ArControlAction::Result>();
-		int status	= ControlErrorCode::FAILURE;
+		int status = ControlErrorCode::FAILURE;
 
-		switch(goal->action) {
-		case PLANNING: {
+		switch (goal->action)
+		{
+		case PLANNING:
+		{
 			planning_state = !goal->planning_group.empty();
 			printf(COLOR_CYAN "%s ArControlServer: Planning %s\n" COLOR_RESET, ar_utils::getCurrentTime().c_str(),
 				   planning_state ? ("started (" + goal->planning_group + ")...").c_str() : "finished ********");
@@ -74,30 +76,30 @@ namespace ar_control
 			status = ControlErrorCode::SUCCESS;
 			break;
 		}
-		// case SET_MOTOR_STATE: {
-		// 	for(size_t i = 0; i < goal->joint_names.size(); i++){
-		// 		const std::string& joint_name = goal->joint_names[i];
-		// 		bool cmd = goal->motor_states[i];
-		// 		int drive_id = goal->drive_id;
-		// 		int slave_id = goal->slave_id;
+			// case SET_MOTOR_STATE: {
+			// 	for(size_t i = 0; i < goal->joint_names.size(); i++){
+			// 		const std::string& joint_name = goal->joint_names[i];
+			// 		bool cmd = goal->motor_states[i];
+			// 		int drive_id = goal->drive_id;
+			// 		int slave_id = goal->slave_id;
 
-		// 		auto it = drive_map_.find(drive_id);
-		// 		if(it == drive_map_.end()){
-		// 			continue;
-		// 		}
+			// 		auto it = drive_map_.find(drive_id);
+			// 		if(it == drive_map_.end()){
+			// 			continue;
+			// 		}
 
-		// 		auto drive = it->second;
+			// 		auto drive = it->second;
 
-		// 		if(cmd){
-		// 			drive->motorOn();
-		// 		}else{
-		// 			drive->motorOff();
-		// 		}
-		// 	}
+			// 		if(cmd){
+			// 			drive->motorOn();
+			// 		}else{
+			// 			drive->motorOff();
+			// 		}
+			// 	}
 
-		// 	status = ControlErrorCode::SUCCESS;
-		// 	break;
-		// }
+			// 	status = ControlErrorCode::SUCCESS;
+			// 	break;
+			// }
 		}
 
 		result->status = status;
@@ -107,9 +109,9 @@ namespace ar_control
 		fflush(stdout);
 	}
 
-}  // namespace ar_control
+} // namespace ar_control
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	rclcpp::init(argc, argv);
 

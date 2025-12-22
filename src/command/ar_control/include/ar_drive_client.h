@@ -5,7 +5,7 @@
 
 namespace ar_control
 {
-    #define LEADSHINE_DRIVER_MAX_JOINT_COUNT 2
+#define LEADSHINE_DRIVER_MAX_JOINT_COUNT 2
 
     struct DriveInput
     {
@@ -25,7 +25,7 @@ namespace ar_control
         int32 touch_probe_1_positive_value;
         uint32 digital_inputs;
     };
-    
+
     struct SingleJointCyclicOutput : DriveOutput
     {
         uint16 control_word;
@@ -49,9 +49,7 @@ namespace ar_control
         uint16 touch_probe_status;
         int32 touch_probe_positive_value;
         uint32 digital_inputs;
-
     };
-
 
     struct DualJointCyclicInput : DriveInput
     {
@@ -86,50 +84,54 @@ namespace ar_control
     class ArDriveClient
     {
     public:
-        ArDriveClient(master::EthercatMasterInterface& manager, int slaveId);
-        ~ArDriveClient ();
+        ArDriveClient(master::EthercatMasterInterface &manager, int slaveId);
+        ~ArDriveClient();
 
-        void readInputs(SingleJointCyclicInput* input);
-        void readOutputs(SingleJointCyclicOutput* output);
-        void writeOutputs(SingleJointCyclicOutput* output);
+        void readInputs(SingleJointCyclicInput *input);
+        void readOutputs(SingleJointCyclicOutput *output);
+        void writeOutputs(SingleJointCyclicOutput *output);
 
-        void readInputs(DualJointCyclicInput* input);
-        void readOutputs(DualJointCyclicOutput* output);
-        void writeOutputs(DualJointCyclicOutput* output);
+        void readInputs(DualJointCyclicInput *input);
+        void readOutputs(DualJointCyclicOutput *output);
+        void writeOutputs(DualJointCyclicOutput *output);
 
-        void readInputs(DualJointProFileInput* input);
-        void readOutputs(DualJointProFileOutput* output);
-        void writeOutputs(DualJointProFileOutput* output);
+        void readInputs(DualJointProFileInput *input);
+        void readOutputs(DualJointProFileOutput *output);
+        void writeOutputs(DualJointProFileOutput *output);
 
+        template <typename T, typename U>
+        void resetFaultSingleJoint(T *input, U *output);
+        template <typename T, typename U>
+        void resetFaultDualJoint(T *input, U *output);
+        template <typename T, typename U>
+        void dualMotorOn(T *input, U *output);
+        template <typename T, typename U>
+        void singleMotorOn(T *input, U *output);
+        template <typename T, typename U>
+        void dualMotorOff(T *input, U *output);
+        template <typename T, typename U>
+        void singleMotorOff(T *input, U *output);
 
-        template <typename T, typename U> void resetFaultSingleJoint(T* input, U* output);
-        template <typename T, typename U> void resetFaultDualJoint(T* input, U* output);
-        template <typename T, typename U> void dualMotorOn(T* input, U* output);
-        template <typename T, typename U> void singleMotorOn(T* input, U* output);
-        template <typename T, typename U> void dualMotorOff(T* input, U* output);
-        template <typename T, typename U> void singleMotorOff(T* input, U* output);
-
-		inline master::EthercatMasterInterface& getManager()
-		{
-			return manager_;
-		}
+        inline master::EthercatMasterInterface &getManager()
+        {
+            return manager_;
+        }
 
         std::shared_ptr<master::DriverInfo> driver_info_;
 
     private:
-        master::EthercatMasterInterface& manager_;
+        master::EthercatMasterInterface &manager_;
         // Private members and methods
-        template <typename T> void ErrorHandling(const T* input);
+        template <typename T>
+        void ErrorHandling(const T *input);
 
         int input_map_size;
         int output_map_size;
 
-        const std::map<uint16_t, std::string>* error_maps;
+        const std::map<uint16_t, std::string> *error_maps;
         const int slave_id_;
     };
 
 }
-
-
 
 #endif

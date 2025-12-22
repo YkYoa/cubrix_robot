@@ -14,5 +14,6 @@ void Timing::MeasureTimeDifference()
 void Timing::OutInfoToFile()
 {
     std::ofstream outFile("loop_timing_info.txt");
-    for (const auto &e : timing_info_) outFile << e << "\n";
+    for (const auto &e : timing_info_)
+        outFile << e << "\n";
 }

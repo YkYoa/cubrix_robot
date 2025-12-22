@@ -38,15 +38,16 @@ double last_timestamp = 0;
 
 namespace ar_control
 {
-	CallbackReturn ArSystemHardware::on_init(const hardware_interface::HardwareInfo& info)
+	CallbackReturn ArSystemHardware::on_init(const hardware_interface::HardwareInfo &info)
 	{
-		if(hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS) {
+		if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
+		{
 			return CallbackReturn::ERROR;
 		}
 
 		robot_desc = info_.hardware_parameters["desc"];
-		is_simulation  = info_.hardware_parameters["sim"] == "False" ? false : true;
-		is_ui  = info_.hardware_parameters["ui"] == "False" ? false : true;
+		is_simulation = info_.hardware_parameters["sim"] == "False" ? false : true;
+		is_ui = info_.hardware_parameters["ui"] == "False" ? false : true;
 		is_ecat = info_.hardware_parameters["ecat"] == "False" ? false : true;
 		b_quit = false;
 
@@ -65,30 +66,34 @@ namespace ar_control
 					info_.hardware_parameters["ui"].c_str(),
 					is_ui,
 					info_.hardware_parameters["ecat"].c_str(),
-					is_ecat
-		);
+					is_ecat);
 		robot = std::make_shared<ArHardwareInterface>(comm_mutex, cond, lock, robot_desc, b_quit, is_simulation, is_ui, is_ecat);
 
-		for(const hardware_interface::ComponentInfo& joint : info_.joints) {
-			if(joint.command_interfaces.size() != 1) {
+		for (const hardware_interface::ComponentInfo &joint : info_.joints)
+		{
+			if (joint.command_interfaces.size() != 1)
+			{
 				RCLCPP_FATAL(rclcpp::get_logger("ArSystemHardware"), "Joint '%s' has %zu command interfaces found. 1 expected.",
 							 joint.name.c_str(), joint.command_interfaces.size());
 				return CallbackReturn::ERROR;
 			}
 
-			if(joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
+			if (joint.command_interfaces[0].name != hardware_interface::HW_IF_POSITION)
+			{
 				RCLCPP_FATAL(rclcpp::get_logger("ArSystemHardware"), "Joint '%s' have %s command interfaces found. '%s' expected.",
 							 joint.name.c_str(), joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
 				return CallbackReturn::ERROR;
 			}
 
-			if(joint.state_interfaces.size() != 1) {
+			if (joint.state_interfaces.size() != 1)
+			{
 				RCLCPP_FATAL(rclcpp::get_logger("ArSystemHardware"), COLOR_CYAN "Joint '%s' has %zu state interface. 1 expected.",
 							 joint.name.c_str(), joint.state_interfaces.size());
 				return CallbackReturn::ERROR;
 			}
 
-			if(joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION) {
+			if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
+			{
 				RCLCPP_FATAL(rclcpp::get_logger("ArSystemHardware"), "Joint '%s' have %s state interface. '%s' expected.",
 							 joint.name.c_str(), joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
 				return CallbackReturn::ERROR;
@@ -98,12 +103,14 @@ namespace ar_control
 		return CallbackReturn::SUCCESS;
 	}
 
-	CallbackReturn ArSystemHardware::on_configure(const rclcpp_lifecycle::State& /*previous_state*/)
+	CallbackReturn ArSystemHardware::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 	{
 		RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "Configuring...Please wait");
 
-		for(auto drive : robot->getDrives()) {
-			for(auto joint : drive.second->getJoints()) {
+		for (auto drive : robot->getDrives())
+		{
+			for (auto joint : drive.second->getJoints())
+			{
 				joint->joint_pos_cmd = joint->joint_pos;
 			}
 		}
@@ -117,8 +124,10 @@ namespace ar_control
 	{
 		std::vector<hardware_interface::StateInterface> state_interfaces;
 
-		for(auto drive : robot->getDrives()) {
-			for(auto joint : drive.second->getJoints()) {
+		for (auto drive : robot->getDrives())
+		{
+			for (auto joint : drive.second->getJoints())
+			{
 				// RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "export_state_interfaces %s", joint->joint_name.c_str());
 				state_interfaces.emplace_back(
 					hardware_interface::StateInterface(joint->joint_name, hardware_interface::HW_IF_POSITION, &joint->joint_pos));
@@ -134,8 +143,10 @@ namespace ar_control
 	{
 		std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-		for(auto drive : robot->getDrives()) {
-			for(auto joint : drive.second->getJoints()) {
+		for (auto drive : robot->getDrives())
+		{
+			for (auto joint : drive.second->getJoints())
+			{
 				// RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "export_command_interfaces %s", joint->joint_name.c_str());
 				command_interfaces.emplace_back(
 					hardware_interface::CommandInterface(joint->joint_name, hardware_interface::HW_IF_POSITION, &joint->joint_pos_cmd));
@@ -147,12 +158,14 @@ namespace ar_control
 		return command_interfaces;
 	}
 
-	CallbackReturn ArSystemHardware::on_activate(const rclcpp_lifecycle::State& /*previous_state*/)
+	CallbackReturn ArSystemHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/)
 	{
 		RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "Activating....Please wait");
 
-		for(auto drive : robot->getDrives()) {
-			for(auto joint : drive.second->getJoints()) {
+		for (auto drive : robot->getDrives())
+		{
+			for (auto joint : drive.second->getJoints())
+			{
 				joint->joint_pos_cmd = joint->joint_pos;
 			}
 		}
@@ -164,7 +177,7 @@ namespace ar_control
 		return CallbackReturn::SUCCESS;
 	}
 
-	CallbackReturn ArSystemHardware::on_deactivate(const rclcpp_lifecycle::State& /*previous_state*/)
+	CallbackReturn ArSystemHardware::on_deactivate(const rclcpp_lifecycle::State & /*previous_state*/)
 	{
 		RCLCPP_INFO(rclcpp::get_logger("ArSystemHardware"), "Deactivating...Please wait");
 		robot->shutdown();
@@ -174,25 +187,26 @@ namespace ar_control
 	}
 
 	bool first = true;
-	hardware_interface::return_type ArSystemHardware::read(const rclcpp::Time& time, const rclcpp::Duration& period)
+	hardware_interface::return_type ArSystemHardware::read(const rclcpp::Time &time, const rclcpp::Duration &period)
 	{
 		// boost::mutex::scoped_lock lock(control_mutex);
-		(void) time;
-		(void) period;
+		(void)time;
+		(void)period;
 		fflush(stdout);
 		robot->read();
 		return hardware_interface::return_type::OK;
 	}
 
-	hardware_interface::return_type ArSystemHardware::write(const rclcpp::Time& time, const rclcpp::Duration& period)
+	hardware_interface::return_type ArSystemHardware::write(const rclcpp::Time &time, const rclcpp::Duration &period)
 	{
-        (void) time;
-		(void) period;
-		
-		if(!is_simulation){
+		(void)time;
+		(void)period;
+
+		if (!is_simulation)
+		{
 			pthread_cond_wait(&cond, &lock);
 		}
-		
+
 		robot->write();
 		fflush(stdout);
 
@@ -214,13 +228,13 @@ namespace ar_control
 		pthread_cond_destroy(&cond);
 		pthread_mutex_destroy(&lock);
 
-		for(auto& mutex : comm_mutex) {
+		for (auto &mutex : comm_mutex)
+		{
 			mutex.reset();
 		}
-
 	}
 
-}  // namespace ar_control
+} // namespace ar_control
 
 #include "pluginlib/class_list_macros.hpp"
 

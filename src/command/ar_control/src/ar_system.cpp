@@ -189,12 +189,10 @@ namespace ar_control
         (void) time;
 		(void) period;
 		
-		// Wait for cyclic loop signal FIRST - this ensures we write when cyclic is ready to send
 		if(!is_simulation){
 			pthread_cond_wait(&cond, &lock);
 		}
 		
-		// Now write to PDO buffer - cyclic loop will send this data
 		robot->write();
 		fflush(stdout);
 
@@ -210,14 +208,14 @@ namespace ar_control
 
 	ArSystemHardware::~ArSystemHardware()
 	{
-		robot->shutdown(); // Call own shutdown method
+		robot->shutdown();
 		usleep(1000);
 
 		pthread_cond_destroy(&cond);
 		pthread_mutex_destroy(&lock);
 
 		for(auto& mutex : comm_mutex) {
-			mutex.reset();	// reset shared_ptr to release ownership
+			mutex.reset();
 		}
 
 	}

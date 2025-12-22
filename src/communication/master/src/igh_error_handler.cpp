@@ -11,8 +11,7 @@ IghErrorHandler::IghErrorHandler(IghManager* mgr)
     , error_thread_(0)
     , stop_flag_(false)
 {
-    // Note: slave_states_ will be initialized in startErrorMonitoring()
-    // because num_slaves_ is not known yet at construction time
+
 }
 
 IghErrorHandler::~IghErrorHandler()
@@ -74,7 +73,6 @@ void IghErrorHandler::errorHandlerLoop()
 {
     struct timespec cycle_start, cycle_end, last_cycle_start = {};
     
-    // Timing measurement variables
     uint32_t period_ns = 0, exec_ns = 0, latency_ns = 0;
     uint32_t period_min_ns = 0xFFFFFFFF, period_max_ns = 0;
     uint32_t exec_min_ns = 0xFFFFFFFF, exec_max_ns = 0;
@@ -88,14 +86,12 @@ void IghErrorHandler::errorHandlerLoop()
     while (!stop_flag_) {
         clock_gettime(CLOCK_MONOTONIC, &cycle_start);
         
-        // Calculate period (time between cycles)
         if (last_cycle_start.tv_sec != 0) {
             period_ns = DIFF_NS(last_cycle_start, cycle_start);
             if (period_ns < period_min_ns) period_min_ns = period_ns;
             if (period_ns > period_max_ns) period_max_ns = period_ns;
         }
         
-        // Monitor slaves
         for (int i = 0; i < manager_->num_slaves_; i++) {
             ec_slave_config_state_t slave_state;
             ecrt_slave_config_state(manager_->slave_[i].slave_config_, &slave_state);
@@ -113,7 +109,6 @@ void IghErrorHandler::errorHandlerLoop()
             }
         }
         
-        // Measure execution time
         clock_gettime(CLOCK_MONOTONIC, &cycle_end);
         exec_ns = DIFF_NS(cycle_start, cycle_end);
         if (exec_ns < exec_min_ns) exec_min_ns = exec_ns;
@@ -127,16 +122,15 @@ void IghErrorHandler::errorHandlerLoop()
             //        period_min_ns, period_max_ns, period_jitter_ns,
             //        exec_min_ns, exec_max_ns);
             
-            if (period_jitter_ns > 5000000) { // 5ms jitter
+            if (period_jitter_ns > 5000000) {
                 printf(COLOR_YELLOW "[IGH Error Handler WARNING] High period jitter: %u ns (%.2f ms)\n" COLOR_RESET,
                        period_jitter_ns, period_jitter_ns / 1e6);
             }
-            if (exec_max_ns > 15000000) { // 15ms execution time (out of 20ms interval)
+            if (exec_max_ns > 15000000) {
                 printf(COLOR_RED "[IGH Error Handler WARNING] High execution time: %u ns (%.2f ms)\n" COLOR_RESET,
                        exec_max_ns, exec_max_ns / 1e6);
             }
             
-            // Reset statistics for next interval
             period_min_ns = exec_min_ns = 0xFFFFFFFF;
             period_max_ns = exec_max_ns = 0;
         }

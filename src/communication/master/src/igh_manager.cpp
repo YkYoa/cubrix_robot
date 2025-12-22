@@ -74,7 +74,7 @@ void IghManager::getAllSlavesInfo()
     }
     
     printf("Configured slave info for %d slaves\n", num_slaves);
-    num_slaves_ = num_slaves;  // Store for later use
+    num_slaves_ = num_slaves;
 }
 
 int IghManager::configSlaves()
@@ -405,7 +405,6 @@ int IghManager::shutdown()
 {
     stop_flag_ = true;
     
-    // Stop error monitoring first
     if(error_handler_) {
         error_handler_->stopErrorMonitoring();
     }
@@ -509,10 +508,6 @@ void IghManager::configDcSync(uint16_t assign_activated, int position)
                             assign_activated, PERIOD_NS, 0, 0, 0);
     }
 }
-
-// ============================================================================
-// Cyclic Communication Implementation
-// ============================================================================
 
 void* IghManager::cyclicThread(void* arg)
 {
@@ -641,10 +636,6 @@ void IghManager::stopCyclicCommunication()
         printf("IGH cyclic communication stopped\n");
     }
 }
-
-// ============================================================================
-// PDO Data Access Methods (match EthercatManager API)
-// ============================================================================
 
 void IghManager::write(int slave_no, uint8_t channel, uint8_t value)
 {    

@@ -101,13 +101,13 @@ typedef struct
     uint32_t error_code;                            ///< Error code
 } SDO_data;
 
-typedef enum OpMode
+enum OpMode
 {
     ProFilePosition = 1,
     CyclicPosition = 8,
 };
 
-typedef struct DataReceived
+struct DataReceived
 {
     uint16_t com_status;
     std::vector<int32_t> target_pos;

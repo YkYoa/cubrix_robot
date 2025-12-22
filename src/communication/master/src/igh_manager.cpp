@@ -662,13 +662,23 @@ uint8_t IghManager::readOutput(int slave_no, uint8_t channel) const
 
 int IghManager::getInputBits(int slave_no) const
 {
-    if(slave_no <= 2) return 152;
-    return 304; 
+    // 2CL3 dual-axis: 38 bytes (304 bits) = 2 x 19 bytes per axis
+    // CS3E single-axis: 19 bytes (152 bits)
+    std::string name(slave_[slave_no].slave_info_.name);
+    if(name.find("2CL3") != std::string::npos) {
+        return 304;  // Dual-axis: 19 bytes * 2 = 38 bytes = 304 bits
+    }
+    return 152;  // Single-axis: 19 bytes = 152 bits
 }
 
 int IghManager::getOutputBits(int slave_no) const
 {
-    if(slave_no <= 2) return 64;
-    return 128;
+    // 2CL3 dual-axis: 16 bytes (128 bits) = 2 x 8 bytes per axis
+    // CS3E single-axis: 8 bytes (64 bits)
+    std::string name(slave_[slave_no].slave_info_.name);
+    if(name.find("2CL3") != std::string::npos) {
+        return 128;  // Dual-axis: 8 bytes * 2 = 16 bytes = 128 bits
+    }
+    return 64;  // Single-axis: 8 bytes = 64 bits
 }
 

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<root BTCPP_format="4">
+  <BehaviorTree ID="VelocityControlExample">
+    <Sequence name="ControlledMotion">
+      <!-- Configure planner -->
+      <SetPlanner pipeline="pilz" planner="PTP"/>
+      
+      <!-- Set velocity to 30% speed -->
+      <SetVelocityScaling factor="0.3"/>
+      
+      <!-- Set acceleration to 50% -->
+      <SetAccelerationScaling factor="0.5"/>
+      
+      <!-- Slow motion to position 1 -->
+      <MoveToJoint target_joints="0;0.5;-0.5;0;0;0" name="SlowMove"/>
+      
+      <!-- Increase speed to 80% -->
+      <SetVelocityScaling factor="0.8"/>
+      <SetAccelerationScaling factor="0.8"/>
+      
+      <!-- Faster motion to position 2 -->
+      <MoveToJoint target_joints="0.5;0;-0.5;0;0;0" name="FastMove"/>
+      
+      <!-- Return to home at moderate speed -->
+      <SetVelocityScaling factor="0.5"/>
+      <SetAccelerationScaling factor="0.5"/>
+      <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

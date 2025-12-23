@@ -9,13 +9,30 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <build_depend>rosidl_default_generators</build_depend>
+
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
+  <depend>rviz_common</depend>
+  <depend>pluginlib</depend>
+  <depend>qt5</depend>
+  <depend>yaml-cpp</depend>
+  <depend>ament_index_cpp</depend>
+  <depend>ar_msgs</depend>
+  <depend>ar_srv</depend>
+  <depend>ar_common</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>moveit_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
   <export>
+    <rviz_common plugin="${prefix}/plugin_description.xml"/>
     <build_type>ament_cmake</build_type>
   </export>
 </package>

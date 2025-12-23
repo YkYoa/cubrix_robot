@@ -15,6 +15,8 @@ find_package(pluginlib REQUIRED)
 find_package(moveit_msgs REQUIRED)
 find_package(geometric_shapes REQUIRED)
 find_package(tf2_eigen REQUIRED)
+find_package(ar_planning_interface REQUIRED)
+find_package(ar_common REQUIRED)
 
 # Only needed if you use pluginlib in your .cpp
 # find_package(pluginlib REQUIRED)
@@ -26,11 +28,16 @@ include_directories(
 
 
 # build library
-add_library(ar_motion_planner
+add_library(ar_motion_planner_lib
   src/ar_motion_planner.cpp
 )
 
-ament_target_dependencies(ar_motion_planner
+target_include_directories(ar_motion_planner_lib PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(ar_motion_planner_lib
   rclcpp
   moveit_core
   moveit_ros_planning
@@ -38,14 +45,36 @@ ament_target_dependencies(ar_motion_planner
   moveit_msgs
   geometric_shapes
   tf2_eigen
+  ar_planning_interface
+)
+
+# build executable
+add_executable(ar_motion_planner_node
+  src/ar_motion_planner.cpp
+)
+
+target_include_directories(ar_motion_planner_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(ar_motion_planner_node
+  rclcpp
+  moveit_core
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  moveit_msgs
+  geometric_shapes
+  tf2_eigen
+  ar_planning_interface
 )
 
 
-# install library
-install(TARGETS ar_motion_planner
+# install library and executable
+install(TARGETS ar_motion_planner_lib ar_motion_planner_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 # install headers
@@ -56,7 +85,7 @@ install(DIRECTORY
 
 # install config
 install(FILES
-  config/ar_motion_planner.yaml
+  config/motion_planner_params.yaml
   DESTINATION share/${PROJECT_NAME}/config
 )
 
@@ -69,9 +98,9 @@ if(BUILD_TESTING)
 
   ament_add_gtest(ar_motion_planner_test test/ar_motion_planner_test.cpp)
   if(TARGET ar_motion_planner_test)
-    target_link_libraries(ar_motion_planner_test ar_motion_planner)
+    target_link_libraries(ar_motion_planner_test ar_motion_planner_lib)
     ament_target_dependencies(ar_motion_planner_test
-      rclcpp moveit_core moveit_msgs geometric_shapes tf2_eigen
+      rclcpp moveit_core moveit_msgs geometric_shapes tf2_eigen ar_planning_interface
     )
   endif()
 endif()

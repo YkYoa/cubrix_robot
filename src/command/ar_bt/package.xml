@@ -1,22 +1,23 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ar_motion_planner</name>
+  <name>ar_bt</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="hans@todo.todo">hans</maintainer>
+  <maintainer email="haonghuypham6801@gmail.com">hans</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>moveit_core</depend>
-  <depend>pluginlib</depend>
-  <depend>moveit_msgs</depend>
-  <depend>geometric_shapes</depend>
-  <depend>tf2_eigen</depend>
-  <depend>ar_planning_interface</depend>
-
+  <depend>ar_common</depend>
+  <depend>ar_utils</depend>
+  <depend>ar_computation</depend>
+  <depend>ar_msgs</depend>
+  <depend>ar_srv</depend>
+  <depend>ar_action</depend>
+  <depend>ar_motion_planner</depend>
+  <depend>behaviortree_cpp</depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 

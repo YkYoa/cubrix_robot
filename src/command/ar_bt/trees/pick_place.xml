@@ -1,0 +1,41 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="PickPlaceSequence">
+    <Sequence name="PickPlace">
+      <!-- Configure planner with blending for smooth motion -->
+      <SetPlanner pipeline="pilz" planner="PTP"/>
+      <SetBlendRadius radius="0.01"/>
+      
+      <!-- Move to home -->
+      <MoveToJoint target_joints="0;0;0;0;0;0" name="Home"/>
+      
+      <!-- Approach pick position -->
+      <MoveToJoint target_joints="0;-0.3;-0.8;0;-0.5;0" name="ApproachPick"/>
+      
+      <!-- Move to pick position -->
+      <MoveToJoint target_joints="0;-0.5;-0.8;0;-0.3;0" name="Pick"/>
+      
+      <!-- Gripper close would go here -->
+      <Delay delay_msec="500">
+        <AlwaysSuccess/>
+      </Delay>
+      
+      <!-- Retreat from pick -->
+      <MoveToJoint target_joints="0;-0.3;-0.8;0;-0.5;0" name="RetreatPick"/>
+      
+      <!-- Move to approach place -->
+      <MoveToJoint target_joints="0;0.3;-0.8;0;-0.5;0" name="ApproachPlace"/>
+      
+      <!-- Move to place position -->
+      <MoveToJoint target_joints="0;0.5;-0.8;0;-0.3;0" name="Place"/>
+      
+      <!-- Gripper open would go here -->
+      <Delay delay_msec="500">
+        <AlwaysSuccess/>
+      </Delay>
+      
+      <!-- Retreat and return home -->
+      <MoveToJoint target_joints="0;0.3;-0.8;0;-0.5;0" name="RetreatPlace"/>
+      <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

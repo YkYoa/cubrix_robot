@@ -1,3 +1,0 @@
-ar_motion_planner:
-  planning_plugins:
-    - ar_motion_planner/ArMotionPlanner

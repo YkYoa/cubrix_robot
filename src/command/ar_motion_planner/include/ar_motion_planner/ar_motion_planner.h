@@ -1,62 +1,54 @@
-#ifndef __AR_MOTION_PLANNER_H__
-#define __AR_MOTION_PLANNER_H__
+#ifndef AR_MOTION_PLANNER__AR_MOTION_PLANNER_H_
+#define AR_MOTION_PLANNER__AR_MOTION_PLANNER_H_
 
-#include <moveit/planning_scene/planning_scene.h>
-#include <moveit/planning_interface/planning_response.h>
-#include <moveit/planning_interface/planning_interface.h>
-
-
-#include <pluginlib/class_loader.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <ar_planning_interface/ar_planning_interface.h>
+#include <moveit_msgs/srv/get_motion_plan.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <std_srvs/srv/trigger.hpp>
+#include <memory>
+#include <thread>
 
 namespace ar_motion_planner
 {
 
-class ArPlanningContext : public planning_interface::PlanningContext
+class MotionPlanner : public rclcpp::Node
 {
 public:
-  ArPlanningContext(const std::string& name, const std::string& group);
-
-  bool solve(planning_interface::MotionPlanResponse& res) override;
-
-  bool solve(planning_interface::MotionPlanDetailedResponse& res, const planning_interface::PlannerTerminationCallback& callback) override;
-
-  bool terminate() override;
-
-  void clear() override;
-};
-
-class ArMotionPlanner : public planning_interface::PlannerManager
-{
-public:
-  ArMotionPlanner();
-
-  bool initialize(const moveit::core::RobotModelConstPtr& model, const std::string& package_path) override;
-
-  bool canHandleRequest(const planning_interface::MotionPlanRequest& req, moveit_msgs::msg::MoveItErrorCodes& error_code) const override;
-
-  std::string getDescription() const override
-  {
-    return "AR Motion Planner";
-  }
-
-  void getCapabilities(planning_interface::PlannerManager::Capabilities& cap) const override;
-
-  planning_interface::PlanningContextPtr getPlanningContext(const planning_scene::PlanningSceneConstPtr& scene,
-                                                            const planning_interface::MotionPlanRequest& req,
-                                                            moveit_msgs::msg::MoveItErrorCodes& error_code) const override;
-
-  void setPlannerConfigurations(const planning_interface::PlannerConfigurationMap& pcs) override;
-
-  void setNode(rclcpp::Node::SharedPtr node) override
-  {
-    node_ = node;
-  }
+  MotionPlanner();
+  ~MotionPlanner();
 
 private:
-  rclcpp::Node::SharedPtr node_;
-  moveit::core::RobotModelConstPtr robot_model_;
+  void initializeParameters();
+  void initializeServices();
+  void spinThread();
+  
+  // Service callbacks
+  void planCallback(
+    const std::shared_ptr<moveit_msgs::srv::GetMotionPlan::Request> request,
+    std::shared_ptr<moveit_msgs::srv::GetMotionPlan::Response> response);
+  
+  // Parameter callback
+  rcl_interfaces::msg::SetParametersResult parametersCallback(
+    const std::vector<rclcpp::Parameter>& parameters);
+
+  // Members
+  std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface_;
+  rclcpp::Service<moveit_msgs::srv::GetMotionPlan>::SharedPtr plan_service_;
+  
+  std::shared_ptr<std::thread> spin_thread_;
+  std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> executor_;
+  
+  // Parameters
+  std::string planning_group_;
+  std::string planning_pipeline_;
+  std::string planner_id_;
+  double velocity_scaling_;
+  double acceleration_scaling_;
+  
+  OnSetParametersCallbackHandle::SharedPtr param_callback_handle_;
 };
 
 } // namespace ar_motion_planner
 
-#endif // __AR_MOTION_PLANNER_H__
+#endif // AR_MOTION_PLANNER__AR_MOTION_PLANNER_H_

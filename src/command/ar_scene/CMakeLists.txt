@@ -9,6 +9,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(rviz_common REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(ar_srv REQUIRED)
+find_package(ar_msgs REQUIRED)
+find_package(ar_common REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -21,5 +28,30 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+find_package(moveit_ros_planning_interface REQUIRED)
+find_package(moveit_msgs REQUIRED)
+
+add_library(ar_scene SHARED
+  src/ar_mesh_server.cpp
+  src/ar_scene_manager.cpp
+)
+
+target_include_directories(ar_scene PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+
+ament_target_dependencies(ar_scene
+  rclcpp
+  ament_index_cpp
+  moveit_ros_planning_interface
+  moveit_msgs
+  ar_msgs
+)
+
+install(DIRECTORY include/
+  DESTINATION include/${PROJECT_NAME}
+)
 
 ament_package()

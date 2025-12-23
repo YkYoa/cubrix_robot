@@ -1,0 +1,7 @@
+ar_motion_planner:
+  ros__parameters:
+    planning_group: "Arm"
+    planning_pipeline: "ompl"
+    planner_id: "RRTConnect"
+    velocity_scaling: 0.5
+    acceleration_scaling: 0.5

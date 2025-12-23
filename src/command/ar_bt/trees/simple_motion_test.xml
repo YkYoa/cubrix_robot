@@ -1,0 +1,37 @@
+<root BTCPP_format="4">
+  <BehaviorTree ID="SimpleMotionTest">
+    <Sequence name="TestSequence">
+      <!-- Configure PILZ planner -->
+      <SetPlanner pipeline="pilz" planner="PTP"/>
+      
+      <!-- Move to home position (all zeros) -->
+      <MoveToJoint target_joints="0;0;0;0;0;0" name="MoveToHome"/>
+      
+      <!-- Wait a bit -->
+      <Delay delay_msec="1000">
+        <AlwaysSuccess/>
+      </Delay>
+
+      <!-- Set velocity to 30% speed -->
+      <SetVelocityScaling factor="0.3"/>
+      
+      <!-- Set acceleration to 50% -->
+      <SetAccelerationScaling factor="0.5"/>
+
+      
+      <!-- Move to a different position -->
+      <MoveToJoint target_joints="0;0.5;-0.5;0;0;0" name="MoveToPosition1"/>
+      <MoveToJoint target_joints="0.5;0;-0.5;0;0;0" name="MoveToPosition2"/>
+      <MoveToJoint target_joints="0;0.5;-0.5;0;0;0.5" name="MoveToPosition3"/>
+      <MoveToJoint target_joints="0;0.5;-0.5;0;0;-0.5" name="MoveToPosition4"/>
+      
+      <!-- Wait -->
+      <Delay delay_msec="1000">
+        <AlwaysSuccess/>
+      </Delay>
+      
+      <!-- Return home -->
+      <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

@@ -19,7 +19,6 @@ find_package(tf2_eigen REQUIRED)
 find_package(ar_common REQUIRED)
 
 set(SRC_FILES
-  src/planning_base.cpp
   src/planning_interface.cpp
 )
 
@@ -29,31 +28,47 @@ include_directories(
 )
 
 add_library(ar_planning_interface
-  src/planning_base.cpp
   src/ar_planning_interface.cpp
 )
 
-target_link_libraries(ar_planning_interface
-  ${rclcpp_LIBRARIES}
-  ${moveit_ros_planning_interface_LIBRARIES}
-  ${moveit_core_LIBRARIES}
-  ${moveit_ros_planning_LIBRARIES}
-  ${moveit_visual_tools_LIBRARIES}
-  ${moveit_msgs_LIBRARIES}
-  ${geometric_shapes_LIBRARIES}
-  ${tf2_eigen_LIBRARIES}
-  ${ar_common_LIBRARIES}
+target_include_directories(ar_planning_interface PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(ar_planning_interface
+  rclcpp
+  moveit_ros_planning_interface
+  moveit_core
+  moveit_ros_planning
+  moveit_visual_tools
+  moveit_msgs
+  geometric_shapes
+  tf2_eigen
+  ar_common
 )
 
 install(TARGETS ar_planning_interface
+  EXPORT ar_planning_interface_targets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
 
 install(DIRECTORY
-  include/ar_planning_interface/
+  include/
   DESTINATION include
+)
+
+# install test configs and launch files
+install(DIRECTORY
+  test/config/
+  DESTINATION share/${PROJECT_NAME}/test/config
+)
+
+install(DIRECTORY
+  test/launch/
+  DESTINATION share/${PROJECT_NAME}/test/launch
 )
 
 set(DEPENDS
@@ -67,30 +82,55 @@ set(DEPENDS
   tf2_eigen
 )
 
-# if(BUILD_TESTING)
-#   find_package(ament_lint_auto REQUIRED)
-#   # the following line skips the linter which checks for copyrights
-#   # comment the line when a copyright and license is added to all source files
-#   set(ament_cmake_copyright_FOUND TRUE)
-#   # the following line skips cpplint (only works in a git repo)
-#   # comment the line when this package is in a git repo and when
-#   # a copyright and license is added to all source files
-#   set(ament_cmake_cpplint_FOUND TRUE)
-#   ament_lint_auto_find_test_dependencies()
+# Build test executable
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  find_package(ament_cmake_gtest REQUIRED)
+  
+  set(ament_cmake_copyright_FOUND TRUE)
+  set(ament_cmake_cpplint_FOUND TRUE)
+  ament_lint_auto_find_test_dependencies()
 
-#   add_executable(ar_planning_interface_test test/ar_planning_interface_test.cpp)
-#   ament_target_dependencies(ar_planning_interface_test rclcpp moveit_core moveit_msgs moveit_ros_planning_interface geometric_shapes tf2_eigen ar_common)
-#   target_link_libraries(ar_planning_interface_test ar_planning_interface)
+  # Build interactive test executable
+  add_executable(ar_planning_interface_test_node test/ar_planning_interface_test.cpp)
+  
+  target_include_directories(ar_planning_interface_test_node PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+  
+  ament_target_dependencies(ar_planning_interface_test_node 
+    rclcpp 
+    moveit_core 
+    moveit_msgs 
+    moveit_ros_planning_interface 
+    geometric_shapes 
+    tf2_eigen 
+    ar_common
+  )
+  
+  target_link_libraries(ar_planning_interface_test_node ar_planning_interface)
 
-#   install(TARGETS ar_planning_interface_test
-#     DESTINATION lib/${PROJECT_NAME}
-#   )
-
-#   ament_auto_add_test(ar_planning_interface_test ar_planning_interface_test)
-# endif()
+  install(TARGETS ar_planning_interface_test_node
+    DESTINATION lib/${PROJECT_NAME}
+  )
+endif()
 
 
 
 
+ament_export_targets(ar_planning_interface_targets HAS_LIBRARY_TARGET)
+ament_export_include_directories(include)
+
+ament_export_dependencies(
+  rclcpp
+  moveit_ros_planning_interface
+  moveit_core
+  moveit_ros_planning
+  moveit_visual_tools
+  moveit_msgs
+  geometric_shapes
+  tf2_eigen
+)
 
 ament_package()

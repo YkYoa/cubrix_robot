@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<root BTCPP_format="4">
+  <TreeNodesModel>
+    <!-- AR Motion Nodes -->
+    <Action ID="MoveToJoint">
+      <input_port name="target_joints" type="std::vector&lt;double&gt;">Target joint values (semicolon-separated)</input_port>
+    </Action>
+    
+    <Action ID="PlanToJoint">
+      <input_port name="target_joints" type="std::vector&lt;double&gt;">Target joint values</input_port>
+      <output_port name="success" type="bool">Planning succeeded</output_port>
+    </Action>
+    
+    <Action ID="PlanToPose">
+      <input_port name="target_pose" type="geometry_msgs::msg::PoseStamped">Target pose</input_port>
+      <output_port name="success" type="bool">Planning succeeded</output_port>
+    </Action>
+    
+    <Action ID="SetPlanner">
+      <input_port name="pipeline" type="std::string" default="ompl">Planning pipeline (ompl/pilz)</input_port>
+      <input_port name="planner" type="std::string" default="RRTConnect">Planner ID</input_port>
+    </Action>
+    
+    <Action ID="SetBlendRadius">
+      <input_port name="radius" type="double" default="0.0">Blend radius in meters</input_port>
+    </Action>
+  </TreeNodesModel>
+</root>

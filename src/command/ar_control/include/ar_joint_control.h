@@ -24,6 +24,7 @@ namespace ar_control
         double upper_limit;          ///< Upper limit for the joint
         double lower_limit;          ///< Lower limit for the joint
         double pulse_per_revolution; ///< Pulse per revolution for the joint
+        double pulley_ratio;         ///< External pulley/belt reduction ratio (default 1.0)
 
         double joint_pos_cmd; ///< Pos Command for the joint
         double joint_pos;     ///< Position of the joint

@@ -31,20 +31,20 @@ Arm_controller:
           stopped_velocity_tolerance: 0.02
           goal_time: 1.0
           Arm_joint1:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01
           Arm_joint2:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01
           Arm_joint3:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01
           Arm_joint4:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01
           Arm_joint5:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01
           Arm_joint6:
-            trajectory: 0.3
+            trajectory: 0.35
             goal: 0.01

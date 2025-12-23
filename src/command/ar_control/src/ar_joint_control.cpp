@@ -9,6 +9,7 @@ namespace ar_control
         upper_limit(0.0),
         lower_limit(0.0),
         pulse_per_revolution(1.0),
+        pulley_ratio(1.0),
         joint_pos_cmd(0.0),
         joint_pos(0.0),
         joint_vel(0.0),

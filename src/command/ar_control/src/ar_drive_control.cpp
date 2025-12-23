@@ -91,13 +91,22 @@ namespace ar_control
 
         if (jointParam.gear_ratio && jointParam.encoder_res)
         {
-            joint->pulse_per_revolution = jointParam.gear_ratio * jointParam.encoder_res;
+            if (jointParam.joint_name == "Arm_joint1")
+            {
+                joint->pulley_ratio = 60.0 / 15.0;
+            }
+            else
+            {
+                joint->pulley_ratio = 1.0;
+            }
+
+            joint->pulse_per_revolution = jointParam.gear_ratio * joint->pulley_ratio * jointParam.encoder_res;
             if (!joint->rev_angle_convert_mode)
             {
                 joint->pulse_per_revolution /= (2 * M_PI);
             }
-            printf("\n [Ar Drive Control ]Joint '%s' gear ratio: %d, encoder resolution: %d, pulse per rev: %5.1f",
-                   jointParam.joint_name.c_str(), jointParam.gear_ratio, jointParam.encoder_res, joint->pulse_per_revolution);
+            printf("\n [Ar Drive Control] Joint '%s' gear ratio: %d, pulley ratio: %.2f, encoder res: %d, pulse per rev: %5.1f",
+                   jointParam.joint_name.c_str(), jointParam.gear_ratio, joint->pulley_ratio, jointParam.encoder_res, joint->pulse_per_revolution);
         }
 
         printf("Joint '%s' added on drive %d, encoder offset: %d",

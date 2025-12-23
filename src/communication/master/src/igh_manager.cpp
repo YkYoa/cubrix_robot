@@ -285,8 +285,6 @@ int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
         // Store base offsets (first entry of each PDO type)
         slave.base_output_offset_ = slave.offset_.control_word;
         slave.base_input_offset_ = slave.offset_.error_code;
-        printf(COLOR_BLUE "DEBUG: Slave %d base_output_offset_=%u, base_input_offset_=%u\n" COLOR_RESET,
-               position, slave.base_output_offset_, slave.base_input_offset_);
     }
 
     return 0;

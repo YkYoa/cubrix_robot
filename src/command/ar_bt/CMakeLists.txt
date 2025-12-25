@@ -49,7 +49,7 @@ ament_target_dependencies(ar_bt_nodes
   ar_common
 )
 
-# BT Executor Node
+# BT Executor Node (one-shot execution)
 add_executable(bt_executor_node
   src/bt_executor_node.cpp
 )
@@ -69,6 +69,27 @@ target_link_libraries(bt_executor_node
   ar_bt_nodes
 )
 
+# BT Server Node (continuous, accepts commands from RViz UI)
+add_executable(bt_server_node
+  src/bt_server_node.cpp
+)
+
+target_include_directories(bt_server_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+ament_target_dependencies(bt_server_node
+  rclcpp
+  behaviortree_cpp_v3
+  ar_planning_interface
+  std_msgs
+)
+
+target_link_libraries(bt_server_node
+  ar_bt_nodes
+)
+
 # Install
 install(TARGETS ar_bt_nodes
   EXPORT ar_bt_nodes_targets
@@ -77,7 +98,7 @@ install(TARGETS ar_bt_nodes
   RUNTIME DESTINATION bin
 )
 
-install(TARGETS bt_executor_node
+install(TARGETS bt_executor_node bt_server_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

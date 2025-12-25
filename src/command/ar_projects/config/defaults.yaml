@@ -1,0 +1,26 @@
+# Global Defaults Configuration
+# These settings are applied to ALL projects unless overridden
+
+# Default motion parameters
+defaults:
+  velocity_scaling: 0.5
+  acceleration_scaling: 0.5
+  
+  # Default planner configuration
+  planner:
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+# Default planning group
+planning_group: "Arm"
+
+# Execution settings
+execution:
+  # Wait for motion to complete before next action
+  wait_for_completion: true
+  
+  # Timeout in seconds for each motion
+  timeout: 30.0
+  
+  # Retry count on failure
+  retry_count: 0

@@ -25,8 +25,9 @@ source install/setup.bash
 
 ## Quick Start
 
-### 1. Launch MoveIt
+### 1. Launch Bringup/MoveIt
 ```bash
+ros2 launch ar_control ar_bringup.launch.py desc:=<your_robot>
 ros2 launch ar_control ar_moveit.launch.py desc:=<your_robot>
 ```
 

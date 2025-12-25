@@ -1,0 +1,70 @@
+# Simple Demo Motion Sequence
+# A basic test sequence for verification
+
+project:
+  name: "demo_sequence"
+  description: "Simple test sequence for verification"
+  
+  # Motion types used by this project
+  motion_types:
+    - move_joint
+    - delay
+    - set_planner
+    - set_velocity
+    - set_acceleration
+
+defaults:
+  velocity_scaling: 0.5
+  acceleration_scaling: 0.5
+  planner:
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+waypoints:
+  home:
+    joints: [0, 0, 0, 0, 0, 0]
+  position_1:
+    joints: [0.5, 0.3, -0.5, 0, 0, 0]
+  position_2:
+    joints: [-0.5, 0.3, -0.5, 0, 0, 0]
+
+sequence:
+  # Initial configuration
+  - type: "set_planner"
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+  - type: "set_velocity"
+    factor: 0.5
+
+  - type: "set_acceleration"
+    factor: 0.5
+
+  # Motion sequence
+  - type: "move_joint"
+    waypoint: "home"
+    name: "GoHome"
+
+  - type: "delay"
+    duration_ms: 200
+    name: "Pause1"
+
+  - type: "move_joint"
+    waypoint: "position_1"
+    name: "MoveToPos1"
+
+  - type: "delay"
+    duration_ms: 200
+    name: "Pause2"
+
+  - type: "move_joint"
+    waypoint: "position_2"
+    name: "MoveToPos2"
+
+  - type: "delay"
+    duration_ms: 200
+    name: "Pause3"
+
+  - type: "move_joint"
+    waypoint: "home"
+    name: "ReturnHome"

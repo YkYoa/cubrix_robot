@@ -3,7 +3,6 @@
 namespace ar_bt
 {
 
-// === ARBTActionNode Base === 
 
 ARBTActionNode::ARBTActionNode(const std::string& name, const BT::NodeConfiguration& config,
                                rclcpp::Node::SharedPtr node,
@@ -14,7 +13,6 @@ ARBTActionNode::ARBTActionNode(const std::string& name, const BT::NodeConfigurat
 {
 }
 
-// === PlanToJoint ===
 
 PlanToJoint::PlanToJoint(const std::string& name, const BT::NodeConfiguration& config,
                          rclcpp::Node::SharedPtr node,
@@ -120,7 +118,6 @@ void PlanToPose::onHalted()
   RCLCPP_INFO(node_->get_logger(), "PlanToPose: Halted");
 }
 
-// === MoveToJoint ===
 
 MoveToJoint::MoveToJoint(const std::string& name, const BT::NodeConfiguration& config,
                          rclcpp::Node::SharedPtr node,
@@ -177,7 +174,6 @@ void MoveToJoint::onHalted()
   RCLCPP_INFO(node_->get_logger(), "MoveToJoint: Halted");
 }
 
-// === SetPlanner ===
 
 SetPlanner::SetPlanner(const std::string& name, const BT::NodeConfiguration& config,
                        std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface)
@@ -205,7 +201,6 @@ BT::NodeStatus SetPlanner::tick()
   return BT::NodeStatus::SUCCESS;
 }
 
-// === SetBlendRadius ===
 
 SetBlendRadius::SetBlendRadius(const std::string& name, const BT::NodeConfiguration& config,
                                std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface)
@@ -228,8 +223,6 @@ BT::NodeStatus SetBlendRadius::tick()
   return BT::NodeStatus::SUCCESS;
 }
 
-// === SetVelocityScaling ===
-
 SetVelocityScaling::SetVelocityScaling(const std::string& name, const BT::NodeConfiguration& config,
                                        std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface)
 : BT::SyncActionNode(name, config)
@@ -250,8 +243,6 @@ BT::NodeStatus SetVelocityScaling::tick()
   planning_interface_->setVelocityScaling(std::clamp(factor, 0.0, 1.0));
   return BT::NodeStatus::SUCCESS;
 }
-
-// === SetAccelerationScaling ===
 
 SetAccelerationScaling::SetAccelerationScaling(const std::string& name, const BT::NodeConfiguration& config,
                                                std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface)
@@ -274,8 +265,6 @@ BT::NodeStatus SetAccelerationScaling::tick()
   return BT::NodeStatus::SUCCESS;
 }
 
-// === ExecutePlan (placeholder) ===
-
 ExecutePlan::ExecutePlan(const std::string& name, const BT::NodeConfiguration& config,
                          rclcpp::Node::SharedPtr node,
                          std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface)
@@ -293,7 +282,6 @@ BT::PortsList ExecutePlan::providedPorts()
 
 BT::NodeStatus ExecutePlan::onStart()
 {
-  // Note: This is a simplified version - in practice you'd get the plan from blackboard
   RCLCPP_WARN(node_->get_logger(), "ExecutePlan: Use MoveToJoint instead for now");
   return BT::NodeStatus::SUCCESS;
 }
@@ -307,8 +295,6 @@ void ExecutePlan::onHalted()
 {
   execution_done_ = false;
 }
-
-// === Registration ===
 
 void registerARBTNodes(BT::BehaviorTreeFactory& factory,
                        rclcpp::Node::SharedPtr node,

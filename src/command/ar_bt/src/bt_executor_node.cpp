@@ -49,22 +49,18 @@ int main(int argc, char** argv)
 
   RCLCPP_INFO(node->get_logger(), "Loading behavior tree from: %s", tree_path.c_str());
 
-  // Wait a bit for MoveIt to be ready
   rclcpp::sleep_for(std::chrono::seconds(2));
 
-  // Create planning interface
   auto planning_interface = std::make_shared<ar_planning_interface::ArPlanningInterface>(
     node, planning_group);
 
   RCLCPP_INFO(node->get_logger(), "Planning interface ready for group: %s", planning_group.c_str());
 
-  // Create BT factory and register nodes
   BT::BehaviorTreeFactory factory;
   ar_bt::registerARBTNodes(factory, node, planning_interface);
 
   RCLCPP_INFO(node->get_logger(), "Registered AR BT nodes");
 
-  // Load and create tree
   BT::Tree tree;
   try {
     tree = factory.createTreeFromFile(tree_path.string());
@@ -75,10 +71,8 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  // Optional: Add logger for debugging
   BT::StdCoutLogger logger_cout(tree);
 
-  // Execute tree
   RCLCPP_INFO(node->get_logger(), "Executing behavior tree...");
   BT::NodeStatus status = BT::NodeStatus::RUNNING;
 
@@ -88,7 +82,6 @@ int main(int argc, char** argv)
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
-  // Report result
   if (status == BT::NodeStatus::SUCCESS) {
     RCLCPP_INFO(node->get_logger(), "Behavior tree execution SUCCEEDED");
   } else if (status == BT::NodeStatus::FAILURE) {

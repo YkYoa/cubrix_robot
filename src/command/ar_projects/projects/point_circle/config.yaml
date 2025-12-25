@@ -1,0 +1,98 @@
+# Point Circle Motion Sequence
+# This project draws a circular pattern with the robot end-effector
+
+project:
+  name: "point_circle"
+  description: "Draw a circular pattern in joint space"
+  
+  # Motion types used by this project
+  motion_types:
+    - move_joint
+    - set_planner
+    - set_velocity
+
+defaults:
+  velocity_scaling: 0.3
+  acceleration_scaling: 0.3
+  planner:
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+# Define the center and perimeter waypoints
+waypoints:
+  home:
+    joints: [0, 0, 0, 0, 0, 0]
+  circle_start:
+    joints: [0.5, 0.3, -0.5, 0, 0, 0]
+  circle_p1:
+    joints: [0.35, 0.35, -0.5, 0, 0, 0]
+  circle_p2:
+    joints: [0.0, 0.4, -0.5, 0, 0, 0]
+  circle_p3:
+    joints: [-0.35, 0.35, -0.5, 0, 0, 0]
+  circle_p4:
+    joints: [-0.5, 0.3, -0.5, 0, 0, 0]
+  circle_p5:
+    joints: [-0.35, 0.25, -0.5, 0, 0, 0]
+  circle_p6:
+    joints: [0.0, 0.2, -0.5, 0, 0, 0]
+  circle_p7:
+    joints: [0.35, 0.25, -0.5, 0, 0, 0]
+
+sequence:
+  # Configure for smooth motion
+  - type: "set_planner"
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+  - type: "set_velocity"
+    factor: 0.3
+
+  # Go home first
+  - type: "move_joint"
+    waypoint: "home"
+    name: "Home"
+
+  # Move to circle start
+  - type: "move_joint"
+    waypoint: "circle_start"
+    name: "CircleStart"
+
+  # Trace the circle
+  - type: "move_joint"
+    waypoint: "circle_p1"
+    name: "Circle_1"
+
+  - type: "move_joint"
+    waypoint: "circle_p2"
+    name: "Circle_2"
+
+  - type: "move_joint"
+    waypoint: "circle_p3"
+    name: "Circle_3"
+
+  - type: "move_joint"
+    waypoint: "circle_p4"
+    name: "Circle_4"
+
+  - type: "move_joint"
+    waypoint: "circle_p5"
+    name: "Circle_5"
+
+  - type: "move_joint"
+    waypoint: "circle_p6"
+    name: "Circle_6"
+
+  - type: "move_joint"
+    waypoint: "circle_p7"
+    name: "Circle_7"
+
+  # Return to start to complete circle
+  - type: "move_joint"
+    waypoint: "circle_start"
+    name: "CircleEnd"
+
+  # Return home
+  - type: "move_joint"
+    waypoint: "home"
+    name: "ReturnHome"

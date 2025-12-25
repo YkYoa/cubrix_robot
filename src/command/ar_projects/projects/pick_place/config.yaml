@@ -1,0 +1,84 @@
+# Pick and Place Motion Sequence
+# This project demonstrates a simple pick and place operation
+
+project:
+  name: "pick_place"
+  description: "Pick and place demo with approach/retract motions"
+  
+  # Motion types used by this project (for documentation/validation)
+  # Only these motion types are expected in the sequence
+  motion_types:
+    - move_joint
+    - delay
+
+defaults:
+  velocity_scaling: 0.5
+  acceleration_scaling: 0.5
+  planner:
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+# Define reusable waypoints
+waypoints:
+  home:
+    joints: [0, 0, 0, 0, 0, 0]
+  pick_approach:
+    joints: [0, -0.3, -0.8, 0, -0.5, 0]
+  pick_position:
+    joints: [0, -0.5, -0.8, 0, -0.3, 0]
+  place_approach:
+    joints: [0, 0.3, -0.8, 0, -0.5, 0]
+  place_position:
+    joints: [0, 0.5, -0.8, 0, -0.3, 0]
+
+# Motion sequence
+sequence:
+  # Go to home position first
+  - type: "move_joint"
+    waypoint: "home"
+    name: "Home"
+
+  # Approach pick location
+  - type: "move_joint"
+    waypoint: "pick_approach"
+    name: "ApproachPick"
+
+  # Move to pick position
+  - type: "move_joint"
+    waypoint: "pick_position"
+    name: "Pick"
+
+  # Wait for gripper to close
+  - type: "delay"
+    duration_ms: 500
+    name: "GripperClose"
+
+  # Retreat from pick
+  - type: "move_joint"
+    waypoint: "pick_approach"
+    name: "RetreatPick"
+
+  # Move to place approach
+  - type: "move_joint"
+    waypoint: "place_approach"
+    name: "ApproachPlace"
+
+  # Move to place position
+  - type: "move_joint"
+    waypoint: "place_position"
+    name: "Place"
+
+  # Wait for gripper to open
+  - type: "delay"
+    duration_ms: 500
+    name: "GripperOpen"
+
+  # Retreat from place
+  - type: "move_joint"
+    waypoint: "place_approach"
+    name: "RetreatPlace"
+
+  # Return home
+  - type: "move_joint"
+    waypoint: "home"
+    name: "ReturnHome"

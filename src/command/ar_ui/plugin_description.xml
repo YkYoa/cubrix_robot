@@ -1,0 +1,10 @@
+<library path="ar_ui">
+  <class name="ar_ui/BehaviorTreePanel"
+         type="ar_ui::BehaviorTreePanel"
+         base_class_type="rviz_common::Panel">
+    <description>
+      Behavior Tree Editor and Executor Panel.
+      Edit XML behavior trees, load project configurations, and monitor execution status.
+    </description>
+  </class>
+</library>

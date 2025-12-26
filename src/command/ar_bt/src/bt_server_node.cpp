@@ -197,9 +197,11 @@ int main(int argc, char** argv)
   std::atomic<bool> stop_requested{false};
   std::mutex execution_mutex;
 
-  // Publisher
+  // Publisher with transient local QoS (keeps last message for late subscribers)
+  rclcpp::QoS status_qos(10);
+  status_qos.transient_local();
   auto status_pub = node->create_publisher<std_msgs::msg::String>(
-    "/ar_bt/execution_status", 10);
+    "/ar_bt/execution_status", status_qos);
 
   auto publish_status = [&](const std::string& status) {
     auto msg = std_msgs::msg::String();

@@ -1,4 +1,10 @@
 #include "ar_ui/behavior_tree_panel.h"
+
+#include <QDesktopServices>
+#include <QUrl>
+#include <QDir>
+#include <QFile>
+#include <QMessageBox>
 #include <rviz_common/display_context.hpp>
 
 namespace ar_ui
@@ -8,16 +14,41 @@ BehaviorTreePanel::BehaviorTreePanel(QWidget* parent)
   : rviz_common::Panel(parent)
   , groot_process_(nullptr)
   , server_process_(nullptr)
+  , manager_process_(nullptr)
 {
   setupUi();
 }
 
-BehaviorTreePanel::~BehaviorTreePanel() {}
+BehaviorTreePanel::~BehaviorTreePanel()
+{
+  // Don't kill manager process - let it run independently
+  if (groot_process_ && groot_process_->state() == QProcess::Running) {
+    groot_process_->terminate();
+  }
+}
 
 void BehaviorTreePanel::onInitialize()
 {
   node_ = getDisplayContext()->getRosNodeAbstraction().lock()->get_raw_node();
-  RCLCPP_INFO(node_->get_logger(), "Panel initialized");
+  
+  // Find Groot2
+  QStringList groot_paths = {
+    "/usr/local/bin/groot2",
+    QDir::homePath() + "/Groot2/bin/groot2",
+    QDir::homePath() + "/Groot2.AppImage",
+    "/opt/Groot2/bin/groot2",
+    "/usr/bin/groot2"
+  };
+  
+  groot_path_ = "";
+  for (const QString& path : groot_paths) {
+    if (QFile::exists(path)) {
+      groot_path_ = path;
+      break;
+    }
+  }
+  
+  RCLCPP_INFO(node_->get_logger(), "BehaviorTreePanel initialized");
 }
 
 void BehaviorTreePanel::save(rviz_common::Config config) const
@@ -34,67 +65,99 @@ void BehaviorTreePanel::setupUi()
 {
   main_layout_ = new QVBoxLayout(this);
   main_layout_->setContentsMargins(5, 5, 5, 5);
-  main_layout_->setSpacing(5);
+  main_layout_->setSpacing(8);
 
-  // Compact project selection
-  project_combo_ = new QComboBox(this);
-  project_combo_->addItem("-- Select Project --");
-  project_combo_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  main_layout_->addWidget(project_combo_);
+  // Title
+  QLabel* title = new QLabel("BehaviorTree", this);
+  title->setStyleSheet("font-weight: bold; font-size: 12px;");
+  title->setAlignment(Qt::AlignCenter);
+  main_layout_->addWidget(title);
 
-  // Compact buttons in single row
-  QHBoxLayout* btn_layout = new QHBoxLayout();
-  btn_layout->setSpacing(3);
-  
-  run_btn_ = new QPushButton("▶", this);
-  run_btn_->setFixedSize(30, 25);
-  run_btn_->setToolTip("Run Project");
-  
-  stop_btn_ = new QPushButton("■", this);
-  stop_btn_->setFixedSize(30, 25);
-  stop_btn_->setToolTip("Stop");
-  
-  groot_btn_ = new QPushButton("🌳", this);
-  groot_btn_->setFixedSize(30, 25);
-  groot_btn_->setToolTip("Open in Groot");
-  
-  refresh_btn_ = new QPushButton("↻", this);
-  refresh_btn_->setFixedSize(30, 25);
-  refresh_btn_->setToolTip("Refresh");
-  
-  btn_layout->addWidget(run_btn_);
-  btn_layout->addWidget(stop_btn_);
-  btn_layout->addWidget(groot_btn_);
-  btn_layout->addWidget(refresh_btn_);
-  btn_layout->addStretch();
-  main_layout_->addLayout(btn_layout);
+  // Open Manager button
+  manager_btn_ = new QPushButton("🚀 Open Manager", this);
+  manager_btn_->setStyleSheet(
+    "QPushButton { background-color: #0e639c; color: white; font-weight: bold; "
+    "padding: 10px; border-radius: 5px; }"
+    "QPushButton:hover { background-color: #1177bb; }");
+  manager_btn_->setToolTip("Open BehaviorTree Manager window");
+  main_layout_->addWidget(manager_btn_);
+
+  // Open Groot button
+  groot_btn_ = new QPushButton("🌳 Open Groot2", this);
+  groot_btn_->setStyleSheet(
+    "QPushButton { background-color: #9c27b0; color: white; font-weight: bold; "
+    "padding: 10px; border-radius: 5px; }"
+    "QPushButton:hover { background-color: #ab47bc; }");
+  groot_btn_->setToolTip("Open Groot2 BehaviorTree editor");
+  main_layout_->addWidget(groot_btn_);
 
   // Status label
   status_label_ = new QLabel("Ready", this);
-  status_label_->setStyleSheet("QLabel { font-size: 10px; color: gray; }");
+  status_label_->setStyleSheet("color: gray; font-size: 10px;");
+  status_label_->setAlignment(Qt::AlignCenter);
   main_layout_->addWidget(status_label_);
 
-  // Compact log
-  log_list_ = new QListWidget(this);
-  log_list_->setMaximumHeight(60);
-  log_list_->setStyleSheet("QListWidget { font-size: 9px; }");
-  main_layout_->addWidget(log_list_);
+  main_layout_->addStretch();
 
-  // Set maximum width to keep panel compact
-  setMaximumWidth(250);
-  
-  // Initialize unused pointers
-  server_status_label_ = nullptr;
+  // Keep panel compact
+  setMaximumWidth(200);
+
+  // Initialize unused members
+  project_combo_ = nullptr;
+  refresh_btn_ = nullptr;
   generate_btn_ = nullptr;
+  run_btn_ = nullptr;
+  stop_btn_ = nullptr;
+  log_list_ = nullptr;
+  server_status_label_ = nullptr;
+
+  // Connections
+  connect(manager_btn_, &QPushButton::clicked, this, &BehaviorTreePanel::onOpenManager);
+  connect(groot_btn_, &QPushButton::clicked, this, &BehaviorTreePanel::onOpenInGroot);
 }
 
-// Empty stubs
+void BehaviorTreePanel::onOpenManager()
+{
+  if (!manager_process_) {
+    manager_process_ = new QProcess(this);
+  }
+  
+  if (manager_process_->state() != QProcess::Running) {
+    // Launch bt_manager executable
+    manager_process_->start("ros2", QStringList() << "run" << "ar_ui" << "bt_manager");
+    status_label_->setText("Manager opened");
+    RCLCPP_INFO(node_->get_logger(), "Launching BT Manager");
+  } else {
+    status_label_->setText("Manager running");
+  }
+}
+
+void BehaviorTreePanel::onOpenInGroot()
+{
+  if (!groot_path_.isEmpty() && QFile::exists(groot_path_)) {
+    if (!groot_process_) {
+      groot_process_ = new QProcess(this);
+    }
+    
+    if (groot_process_->state() != QProcess::Running) {
+      groot_process_->start(groot_path_, QStringList());
+      status_label_->setText("Groot2 opened");
+      RCLCPP_INFO(node_->get_logger(), "Launching Groot2");
+    } else {
+      status_label_->setText("Groot2 running");
+    }
+  } else {
+    QMessageBox::warning(this, "Groot Not Found",
+      "Groot2 not installed.\n\nDownload from:\nhttps://www.behaviortree.dev/groot");
+  }
+}
+
+// Empty stubs for unused functions
 void BehaviorTreePanel::updateProjectList() {}
 void BehaviorTreePanel::onRefreshProjects() {}
 void BehaviorTreePanel::onProjectSelected(int) {}
 QString BehaviorTreePanel::generateProjectXml(const QString&) { return ""; }
 void BehaviorTreePanel::onGenerateXml() {}
-void BehaviorTreePanel::onOpenInGroot() {}
 void BehaviorTreePanel::startServer() {}
 void BehaviorTreePanel::onServerStarted() {}
 void BehaviorTreePanel::onServerError() {}

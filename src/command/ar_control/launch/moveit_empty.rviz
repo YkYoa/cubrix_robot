@@ -167,7 +167,7 @@ Visualization Manager:
       Velocity_Scaling_Factor: 0.1
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 25; 25; 25
     Fixed Frame: Base
     Frame Rate: 30
   Name: root
@@ -236,7 +236,7 @@ Window Geometry:
     collapsed: false
   Height: 1016
   Hide Left Dock: false
-  Hide Right Dock: false
+  Hide Right Dock: true
   MotionPlanning:
     collapsed: false
   MotionPlanning - Trajectory Slider:

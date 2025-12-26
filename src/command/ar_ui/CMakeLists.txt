@@ -17,7 +17,7 @@ find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(std_msgs REQUIRED)
-# find_package(ar_projects REQUIRED)  # Temporarily disabled for testing
+find_package(ar_projects REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
 
@@ -27,6 +27,10 @@ include_directories(include)
 # Qt MOC files
 qt5_wrap_cpp(MOC_FILES
   include/ar_ui/behavior_tree_panel.h
+)
+
+qt5_wrap_cpp(BT_MANAGER_MOC_FILES
+  include/ar_ui/bt_manager_window.h
 )
 
 # RViz Panel Library
@@ -52,18 +56,42 @@ ament_target_dependencies(${PROJECT_NAME}
   rviz_rendering
   pluginlib
   std_msgs
-  # ar_projects  # Temporarily disabled for testing
+  ar_projects
   ament_index_cpp
+)
+
+# Standalone BT Manager Application
+add_executable(bt_manager
+  src/bt_manager_main.cpp
+  src/bt_manager_window.cpp
+  ${BT_MANAGER_MOC_FILES}
+)
+
+target_include_directories(bt_manager PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(bt_manager
+  Qt5::Widgets
+  Qt5::Core
+  Qt5::Gui
+)
+
+ament_target_dependencies(bt_manager
+  rclcpp
+  std_msgs
+  ar_projects
 )
 
 # Register as rviz plugin
 pluginlib_export_plugin_description_file(rviz_common plugin_description.xml)
 
 # Install targets
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME} bt_manager
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY include/
@@ -80,3 +108,4 @@ if(BUILD_TESTING)
 endif()
 
 ament_package()
+

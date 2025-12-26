@@ -20,13 +20,11 @@ namespace ar_ui
 {
 
 /**
- * @brief RViz Panel for Behavior Tree project management
+ * @brief Compact RViz Panel for launching BT tools
  * 
  * Features:
- * - Project selector from ar_projects
- * - Generate XML from YAML  
- * - Open generated XML in Groot2
- * - Execute behavior trees (auto-starts bt_server_node)
+ * - Launch BT Manager standalone window
+ * - Launch Groot2 editor
  */
 class BehaviorTreePanel : public rviz_common::Panel
 {
@@ -47,6 +45,7 @@ public Q_SLOTS:
   void onOpenInGroot();
   void onRunProject();
   void onStop();
+  void onOpenManager();
 
 private Q_SLOTS:
   void onServerStarted();
@@ -69,18 +68,19 @@ private:
   // UI Components
   QVBoxLayout* main_layout_;
   
-  // Project selection
-  QComboBox* project_combo_;
-  QPushButton* refresh_btn_;
-  
-  // Actions
-  QPushButton* generate_btn_;
+  // Launcher buttons
+  QPushButton* manager_btn_;
   QPushButton* groot_btn_;
-  QPushButton* run_btn_;
-  QPushButton* stop_btn_;
   
   // Status
   QLabel* status_label_;
+  
+  // Legacy (unused but kept for compatibility)
+  QComboBox* project_combo_;
+  QPushButton* refresh_btn_;
+  QPushButton* generate_btn_;
+  QPushButton* run_btn_;
+  QPushButton* stop_btn_;
   QLabel* server_status_label_;
   QListWidget* log_list_;
 
@@ -89,7 +89,8 @@ private:
   QString groot_path_;
   QProcess* groot_process_;
   QProcess* server_process_;
-  QString pending_tree_file_;  // Tree to execute after server starts
+  QProcess* manager_process_;
+  QString pending_tree_file_;
 };
 
 }  // namespace ar_ui

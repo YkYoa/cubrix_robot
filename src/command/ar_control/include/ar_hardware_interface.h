@@ -18,7 +18,9 @@
 #include <vector>
 #include <ar_drive_config.h>
 #include <ar_drive_control.h>
+#ifndef NO_ETHERCAT
 #include <igh_manager.hpp>
+#endif
 
 namespace ar_control
 {
@@ -59,6 +61,8 @@ namespace ar_control
 		int no_of_port_connected_ = 0; ///< Number of connected ports
 
 		master::EthercatManager *portManager; ///< Port manager for handling communication ports (SOEM)
-		master::IghManager *ighManager;		  ///< IGH EtherCAT manager pointer
+	#ifndef NO_ETHERCAT
+	master::IghManager *ighManager;		  ///< IGH EtherCAT manager pointer
+#endif
 	};
 } // namespace ar_control

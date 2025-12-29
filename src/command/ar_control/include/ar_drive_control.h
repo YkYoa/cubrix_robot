@@ -5,7 +5,10 @@
 #include "ar_utils.h"
 #include "ethercat_manager.h"
 #include "ar_drive_client.h"
+
+#ifndef NO_ETHERCAT
 #include "igh_manager.hpp"
+#endif
 
 namespace ar_control
 {
@@ -65,7 +68,9 @@ namespace ar_control
         bool is_dual_axis_;                                   ///< Flag to indicate if the drive is dual axis
         int drive_id_;                                        ///< Unique identifier for the drive
         std::unique_ptr<ar_control::ArDriveClient> ar_client; ///< Pointer to the drive client
+#ifndef NO_ETHERCAT
         master::IghManager *igh_manager_;                     ///< Pointer to IGH manager for DC sync control
+#endif
         int slave_id_;                                        ///< Slave ID for this drive
 
         DriveInput *driveInput;   ///< Pointer to the drive input structure

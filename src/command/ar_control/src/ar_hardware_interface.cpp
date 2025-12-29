@@ -50,7 +50,9 @@ namespace ar_control
 
         RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing ETHERCAT manager, drives and joints");
         portManager = nullptr;
+#ifndef NO_ETHERCAT
         ighManager = nullptr;
+#endif
 
         if (!is_simulation && !is_ecat)
         {
@@ -72,6 +74,7 @@ namespace ar_control
             }
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "SOEM ETHERCAT manager initialized for %zu SOEM drives", soem_drives.size());
         }
+#ifndef NO_ETHERCAT
         else if (!is_simulation && is_ecat)
         {
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "Initializing IGH EtherCAT master...");
@@ -149,6 +152,7 @@ namespace ar_control
 
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "IGH EtherCAT master initialized successfully");
         }
+#endif
 
         for (auto &driveParm : ar_drives.drive_parameters)
         {
@@ -161,10 +165,12 @@ namespace ar_control
                             driveParm.drive_id, driveParm.slave_id);
                 drives[driveParm.drive_id]->InitializeDriveClient(portManager, driveParm.slave_id);
             }
+#ifndef NO_ETHERCAT
             else if (!is_simulation && is_ecat && ighManager && driveParm.port_id == PORT_SOEM)
             {
                 drives[driveParm.drive_id]->InitializeDriveClient(ighManager, driveParm.slave_id);
             }
+#endif
 
             for (auto &jointParm : driveParm.joint_paramters)
             {
@@ -205,6 +211,7 @@ namespace ar_control
             delete portManager;
             portManager = nullptr;
         }
+#ifndef NO_ETHERCAT
         if (ighManager)
         {
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "Shutting down IGH manager");
@@ -212,6 +219,7 @@ namespace ar_control
             delete ighManager;
             ighManager = nullptr;
         }
+#endif
         if (control_server_thread)
             control_server_thread->join();
 

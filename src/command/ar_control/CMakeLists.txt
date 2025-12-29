@@ -17,6 +17,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
   add_compile_options(-Wall -Wextra)
 endif()
 
+# Option for simulation-only builds (UI team doesn't need EtherCAT)
+option(SIMULATION_ONLY "Build without EtherCAT hardware support (for simulation)" OFF)
+
+if(SIMULATION_ONLY)
+  message(STATUS "[ar_control] Building in SIMULATION_ONLY mode - EtherCAT/IGH code excluded")
+  add_definitions(-DNO_ETHERCAT)
+endif()
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(moveit_common REQUIRED)

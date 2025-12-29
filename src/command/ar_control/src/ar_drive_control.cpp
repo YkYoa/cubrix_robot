@@ -18,7 +18,9 @@ namespace ar_control
         is_dual_axis_ = driveParm.is_dual_axis;
         driveInput = nullptr;
         driveOutput = nullptr;
+#ifndef NO_ETHERCAT
         igh_manager_ = nullptr;
+#endif
         slave_id_ = -1;
     }
 
@@ -37,7 +39,9 @@ namespace ar_control
                    manager->getOutputBits(slaveId) / 8);
             fflush(stdout);
 
+#ifndef NO_ETHERCAT
             igh_manager_ = dynamic_cast<master::IghManager *>(manager);
+#endif
             slave_id_ = slaveId;
         }
         else

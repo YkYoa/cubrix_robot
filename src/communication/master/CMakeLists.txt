@@ -9,8 +9,15 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
+# Option for simulation-only builds (UI team doesn't need EtherCAT)
+option(SIMULATION_ONLY "Build without EtherCAT hardware support (for simulation)" OFF)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-g -w -Wall -Wextra -Wpedantic -I/opt/etherlab/include -L/opt/etherlab/lib -lethercat -lpthread -lrt)
+  if(NOT SIMULATION_ONLY)
+    add_compile_options(-g -w -Wall -Wextra -Wpedantic -I/opt/etherlab/include -L/opt/etherlab/lib -lethercat -lpthread -lrt)
+  else()
+    add_compile_options(-g -w -Wall -Wextra -Wpedantic -lpthread -lrt)
+  endif()
 endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -24,15 +31,18 @@ find_package(ar_utils)
 find_package(ar_common REQUIRED)
 find_package(Threads REQUIRED)
 
-# Option for simulation-only builds (UI team doesn't need EtherCAT)
-option(SIMULATION_ONLY "Build without EtherCAT hardware support (for simulation)" OFF)
-
 if(NOT SIMULATION_ONLY)
   find_library(ETHERCAT_LIBRARY ethercat PATHS /opt/etherlab/lib /usr/local/lib REQUIRED)
   include_directories(/opt/etherlab/include /usr/local/include)
+  set(IGH_SOURCES
+    src/igh_manager.cpp
+    src/igh_slave.cpp
+    src/igh_error_handler.cpp
+  )
 else()
-  message(STATUS "Building in SIMULATION_ONLY mode - EtherCAT library not required")
+  message(STATUS "Building in SIMULATION_ONLY mode - EtherCAT/IGH files excluded")
   set(ETHERCAT_LIBRARY "")
+  set(IGH_SOURCES "")
   add_definitions(-DNO_ETHERCAT)
 endif()
 
@@ -46,9 +56,7 @@ add_library(
   SHARED
   src/ethercat_manager.cpp
   src/soem_cpp.cpp
-  src/igh_manager.cpp
-  src/igh_slave.cpp
-  src/igh_error_handler.cpp
+  ${IGH_SOURCES}
 )
 
 target_include_directories(

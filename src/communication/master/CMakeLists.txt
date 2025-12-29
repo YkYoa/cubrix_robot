@@ -24,8 +24,17 @@ find_package(ar_utils)
 find_package(ar_common REQUIRED)
 find_package(Threads REQUIRED)
 
-find_library(ETHERCAT_LIBRARY ethercat PATHS /opt/etherlab/lib /usr/local/lib REQUIRED)
-include_directories(/opt/etherlab/include /usr/local/include)
+# Option for simulation-only builds (UI team doesn't need EtherCAT)
+option(SIMULATION_ONLY "Build without EtherCAT hardware support (for simulation)" OFF)
+
+if(NOT SIMULATION_ONLY)
+  find_library(ETHERCAT_LIBRARY ethercat PATHS /opt/etherlab/lib /usr/local/lib REQUIRED)
+  include_directories(/opt/etherlab/include /usr/local/include)
+else()
+  message(STATUS "Building in SIMULATION_ONLY mode - EtherCAT library not required")
+  set(ETHERCAT_LIBRARY "")
+  add_definitions(-DNO_ETHERCAT)
+endif()
 
 ament_export_include_directories(
   include

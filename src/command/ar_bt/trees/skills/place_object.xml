@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+  PlaceObject Skill Subtree
+  Composed skill: Approach → Place → Retreat with Fallback recovery
+  Usage: <SubTree ID="PlaceObject" approach_joints="..." place_joints="..."/>
+-->
+<root BTCPP_format="4">
+  <BehaviorTree ID="PlaceObject">
+    <Fallback name="RobustPlace">
+      <!-- Main place sequence -->
+      <Sequence name="PlaceSequence">
+        <!-- Approach place position -->
+        <MoveToJoint target_joints="{approach_joints}" name="ApproachPlace"/>
+        
+        <!-- Move to place position -->
+        <MoveToJoint target_joints="{place_joints}" name="Place"/>
+        
+        <!-- Gripper open (simulated with delay) -->
+        <Delay delay_msec="500">
+          <AlwaysSuccess/>
+        </Delay>
+        
+        <!-- Retreat from place -->
+        <MoveToJoint target_joints="{approach_joints}" name="RetreatPlace"/>
+      </Sequence>
+      
+      <!-- Recovery: Try to retreat safely -->
+      <Sequence name="PlaceRecovery">
+        <Delay delay_msec="1000">
+          <AlwaysSuccess/>
+        </Delay>
+        <MoveToJoint target_joints="{approach_joints}" name="RecoveryRetreat"/>
+      </Sequence>
+    </Fallback>
+  </BehaviorTree>
+</root>

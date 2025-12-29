@@ -262,6 +262,9 @@ int main(int argc, char** argv)
         try {
           BT::Tree tree = factory.createTreeFromFile(tree_path.string());
           publish_status("RUNNING: Executing...");
+          
+          // Enable state transition logging (IDLE -> RUNNING, etc.)
+          BT::StdCoutLogger logger_cout(tree);
 
           BT::NodeStatus status = BT::NodeStatus::RUNNING;
           while (rclcpp::ok() && status == BT::NodeStatus::RUNNING && !stop_requested) {

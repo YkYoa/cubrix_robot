@@ -27,15 +27,15 @@ use_torque_offset: false
 
 port_ids: 
   drive_1: 1
-  drive_2: 0
-  drive_3: 0
-  drive_4: 0
+  drive_2: 1
+  drive_3: 1
+  drive_4: 1
   drive_5: 0
   # drive_6: 0
 
 
 drives:
-  drive_2:
+  drive_3:
     is_dual_axis: true
     driver_name: 2CL3-EC403T    
     joints:
@@ -52,7 +52,7 @@ drives:
         # torque_gamma:
         log_joint: false
 
-  drive_3:
+  drive_2:
     is_dual_axis: false
     driver_name: CS3E-D507B
     joints:
@@ -88,7 +88,7 @@ drives:
     joints:
       Arm_joint4:
         gear_ratio: 10
-        encoder_res: 4000
+        encoder_res: 10000
         encoder_offset: 0
         # torque_gamma:
         log_joint: false

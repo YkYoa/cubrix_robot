@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+  GoHome Subtree
+  Atomic primitive: Move robot to home (zero) position
+  Usage: <SubTree ID="GoHome"/>
+-->
+<root BTCPP_format="4">
+  <BehaviorTree ID="GoHome">
+    <Sequence name="GoHomeSequence">
+      <!-- Check if already at home -->
+      <Fallback name="EnsureAtHome">
+        <IsAtJoint target_joints="0;0;0;0;0;0" tolerance="0.02"/>
+        <MoveToJoint target_joints="0;0;0;0;0;0" name="MoveHome"/>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+</root>

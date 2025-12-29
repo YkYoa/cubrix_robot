@@ -7,6 +7,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFontDatabase>
+#include <QRegularExpression>
 
 #include <ar_projects/project_manager.h>
 #include <ar_projects/yaml_parser.h>
@@ -24,39 +25,51 @@ BTManagerWindow::BTManagerWindow(QWidget* parent)
   , server_ready_(false)
 {
   setWindowTitle("BehaviorTree Manager");
-  setMinimumSize(1000, 700);
+  setMinimumSize(1400, 900);  // Much larger window
+  resize(1600, 1000);  // Default size
   
-  // Dark theme
+  // Dark theme with larger fonts
   setStyleSheet(R"(
     QMainWindow { background-color: #1e1e1e; }
     QGroupBox { 
       color: #ffffff; 
       border: 1px solid #3c3c3c; 
       border-radius: 5px; 
-      margin-top: 10px; 
-      padding-top: 10px;
+      margin-top: 12px; 
+      padding-top: 12px;
       font-weight: bold;
+      font-size: 13px;
     }
     QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px; }
-    QComboBox, QListWidget, QTextEdit { 
+    QComboBox, QListWidget { 
       background-color: #2d2d2d; 
       color: #ffffff; 
       border: 1px solid #3c3c3c; 
       border-radius: 3px;
+      font-size: 12px;
+      padding: 4px;
+    }
+    QTextEdit { 
+      background-color: #1a1a1a; 
+      color: #d4d4d4; 
+      border: 1px solid #3c3c3c; 
+      border-radius: 3px;
+      font-size: 12px;
     }
     QPushButton { 
       background-color: #0e639c; 
       color: white; 
       border: none; 
-      padding: 8px 16px; 
+      padding: 10px 20px; 
       border-radius: 4px;
       font-weight: bold;
+      font-size: 13px;
     }
     QPushButton:hover { background-color: #1177bb; }
     QPushButton:pressed { background-color: #0d5a8c; }
     QPushButton:disabled { background-color: #3c3c3c; color: #808080; }
-    QLabel { color: #ffffff; }
-    QStatusBar { background-color: #007acc; color: white; }
+    QLabel { color: #ffffff; font-size: 12px; }
+    QStatusBar { background-color: #007acc; color: white; font-size: 12px; }
     QMenuBar { background-color: #2d2d2d; color: white; }
     QMenuBar::item:selected { background-color: #3c3c3c; }
     QMenu { background-color: #2d2d2d; color: white; }
@@ -244,41 +257,49 @@ void BTManagerWindow::setupUi()
   
   main_layout->addWidget(xml_group_, 1);
   
-  // Right panel - Execution
+  // Right panel - Execution (much wider now!)
   exec_group_ = new QGroupBox("Execution", this);
-  exec_group_->setMinimumWidth(280);
-  exec_group_->setMaximumWidth(320);
+  exec_group_->setMinimumWidth(550);
+  exec_group_->setMaximumWidth(800);
   QVBoxLayout* exec_layout = new QVBoxLayout(exec_group_);
   
   status_label_ = new QLabel("⚪ Not Connected", this);
-  status_label_->setStyleSheet("color: #808080; font-size: 14px; font-weight: bold;");
+  status_label_->setStyleSheet("color: #808080; font-size: 16px; font-weight: bold;");
   status_label_->setAlignment(Qt::AlignCenter);
+  status_label_->setMinimumHeight(30);
   exec_layout->addWidget(status_label_);
   
   QHBoxLayout* btn_row = new QHBoxLayout();
   run_btn_ = new QPushButton("▶ Run", this);
-  run_btn_->setStyleSheet("background-color: #4CAF50;");
+  run_btn_->setStyleSheet("background-color: #4CAF50; font-size: 14px; padding: 12px 24px;");
+  run_btn_->setMinimumHeight(45);
   stop_btn_ = new QPushButton("■ Stop", this);
-  stop_btn_->setStyleSheet("background-color: #f44336;");
+  stop_btn_->setStyleSheet("background-color: #f44336; font-size: 14px; padding: 12px 24px;");
+  stop_btn_->setMinimumHeight(45);
   stop_btn_->setEnabled(false);
   btn_row->addWidget(run_btn_);
   btn_row->addWidget(stop_btn_);
   exec_layout->addLayout(btn_row);
   
   groot_btn_ = new QPushButton("🌳 Open in Groot2", this);
-  groot_btn_->setStyleSheet("background-color: #9c27b0;");
+  groot_btn_->setStyleSheet("background-color: #9c27b0; font-size: 13px;");
+  groot_btn_->setMinimumHeight(40);
   exec_layout->addWidget(groot_btn_);
   
   QLabel* log_label = new QLabel("Execution Log:", this);
+  log_label->setStyleSheet("font-size: 13px; font-weight: bold; margin-top: 10px;");
   exec_layout->addWidget(log_label);
   
   log_text_ = new QTextEdit(this);
   log_text_->setReadOnly(true);
-  log_text_->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  log_text_->setStyleSheet("background-color: #1a1a1a; color: #d4d4d4;");
-  exec_layout->addWidget(log_text_);
+  QFont log_font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+  log_font.setPointSize(10);  // Larger font for readability
+  log_text_->setFont(log_font);
+  log_text_->setStyleSheet("background-color: #300a24; color: #ffffff; border: 2px solid #4c2639; padding: 8px;");
+  log_text_->setMinimumHeight(500);  // Very tall log area
+  exec_layout->addWidget(log_text_, 1);  // Stretch to fill
   
-  main_layout->addWidget(exec_group_);
+  main_layout->addWidget(exec_group_, 1);  // Give execution panel stretch priority
   
   // Connections
   connect(refresh_btn_, &QPushButton::clicked, this, &BTManagerWindow::onRefreshProjects);
@@ -576,9 +597,27 @@ void BTManagerWindow::processRosEvents()
 void BTManagerWindow::appendLog(const QString& msg, const QString& color)
 {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
-  QString html = QString("<span style='color:#808080;'>[%1]</span> "
+  
+  // Convert ANSI escape codes to HTML colors
+  QString processed = msg;
+  
+  // First, strip any remaining escape characters (the  symbol)
+  processed.remove(QChar('\x1b'));
+  
+  // ANSI color code mappings (now without escape char)
+  // [30m=black, [31m=red, [32m=green, [33m=yellow, [34m=blue, [35m=magenta, [36m=cyan, [37m=white
+  // [0m = reset
+  processed.replace("[36m", "<span style='color:#56b6c2;'>");  // Cyan (IDLE)
+  processed.replace("[32m", "<span style='color:#98c379;'>");  // Green (SUCCESS)
+  processed.replace("[33m", "<span style='color:#e5c07b;'>");  // Yellow (RUNNING)
+  processed.replace("[31m", "<span style='color:#e06c75;'>");  // Red (FAILURE)
+  processed.replace("[35m", "<span style='color:#c678dd;'>");  // Magenta
+  processed.replace("[34m", "<span style='color:#61afef;'>");  // Blue
+  processed.replace("[0m", "</span>");  // Reset
+  
+  QString html = QString("<span style='color:#5c6370;'>[%1]</span> "
                         "<span style='color:%2;'>%3</span>")
-    .arg(timestamp, color, msg.toHtmlEscaped());
+    .arg(timestamp, color, processed);
   log_text_->append(html);
 }
 

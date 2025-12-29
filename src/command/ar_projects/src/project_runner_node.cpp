@@ -12,7 +12,6 @@
 #include "ar_projects/motion_types/delay_motion.h"
 #include "ar_projects/motion_types/set_planner.h"
 #include "ar_projects/motion_types/set_velocity.h"
-#include "ar_projects/motion_types/circle_motion.h"
 
 /**
  * @brief Project runner node

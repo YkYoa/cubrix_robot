@@ -1,4 +1,5 @@
 #include "ar_bt/bt_action_nodes.h"
+#include "ar_bt/bt_condition_nodes.h"
 
 namespace ar_bt
 {
@@ -11,6 +12,17 @@ ARBTActionNode::ARBTActionNode(const std::string& name, const BT::NodeConfigurat
 , node_(node)
 , planning_interface_(planning_interface)
 {
+  // Create status publisher with transient_local QoS to match UI subscriber
+  rclcpp::QoS qos(10);
+  qos.transient_local();
+  status_pub_ = node_->create_publisher<std_msgs::msg::String>("/ar_bt/execution_status", qos);
+}
+
+void ARBTActionNode::publishStatus(const std::string& status)
+{
+  auto msg = std_msgs::msg::String();
+  msg.data = status;
+  status_pub_->publish(msg);
 }
 
 
@@ -35,21 +47,29 @@ BT::NodeStatus PlanToJoint::onStart()
   auto target = getInput<std::vector<double>>("target_joints");
   if (!target) {
     RCLCPP_ERROR(node_->get_logger(), "PlanToJoint: missing 'target_joints' input");
+    publishStatus("ERROR: Missing target_joints input");
     return BT::NodeStatus::FAILURE;
   }
 
+  std::string node_name = this->name();
   planning_done_ = false;
+  
+  publishStatus("PLANNING: " + node_name);
+  RCLCPP_INFO(node_->get_logger(), "[%s] Planning...", node_name.c_str());
+  
   planning_interface_->setTargetJoints(target.value());
   
   if (planning_interface_->plan(current_plan_)) {
     planning_done_ = true;
     setOutput("success", true);
     planning_interface_->visualizeTrajectory(current_plan_);
-    RCLCPP_INFO(node_->get_logger(), "PlanToJoint: Planning succeeded");
+    publishStatus("PLAN_SUCCESS: " + node_name);
+    RCLCPP_INFO(node_->get_logger(), "[%s] Plan succeeded", node_name.c_str());
     return BT::NodeStatus::SUCCESS;
   } else {
     setOutput("success", false);
-    RCLCPP_ERROR(node_->get_logger(), "PlanToJoint: Planning failed");
+    publishStatus("PLAN_FAILED: " + node_name);
+    RCLCPP_ERROR(node_->get_logger(), "[%s] Planning failed", node_name.c_str());
     return BT::NodeStatus::FAILURE;
   }
 }
@@ -62,7 +82,8 @@ BT::NodeStatus PlanToJoint::onRunning()
 void PlanToJoint::onHalted()
 {
   planning_done_ = false;
-  RCLCPP_INFO(node_->get_logger(), "PlanToJoint: Halted");
+  publishStatus("HALTED: " + this->name());
+  RCLCPP_INFO(node_->get_logger(), "[%s] Halted", this->name().c_str());
 }
 
 // === PlanToPose ===
@@ -139,26 +160,54 @@ BT::NodeStatus MoveToJoint::onStart()
   auto target = getInput<std::vector<double>>("target_joints");
   if (!target) {
     RCLCPP_ERROR(node_->get_logger(), "MoveToJoint: missing 'target_joints' input");
+    publishStatus("ERROR: Missing target_joints input");
     return BT::NodeStatus::FAILURE;
   }
 
   motion_done_ = false;
+  
+  // Get node name for status messages
+  std::string node_name = this->name();
+  
+  // Format target joints for display
+  std::string joints_str;
+  for (size_t i = 0; i < target.value().size(); ++i) {
+    if (i > 0) joints_str += ";";
+    char buf[16];
+    snprintf(buf, sizeof(buf), "%.2f", target.value()[i]);
+    joints_str += buf;
+  }
+  
+  // Planning phase with joint values
+  publishStatus("PLANNING: " + node_name + " [" + joints_str + "]");
+  RCLCPP_INFO(node_->get_logger(), "[%s] Planning to [%s]...", node_name.c_str(), joints_str.c_str());
+  
   planning_interface_->setTargetJoints(target.value());
   
   moveit::planning_interface::MoveGroupInterface::Plan plan;
   if (planning_interface_->plan(plan)) {
+    publishStatus("PLAN_SUCCESS: " + node_name);
+    RCLCPP_INFO(node_->get_logger(), "[%s] Plan succeeded", node_name.c_str());
+    
     planning_interface_->visualizeTrajectory(plan);
+    
+    // Execution phase
+    publishStatus("EXECUTING: " + node_name);
+    RCLCPP_INFO(node_->get_logger(), "[%s] Executing...", node_name.c_str());
     
     if (planning_interface_->execute(plan)) {
       motion_done_ = true;
-      RCLCPP_INFO(node_->get_logger(), "MoveToJoint: Motion succeeded");
+      publishStatus("EXECUTE_SUCCESS: " + node_name);
+      RCLCPP_INFO(node_->get_logger(), "[%s] Execution succeeded", node_name.c_str());
       return BT::NodeStatus::SUCCESS;
     } else {
-      RCLCPP_ERROR(node_->get_logger(), "MoveToJoint: Execution failed");
+      publishStatus("EXECUTE_FAILED: " + node_name);
+      RCLCPP_ERROR(node_->get_logger(), "[%s] Execution failed", node_name.c_str());
       return BT::NodeStatus::FAILURE;
     }
   } else {
-    RCLCPP_ERROR(node_->get_logger(), "MoveToJoint: Planning failed");
+    publishStatus("PLAN_FAILED: " + node_name);
+    RCLCPP_ERROR(node_->get_logger(), "[%s] Planning failed", node_name.c_str());
     return BT::NodeStatus::FAILURE;
   }
 }
@@ -171,7 +220,8 @@ BT::NodeStatus MoveToJoint::onRunning()
 void MoveToJoint::onHalted()
 {
   motion_done_ = false;
-  RCLCPP_INFO(node_->get_logger(), "MoveToJoint: Halted");
+  publishStatus("HALTED: " + this->name());
+  RCLCPP_INFO(node_->get_logger(), "[%s] Halted", this->name().c_str());
 }
 
 
@@ -335,6 +385,9 @@ void registerARBTNodes(BT::BehaviorTreeFactory& factory,
   factory.registerBuilder<SetBlendRadius>("SetBlendRadius", set_blend_builder);
   factory.registerBuilder<SetVelocityScaling>("SetVelocityScaling", set_velocity_builder);
   factory.registerBuilder<SetAccelerationScaling>("SetAccelerationScaling", set_accel_builder);
+
+  // Also register condition nodes
+  registerARBTConditionNodes(factory, node, planning_interface);
 }
 
 } // namespace ar_bt

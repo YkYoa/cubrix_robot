@@ -6,6 +6,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <ar_planning_interface/ar_planning_interface.h>
 #include <geometry_msgs/msg/pose_stamped.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <vector>
 #include <string>
 
@@ -23,8 +24,11 @@ public:
                  std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
 protected:
+  void publishStatus(const std::string& status);
+  
   rclcpp::Node::SharedPtr node_;
   std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr status_pub_;
 };
 
 /**

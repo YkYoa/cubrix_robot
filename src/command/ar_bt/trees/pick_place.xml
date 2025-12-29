@@ -1,41 +1,61 @@
+<?xml version="1.0"?>
+<!--
+  Pick and Place Mission
+  High-level mission tree using SubTrees for modularity
+  Demonstrates: Fallback recovery, Condition checks, SubTree composition
+-->
 <root BTCPP_format="4">
-  <BehaviorTree ID="PickPlaceSequence">
-    <Sequence name="PickPlace">
-      <!-- Configure planner with blending for smooth motion -->
+  <!-- Include SubTree definitions -->
+  <include path="primitives/go_home.xml"/>
+  <include path="primitives/setup_motion.xml"/>
+  <include path="skills/pick_object.xml"/>
+  <include path="skills/place_object.xml"/>
+
+  <BehaviorTree ID="PickPlaceMission">
+    <Sequence name="MainMission">
+      
+      <!-- Pre-flight check: Ensure robot is ready -->
+      <Precondition if="IsRobotReady" else="FAILURE">
+        <AlwaysSuccess/>
+      </Precondition>
+      
+      <!-- Configure motion planner -->
       <SetPlanner pipeline="pilz" planner="PTP"/>
       <SetBlendRadius radius="0.01"/>
+      <SetVelocityScaling factor="0.5"/>
+      <SetAccelerationScaling factor="0.5"/>
       
-      <!-- Move to home -->
-      <MoveToJoint target_joints="0;0;0;0;0;0" name="Home"/>
-      
-      <!-- Approach pick position -->
-      <MoveToJoint target_joints="0;-0.3;-0.8;0;-0.5;0" name="ApproachPick"/>
-      
-      <!-- Move to pick position -->
-      <MoveToJoint target_joints="0;-0.5;-0.8;0;-0.3;0" name="Pick"/>
-      
-      <!-- Gripper close would go here -->
-      <Delay delay_msec="500">
-        <AlwaysSuccess/>
-      </Delay>
-      
-      <!-- Retreat from pick -->
-      <MoveToJoint target_joints="0;-0.3;-0.8;0;-0.5;0" name="RetreatPick"/>
-      
-      <!-- Move to approach place -->
-      <MoveToJoint target_joints="0;0.3;-0.8;0;-0.5;0" name="ApproachPlace"/>
-      
-      <!-- Move to place position -->
-      <MoveToJoint target_joints="0;0.5;-0.8;0;-0.3;0" name="Place"/>
-      
-      <!-- Gripper open would go here -->
-      <Delay delay_msec="500">
-        <AlwaysSuccess/>
-      </Delay>
-      
-      <!-- Retreat and return home -->
-      <MoveToJoint target_joints="0;0.3;-0.8;0;-0.5;0" name="RetreatPlace"/>
-      <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+      <!-- Main mission with Fallback recovery -->
+      <Fallback name="RobustMission">
+        
+        <!-- Normal flow -->
+        <Sequence name="NormalFlow">
+          <!-- Go home first -->
+          <SubTree ID="GoHome"/>
+          
+          <!-- Pick object -->
+          <SubTree ID="PickObject"
+            approach_joints="0;-0.3;-0.8;0;-0.5;0"
+            pick_joints="0;-0.5;-0.8;0;-0.3;0"/>
+          
+          <!-- Place object -->
+          <SubTree ID="PlaceObject"
+            approach_joints="0;0.3;-0.8;0;-0.5;0"
+            place_joints="0;0.5;-0.8;0;-0.3;0"/>
+          
+          <!-- Return home -->
+          <SubTree ID="GoHome"/>
+        </Sequence>
+        
+        <!-- Error recovery: Always try to go home -->
+        <Sequence name="ErrorRecovery">
+          <Delay delay_msec="2000">
+            <AlwaysSuccess/>
+          </Delay>
+          <MoveToJoint target_joints="0;0;0;0;0;0" name="EmergencyHome"/>
+        </Sequence>
+        
+      </Fallback>
     </Sequence>
   </BehaviorTree>
 </root>

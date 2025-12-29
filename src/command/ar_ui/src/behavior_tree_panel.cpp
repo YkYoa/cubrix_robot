@@ -99,9 +99,6 @@ void BehaviorTreePanel::setupUi()
 
   main_layout_->addStretch();
 
-  // Keep panel compact
-  setMaximumWidth(200);
-
   // Initialize unused members
   project_combo_ = nullptr;
   refresh_btn_ = nullptr;

@@ -21,7 +21,6 @@ add_library(motion_types SHARED
   src/motion_types/delay_motion.cpp
   src/motion_types/set_planner.cpp
   src/motion_types/set_velocity.cpp
-  src/motion_types/circle_motion.cpp
 )
 target_include_directories(motion_types PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

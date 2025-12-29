@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
+<!--
+  AR BehaviorTree Node Definitions for Groot2
+  Load this file in Groot2 to see AR nodes in the palette
+-->
 <root BTCPP_format="4">
   <TreeNodesModel>
-    <!-- AR Motion Nodes -->
+    
+    <!-- ==================== ACTION NODES ==================== -->
+    
     <Action ID="MoveToJoint">
-      <input_port name="target_joints" type="std::vector&lt;double&gt;">Target joint values (semicolon-separated)</input_port>
+      <input_port name="target_joints" type="std::vector&lt;double&gt;">Target joint values (semicolon-separated, e.g., "0;0.5;-0.5;0;0;0")</input_port>
     </Action>
     
     <Action ID="PlanToJoint">
@@ -18,11 +24,65 @@
     
     <Action ID="SetPlanner">
       <input_port name="pipeline" type="std::string" default="ompl">Planning pipeline (ompl/pilz)</input_port>
-      <input_port name="planner" type="std::string" default="RRTConnect">Planner ID</input_port>
+      <input_port name="planner" type="std::string" default="RRTConnect">Planner ID (RRTConnect, PTP, LIN, CIRC)</input_port>
     </Action>
     
     <Action ID="SetBlendRadius">
-      <input_port name="radius" type="double" default="0.0">Blend radius in meters</input_port>
+      <input_port name="radius" type="double" default="0.0">Blend radius in meters (for PILZ)</input_port>
     </Action>
+    
+    <Action ID="SetVelocityScaling">
+      <input_port name="factor" type="double" default="0.5">Velocity scaling factor (0.0 to 1.0)</input_port>
+    </Action>
+    
+    <Action ID="SetAccelerationScaling">
+      <input_port name="factor" type="double" default="0.5">Acceleration scaling factor (0.0 to 1.0)</input_port>
+    </Action>
+    
+    <!-- ==================== CONDITION NODES ==================== -->
+    
+    <Condition ID="IsAtJoint">
+      <input_port name="target_joints" type="std::vector&lt;double&gt;">Target joint values to check</input_port>
+      <input_port name="tolerance" type="double" default="0.01">Position tolerance in radians</input_port>
+    </Condition>
+    
+    <Condition ID="IsPlanValid">
+      <input_port name="plan_key" type="std::string" default="current_plan">Blackboard key for the plan</input_port>
+    </Condition>
+    
+    <Condition ID="IsRobotReady">
+      <!-- No input ports - checks if robot is operational -->
+    </Condition>
+    
+    <Condition ID="AlwaysSuccess">
+      <!-- BUILT-IN: Always returns SUCCESS - useful for testing -->
+    </Condition>
+    
+    <Condition ID="AlwaysFailure">
+      <!-- BUILT-IN: Always returns FAILURE - useful for forcing Fallback -->
+    </Condition>
+    
+    <!-- ==================== SUBTREES ==================== -->
+    
+    <SubTree ID="GoHome">
+      <!-- Moves robot to home (zero) position -->
+    </SubTree>
+    
+    <SubTree ID="SetupMotion">
+      <input_port name="pipeline" default="pilz">Planning pipeline</input_port>
+      <input_port name="planner" default="PTP">Planner ID</input_port>
+      <input_port name="velocity" default="0.5">Velocity scaling</input_port>
+    </SubTree>
+    
+    <SubTree ID="PickObject">
+      <input_port name="approach_joints">Joint config for approach position</input_port>
+      <input_port name="pick_joints">Joint config for pick position</input_port>
+    </SubTree>
+    
+    <SubTree ID="PlaceObject">
+      <input_port name="approach_joints">Joint config for approach position</input_port>
+      <input_port name="place_joints">Joint config for place position</input_port>
+    </SubTree>
+    
   </TreeNodesModel>
 </root>

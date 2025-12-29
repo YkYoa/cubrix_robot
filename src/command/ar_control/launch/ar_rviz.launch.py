@@ -115,7 +115,8 @@ def generate_launch_description():
                     robot_description,
                     robot_description_semantic,
                     robot_description_kinematics,
-                ]
+                ],
+                additional_env={"QT_QPA_PLATFORMTHEME": "qt5ct"},
             )
         ]
     )

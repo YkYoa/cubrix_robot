@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+  SetupMotion Subtree
+  Atomic primitive: Configure planner and velocity for motion
+  Usage: <SubTree ID="SetupMotion" pipeline="pilz" planner="PTP" velocity="0.5"/>
+-->
+<root BTCPP_format="4">
+  <BehaviorTree ID="SetupMotion">
+    <Sequence name="MotionSetup">
+      <SetPlanner pipeline="{pipeline}" planner="{planner}"/>
+      <SetVelocityScaling factor="{velocity}"/>
+      <SetAccelerationScaling factor="{velocity}"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

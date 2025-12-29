@@ -30,6 +30,7 @@ include_directories(
 # BT Action Nodes Library
 add_library(ar_bt_nodes SHARED
   src/bt_action_nodes.cpp
+  src/bt_condition_nodes.cpp
 )
 
 target_include_directories(ar_bt_nodes PUBLIC

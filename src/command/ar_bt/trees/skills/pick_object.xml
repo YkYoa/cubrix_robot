@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+  PickObject Skill Subtree
+  Composed skill: Approach → Pick → Retreat with Fallback recovery
+  Usage: <SubTree ID="PickObject" approach_joints="..." pick_joints="..."/>
+-->
+<root BTCPP_format="4">
+  <BehaviorTree ID="PickObject">
+    <Fallback name="RobustPick">
+      <!-- Main pick sequence -->
+      <Sequence name="PickSequence">
+        <!-- Approach pick position -->
+        <MoveToJoint target_joints="{approach_joints}" name="ApproachPick"/>
+        
+        <!-- Move to pick position -->
+        <MoveToJoint target_joints="{pick_joints}" name="Pick"/>
+        
+        <!-- Gripper close (simulated with delay) -->
+        <Delay delay_msec="500">
+          <AlwaysSuccess/>
+        </Delay>
+        
+        <!-- Retreat from pick -->
+        <MoveToJoint target_joints="{approach_joints}" name="RetreatPick"/>
+      </Sequence>
+      
+      <!-- Recovery: Try to go back to approach position -->
+      <Sequence name="PickRecovery">
+        <Delay delay_msec="1000">
+          <AlwaysSuccess/>
+        </Delay>
+        <MoveToJoint target_joints="{approach_joints}" name="RecoveryRetreat"/>
+      </Sequence>
+    </Fallback>
+  </BehaviorTree>
+</root>

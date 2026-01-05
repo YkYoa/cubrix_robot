@@ -3,6 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <ar_planning_interface/ar_planning_interface.h>
+#include "ar_motion_planner/planner_types.h"
 #include <moveit_msgs/srv/get_motion_plan.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_srvs/srv/trigger.hpp>

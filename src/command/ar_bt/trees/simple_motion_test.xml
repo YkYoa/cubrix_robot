@@ -1,37 +1,39 @@
 <root BTCPP_format="4">
   <BehaviorTree ID="SimpleMotionTest">
-    <Sequence name="TestSequence">
-      <!-- Configure PILZ planner -->
+    <Sequence name="MainSequence">
+      <!-- Configure PILZ planner (do this once) -->
       <SetPlanner pipeline="pilz" planner="PTP"/>
+      <SetVelocityScaling factor="0.3"/>
+      <SetAccelerationScaling factor="0.3"/>
       
-      <!-- Move to home position (all zeros) -->
+      <!-- Move to home position first -->
       <MoveToJoint target_joints="0;0;0;0;0;0" name="MoveToHome"/>
       
-      <!-- Wait a bit -->
-      <Delay delay_msec="100">
-        <AlwaysSuccess/>
-      </Delay>
-
-      <!-- Set velocity to 30% speed -->
-      <SetVelocityScaling factor="0.5"/>
-      
-      <!-- Set acceleration to 50% -->
-      <SetAccelerationScaling factor="0.5"/>
-
-      
-      <!-- Move to a different position -->
-      <!-- <MoveToJoint target_joints="0;0.5;-0.5;-1;0;0" name="MoveToPosition1"/> -->
-      <MoveToJoint target_joints="0.95;0.35;-1.3;-1.5;0;0" name="MoveToPosition1"/>
-      <!-- <MoveToJoint target_joints="-0.38;0.17;-0.24;1.2;0;0.5" name="MoveToPosition3"/> -->
-      <MoveToJoint target_joints="-1.2;0.87;-0.35;0.26;0;-0.5" name="MoveToPosition2"/>
-      
-      <!-- Wait -->
-      <Delay delay_msec="100">
-        <AlwaysSuccess/>
-      </Delay>
-      
-      <!-- Return home -->
-      <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+      <!-- Loop the motion sequence 5 times -->
+      <Repeat num_cycles="5">
+        <Sequence name="MotionLoop">
+          <!-- Move to position 1 -->
+          <MoveToJoint target_joints="0;0.5;-0.5;0;0;0" name="MoveToPosition1"/>
+          
+          <Delay delay_msec="100">
+            <AlwaysSuccess/>
+          </Delay>
+          
+          <!-- Move to position 2 -->
+          <MoveToJoint target_joints="0;0.3;-0.3;0;0;0" name="MoveToPosition2"/>
+          
+          <Delay delay_msec="100">
+            <AlwaysSuccess/>
+          </Delay>
+          
+          <!-- Return home -->
+          <MoveToJoint target_joints="0;0;0;0;0;0" name="ReturnHome"/>
+          
+          <Delay delay_msec="200">
+            <AlwaysSuccess/>
+          </Delay>
+        </Sequence>
+      </Repeat>
     </Sequence>
   </BehaviorTree>
 </root>

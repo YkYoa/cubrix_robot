@@ -246,7 +246,17 @@ namespace master
     }
 
     void IghErrorHandler::requestSlaveState(int slave_pos, ec_al_state_t target_state)
-    {
+    {        
+        const char* state_name = "UNKNOWN";
+        switch (target_state) {
+            case EC_AL_STATE_INIT: state_name = "INIT"; break;
+            case EC_AL_STATE_PREOP: state_name = "PRE-OP"; break;
+            case EC_AL_STATE_SAFEOP: state_name = "SAFE-OP"; break;
+            case EC_AL_STATE_OP: state_name = "OP"; break;
+        }
+        
+        printf("[IGH Error Handler] Requesting state %s for slave %d (%s)\n",
+               state_name, slave_pos, manager_->slave_[slave_pos].slave_info_.name);
     }
 
 } // namespace master

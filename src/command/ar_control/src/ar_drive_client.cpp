@@ -59,10 +59,7 @@ namespace ar_control
     map[6] = (output->touch_probe_function) & 0x00ff;
     map[7] = (output->touch_probe_function >> 8) & 0x00ff;
 
-    for (int i = 0; i < output_map_size; ++i)
-    {
-      manager_.write(slave_id_, i, map[i]);
-    }
+    manager_.writeBuffer(slave_id_, map, output_map_size);
   }
 
   void ArDriveClient::readInputs(DualJointCyclicInput *input)
@@ -120,10 +117,7 @@ namespace ar_control
       map[i * 8 + 7] = (output->axis[i].touch_probe_function >> 8) & 0x00ff;
     }
 
-    for (int i = 0; i < output_map_size; ++i)
-    {
-      manager_.write(slave_id_, i, map[i]);
-    }
+    manager_.writeBuffer(slave_id_, map, output_map_size);
   }
 
   void ArDriveClient::readInputs(DualJointProFileInput *input)
@@ -198,10 +192,7 @@ namespace ar_control
       map[i * 8 + 18] = (output->axis[i].mode_of_operation) & 0x00ff;
     }
 
-    for (int i = 0; i < output_map_size; ++i)
-    {
-      manager_.write(slave_id_, i, map[i]);
-    }
+    manager_.writeBuffer(slave_id_, map, output_map_size);
   }
 
   template <typename T, typename U>
@@ -232,6 +223,7 @@ namespace ar_control
       if (!fault)
       {
         output->control_word = 0x80;
+        writeOutputs(output);
         usleep(10000);
       }
     }
@@ -243,11 +235,24 @@ namespace ar_control
     readInputs(input);
     fflush(stdout);
 
-    bool axis0_fault = (input->axis[0].error_code == 0);
-    bool axis1_fault = (input->axis[0].error_code == 0);
-    if (axis0_fault && axis1_fault)
-      return;
+    // Log initial state
+    printf("[resetFaultDualJoint] Initial state:\n");
+    printf("  Axis[0]: err=0x%04x stat=0x%04x mode=%d pos=%d\n",
+           input->axis[0].error_code, input->axis[0].status_word,
+           input->axis[0].mode_of_operation_display, input->axis[0].actual_position);
+    printf("  Axis[1]: err=0x%04x stat=0x%04x mode=%d pos=%d\n",
+           input->axis[1].error_code, input->axis[1].status_word,
+           input->axis[1].mode_of_operation_display, input->axis[1].actual_position);
 
+    bool axis0_fault = (input->axis[0].error_code == 0);
+    bool axis1_fault = (input->axis[1].error_code == 0);
+    if (axis0_fault && axis1_fault)
+    {
+      printf("[resetFaultDualJoint] No faults detected, skipping reset\n");
+      return;
+    }
+
+    printf("[resetFaultDualJoint] Sending fault reset (0x80) to both axes...\n");
     for (int i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
     {
       output->axis[i].control_word = 0x80; // fault reset
@@ -262,7 +267,10 @@ namespace ar_control
       axis0_fault = (input->axis[0].error_code == 0);
       axis1_fault = (input->axis[1].error_code == 0);
       if (axis0_fault && axis1_fault)
+      {
+        printf("[resetFaultDualJoint] All faults cleared after %d iterations\n", loop);
         break;
+      }
       if (loop % 10 == 0)
       {
         printf("[resetFaultDualJoint] loop %d: axis0 err=0x%04x stat=0x%04x mode=%d pos=%08x | axis1 err=0x%04x stat=0x%04x mode=%d pos=%08x\n",
@@ -283,6 +291,15 @@ namespace ar_control
         writeOutputs(output);
         usleep(10000);
       }
+    }
+    
+    // Final check
+    readInputs(input);
+    if (input->axis[0].error_code != 0 || input->axis[1].error_code != 0)
+    {
+      printf("[resetFaultDualJoint] WARNING: Faults still present after reset:\n");
+      printf("  Axis[0]: err=0x%04x\n", input->axis[0].error_code);
+      printf("  Axis[1]: err=0x%04x\n", input->axis[1].error_code);
     }
   }
 
@@ -307,8 +324,9 @@ namespace ar_control
   template <typename T, typename U>
   void ArDriveClient::singleMotorOff(T *input, U *output)
   {
-    const uint16 sequence[] = {0x000F, 0x0007, 0x0006, 0x0000};
+    const uint16 sequence[] = {0x0007, 0x0006, 0x0000};
 
+    printf("[singleMotorOff] Starting shutdown sequence...\n");
     for (uint16 cmd : sequence)
     {
       output->control_word = cmd;

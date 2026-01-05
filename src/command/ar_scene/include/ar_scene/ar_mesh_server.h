@@ -4,6 +4,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <string>
 #include <map>
+#include <vector>
 #include <memory>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
@@ -27,11 +28,25 @@ public:
   bool registerMesh(const std::string & name, const std::string & path);
 
   /**
+   * @brief Register all mesh files from a directory in a package
+   * @param package_name ROS package name
+   * @param relative_path Path relative to package share directory
+   * @return Number of meshes registered
+   */
+  int registerMeshDirectory(const std::string & package_name, const std::string & relative_path);
+
+  /**
    * @brief Get the full path to a mesh
    * @param name Name of the mesh
    * @return std::string Full path, or empty if not found
    */
   std::string getMeshPath(const std::string & name) const;
+
+  /**
+   * @brief Get list of all registered mesh names
+   * @return Vector of mesh names
+   */
+  std::vector<std::string> getRegisteredMeshNames() const;
 
   /**
    * @brief Check if a mesh file exists and is accessible
@@ -48,3 +63,4 @@ private:
 } // namespace ar_scene
 
 #endif // AR_SCENE__AR_MESH_SERVER_H_
+

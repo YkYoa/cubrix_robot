@@ -119,10 +119,13 @@ namespace master
         virtual ~EthercatMasterInterface() = default;
         
         virtual void write(int slave_no, uint8_t channel, uint8_t value) = 0;
+        virtual void writeBuffer(int slave_no, const uint8_t* buffer, int size) = 0;
         virtual uint8_t readInput(int slave_no, uint8_t channel) const = 0;
         virtual uint8_t readOutput(int slave_no, uint8_t channel) const = 0;
         virtual int getInputBits(int slave_no) const = 0;
         virtual int getOutputBits(int slave_no) const = 0;
+        
+        virtual void waitForCycles(int num_cycles) = 0;
     };
 
     class EthercatManager : public EthercatMasterInterface
@@ -146,6 +149,16 @@ namespace master
          * sure you know your IOMap bounds.
          */
         void write(int slave_no, uint8_t channel, uint8_t value);
+        
+        /**
+         * \brief Atomically writes a buffer to the output registers (for SOEM compatibility)
+         */
+        void writeBuffer(int slave_no, const uint8_t* buffer, int size);
+        
+        /**
+         * \brief Wait for N complete EtherCAT cycles (for synchronization)
+         */
+        void waitForCycles(int num_cycles);
 
         /**
          * \brief Reads the "channel-th" input-register of the given slave no

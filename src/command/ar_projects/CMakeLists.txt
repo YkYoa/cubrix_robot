@@ -31,10 +31,11 @@ ament_target_dependencies(motion_types
   rclcpp
 )
 
-# YAML parser and XML generator library
+# YAML parser and XML/YAML generator library
 add_library(project_generator SHARED
   src/yaml_parser.cpp
   src/xml_generator.cpp
+  src/yaml_generator.cpp
   src/project_manager.cpp
 )
 target_include_directories(project_generator PUBLIC

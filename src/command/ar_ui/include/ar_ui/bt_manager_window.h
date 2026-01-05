@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
+#include <QCheckBox>
+#include <QSpinBox>
 #include <QLabel>
 #include <QComboBox>
 #include <QTextEdit>
@@ -23,6 +25,10 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 
 namespace ar_ui
 {
@@ -44,12 +50,15 @@ private slots:
   void onRefreshProjects();
   void onProjectSelected(int index);
   void onGenerateXml();
+  void onGenerateYaml();
   void onOpenInGroot();
   void onRunProject();
   void onStopProject();
   void onOpenXmlFile();
+  void onReloadYaml();
   void onSaveXml();
   void onClearLog();
+  void onGetRobotState();
   void onAbout();
   void processRosEvents();
 
@@ -70,7 +79,7 @@ private:
   QGroupBox* project_group_;
   QComboBox* project_combo_;
   QPushButton* refresh_btn_;
-  QListWidget* project_info_list_;
+  QListWidget* sequence_list_;
   
   // Center panel - XML Editor
   QGroupBox* xml_group_;
@@ -82,12 +91,18 @@ private:
   QPushButton* run_btn_;
   QPushButton* stop_btn_;
   QPushButton* groot_btn_;
+  QCheckBox* loop_checkbox_;
+  QSpinBox* loop_count_spinbox_;
   QTextEdit* log_text_;
   
   // ROS
   rclcpp::Node::SharedPtr node_;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr execution_pub_;
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr status_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_sub_;
+  sensor_msgs::msg::JointState latest_joint_state_;
+  std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
   QTimer* ros_timer_;
   
   // Processes
@@ -100,6 +115,8 @@ private:
   QString groot_path_;
   QString pending_tree_file_;
   bool server_ready_;
+  int current_loop_;
+  int target_loops_;
 };
 
 }  // namespace ar_ui

@@ -99,6 +99,13 @@ namespace ar_control
             {
                 joint->pulley_ratio = 60.0 / 15.0;
             }
+            else if(jointParam.joint_name == "Arm_joint5"){
+                joint->pulley_ratio = 2.0;
+            }
+            else if (jointParam.joint_name == "Arm_joint4")
+            {
+                joint->pulley_ratio = 2.0;
+            }
             else
             {
                 joint->pulley_ratio = 1.0;
@@ -258,6 +265,9 @@ namespace ar_control
 
     void ArDriveControl::shutdown()
     {
+        if (shutdown_complete_)
+            return; 
+
         if (ar_client == nullptr)
             return;
 
@@ -274,7 +284,7 @@ namespace ar_control
             }
 
             ar_client->resetFaultDualJoint(input, output);
-            ar_client->dualMotorOff(input, output);
+            // ar_client->dualMotorOff(input, output);
         }
         else
         {
@@ -286,8 +296,10 @@ namespace ar_control
                    input->error_code, input->status_word, input->mode_of_operation_display);
 
             ar_client->resetFaultSingleJoint(input, output);
-            ar_client->singleMotorOff(input, output);
+            // ar_client->singleMotorOff(input, output);
         }
+
+        shutdown_complete_ = true;
     }
 
     // template <typename T> void ArDriveControl::jointCmdToPulses(ArJointControl* joint, T* position, T* velocity)

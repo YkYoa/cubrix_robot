@@ -17,6 +17,10 @@ find_package(rviz_common REQUIRED)
 find_package(rviz_rendering REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(ar_projects REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
@@ -81,6 +85,10 @@ target_link_libraries(bt_manager
 ament_target_dependencies(bt_manager
   rclcpp
   std_msgs
+  sensor_msgs
+  geometry_msgs
+  tf2_ros
+  tf2_geometry_msgs
   ar_projects
 )
 

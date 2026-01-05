@@ -994,6 +994,22 @@ namespace master
         soem.ec_slave[slave_no].outputs[channel] = value;
     }
 
+    void EthercatManager::writeBuffer(int slave_no, const uint8_t* buffer, int size)
+    {
+        boost::mutex::scoped_lock lock(iomap_mutex_);
+        for (int i = 0; i < size; ++i)
+        {
+            soem.ec_slave[slave_no].outputs[i] = buffer[i];
+        }
+    }
+
+    void EthercatManager::waitForCycles(int num_cycles)
+    {
+        // SOEM runs at DRIVER_SYNCH_TIME ms per cycle
+        // Wait for num_cycles * cycle_time to ensure data is exchanged
+        usleep(num_cycles * DRIVER_SYNCH_TIME * 1000);
+    }
+
     uint8_t EthercatManager::readOutput(int slave_no, uint8_t channel) const
     {
         boost::mutex::scoped_lock lock(iomap_mutex_);

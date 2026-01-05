@@ -12,7 +12,7 @@ struct timespec g_sync_timer;                 // timer for DC sync
 uint32_t g_sync_ref_counter = 0;              // reference counter for DC sync
 
 IghManager::IghManager(pthread_cond_t &cond, pthread_mutex_t &cond_lock, boost::mutex &mutex)
-    : cond_(cond), cond_lock_(cond_lock), iomap_mutex_(mutex), stop_flag_(false), num_slaves_(0), error_handler_(nullptr)
+    : cond_(cond), cond_lock_(cond_lock), iomap_mutex_(mutex), stop_flag_(false), num_slaves_(0), cycle_counter_(0), error_handler_(nullptr)
 {
     // Create error handler
     error_handler_ = new IghErrorHandler(this);
@@ -324,6 +324,70 @@ int IghManager::registerDomain()
     return 0;
 }
 
+int IghManager::initializePdoDomain()
+{
+    printf("[IGH] Initializing PDO domain and resetting DS402 drive states...\n");
+    
+    int actual_slaves = num_slaves_;
+    
+    // Step 1: Zero all output PDO memory
+    for (int i = 0; i < actual_slaves; i++)
+    {
+        if (slave_[i].slave_pdo_domain_)
+        {
+            int output_bytes = getOutputBits(i) / 8;
+            memset(slave_[i].slave_pdo_domain_ + slave_[i].base_output_offset_, 0, output_bytes);
+            printf("[IGH] Slave %d: zeroed %d output bytes at offset %u\n", 
+                   i, output_bytes, slave_[i].base_output_offset_);
+        }
+    }
+    
+    // Step 2: Write explicit "Disable Voltage" command (0x0000) to all control words
+    // This is critical for DS402 state machine reset
+    printf("[IGH] Sending Disable Voltage (0x0000) to all drives...\n");
+    for (int i = 0; i < actual_slaves; i++)
+    {
+        if (slave_[i].slave_pdo_domain_)
+        {
+            uint8_t* domain = slave_[i].slave_pdo_domain_;
+            
+            // Write 0x0000 to control word (2 bytes, little-endian)
+            domain[slave_[i].offset_.control_word] = 0x00;
+            domain[slave_[i].offset_.control_word + 1] = 0x00;
+            
+            // For dual-axis drives, also write to second control word
+            std::string slave_name(slave_[i].slave_info_.name);
+            if (slave_name.find("2CL3") != std::string::npos)
+            {
+                domain[slave_[i].offset_.control_word_2] = 0x00;
+                domain[slave_[i].offset_.control_word_2 + 1] = 0x00;
+                printf("[IGH] Slave %d (dual-axis): wrote 0x0000 to both control words\n", i);
+            }
+            else
+            {
+                printf("[IGH] Slave %d: wrote 0x0000 to control word\n", i);
+            }
+        }
+    }
+    
+    // Step 3: Verify the writes by reading back
+    printf("[IGH] Verifying PDO domain writes...\n");
+    for (int i = 0; i < actual_slaves; i++)
+    {
+        if (slave_[i].slave_pdo_domain_)
+        {
+            uint8_t* domain = slave_[i].slave_pdo_domain_;
+            uint16_t cw = domain[slave_[i].offset_.control_word] | 
+                         (domain[slave_[i].offset_.control_word + 1] << 8);
+            printf("[IGH] Slave %d: Control word readback = 0x%04X (offset=%u)\n",
+                   i, cw, slave_[i].offset_.control_word);
+        }
+    }
+    
+    printf("[IGH] PDO domain initialized - drives will receive DS402 reset on next cycles\n");
+    return 0;
+}
+
 int IghManager::setCyclicPositionParameters()
 {
     int actual_slaves = num_slaves_;
@@ -369,46 +433,70 @@ int IghManager::waitForOpMode()
 {
     int actual_slaves = num_slaves_;
     int try_cnt = 0;
-    int check_state_cnt = 0;
-    int time_out = 20e3;
-    while (g_master_state.al_states != EC_AL_STATE_OP)
+    int time_out = 5000;
+    
+    printf("[IGH] Waiting for all slaves to reach OPERATIONAL state...\n");
+    
+    struct timespec wakeup_time;
+    clock_gettime(CLOCK_MONOTONIC, &wakeup_time);
+    
+    while (1)
     {
-        if (try_cnt < time_out)
+        if (try_cnt >= time_out)
         {
-            clock_gettime(CLOCK_MONOTONIC, &g_sync_timer);
-            ecrt_master_application_time(g_master, TIMESPEC2NS(g_sync_timer));
-
-            ecrt_master_receive(g_master);
-            ecrt_domain_process(g_master_domain);
-            usleep(PERIOD_US);
-
-            if (!check_state_cnt)
+            printf("[IGH] ERROR: Timeout waiting for OP state after %d iterations (~%d seconds)\n", 
+                   try_cnt, (try_cnt * PERIOD_NS) / 1000000000);
+            
+            for (int i = 0; i < actual_slaves; i++)
             {
-                checkMasterState();
-                checkMasterDomainState();
-                for (int i = 0; i < actual_slaves; i++)
-                {
-                    slave_[i].checkSlaveConfigState();
-                }
-                check_state_cnt = PERIOD_US;
+                ec_slave_config_state_t slave_state;
+                ecrt_slave_config_state(slave_[i].slave_config_, &slave_state);
+                printf("[IGH] Slave %d final state: 0x%02X, online=%d\n", 
+                       i, slave_state.al_state, slave_state.online);
             }
-
-            ecrt_domain_queue(g_master_domain);
-            ecrt_master_sync_slave_clocks(g_master);
-            ecrt_master_sync_reference_clock_to(g_master, TIMESPEC2NS(g_sync_timer));
-            ecrt_master_send(g_master);
-
-            try_cnt++;
-            check_state_cnt--;
-        }
-        else
-        {
-            ecrt_master_deactivate(g_master);
-            ecrt_release_master(g_master);
             return -1;
         }
+        
+        wakeup_time.tv_nsec += PERIOD_NS;
+        while (wakeup_time.tv_nsec >= 1000000000L)
+        {
+            wakeup_time.tv_nsec -= 1000000000L;
+            wakeup_time.tv_sec++;
+        }
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &wakeup_time, NULL);
+        
+        ecrt_master_application_time(g_master, TIMESPEC2NS(wakeup_time));
+        
+        ecrt_master_receive(g_master);
+        ecrt_domain_process(g_master_domain);
+        
+        ecrt_master_state(g_master, &g_master_state);
+        
+        if (g_master_state.al_states == EC_AL_STATE_OP)
+        {
+            printf("[IGH] All %d slaves reached OPERATIONAL state after %d cycles (~%.1f seconds)\n", 
+                   actual_slaves, try_cnt, (try_cnt * PERIOD_NS) / 1e9);
+            
+            ecrt_domain_queue(g_master_domain);
+            ecrt_master_send(g_master);
+            return 0;
+        }
+        
+        if (try_cnt % 250 == 0 && try_cnt > 0)
+        {
+            printf("[IGH] Waiting for OP... Master AL state: 0x%02X, slaves responding: %u/%d (%.1fs)\n",
+                   g_master_state.al_states, g_master_state.slaves_responding, actual_slaves,
+                   (try_cnt * PERIOD_NS) / 1e9);
+        }
+        
+        ecrt_domain_queue(g_master_domain);
+        ecrt_master_sync_slave_clocks(g_master);
+        ecrt_master_sync_reference_clock_to(g_master, TIMESPEC2NS(wakeup_time));
+        ecrt_master_send(g_master);
+        
+        try_cnt++;
     }
-
+    
     return 0;
 }
 
@@ -559,7 +647,6 @@ void IghManager::cyclicLoop()
 
     printf("IGH cyclic communication thread started at 250Hz\n");
 
-    uint32_t cycle_counter = 0;
     uint8_t sync_ref_counter = 0;
 
     while (!stop_flag_)
@@ -580,7 +667,7 @@ void IghManager::cyclicLoop()
         pthread_cond_signal(&cond_);
         usleep(1000);
 
-        if (cycle_counter % 1000 == 0 && g_master_domain_state.wc_state == EC_WC_INCOMPLETE)
+        if (cycle_counter_ % 1000 == 0 && g_master_domain_state.wc_state == EC_WC_INCOMPLETE)
         {
             printf("Domain WC incomplete: %u\n", g_master_domain_state.working_counter);
         }
@@ -603,10 +690,21 @@ void IghManager::cyclicLoop()
             ecrt_master_send(g_master);
         }
 
-        cycle_counter++;
+        cycle_counter_++;
     }
 
     printf("\n IGH cyclic communication thread stopped \n");
+}
+
+void IghManager::waitForCycles(int num_cycles)
+{
+    uint32_t start_cycle = cycle_counter_;
+    uint32_t target_cycle = start_cycle + num_cycles;
+    
+    while (cycle_counter_ < target_cycle && !stop_flag_)
+    {
+        usleep(500);
+    }
 }
 
 int IghManager::startCyclicCommunication()
@@ -697,6 +795,36 @@ void IghManager::write(int slave_no, uint8_t channel, uint8_t value)
     {
         unsigned int offset = slave_[slave_no].base_output_offset_ + channel;
         domain[offset] = value;
+    }
+}
+
+void IghManager::writeBuffer(int slave_no, const uint8_t* buffer, int size)
+{
+    boost::mutex::scoped_lock lock(iomap_mutex_);
+    
+    uint8_t *domain = slave_[slave_no].slave_pdo_domain_;
+    if (domain && buffer)
+    {
+        unsigned int base_offset = slave_[slave_no].base_output_offset_;
+        
+        // Debug: Log control word writes for slaves 1 and 2 (the problematic middle drives)
+        static int log_counter = 0;
+        if ((slave_no == 1 || slave_no == 2) && log_counter++ < 5 && size >= 2)
+        {
+            uint16_t control_word = buffer[0] | (buffer[1] << 8);
+            printf("[IGH DEBUG] Slave %d: Writing control word 0x%04X to offset %u (base=%u)\n",
+                   slave_no, control_word, base_offset, base_offset);
+        }
+        
+        for (int i = 0; i < size; ++i)
+        {
+            domain[base_offset + i] = buffer[i];
+        }
+    }
+    else
+    {
+        printf("[IGH ERROR] Slave %d: domain=%p, buffer=%p - cannot write!\n",
+               slave_no, (void*)domain, (void*)buffer);
     }
 }
 

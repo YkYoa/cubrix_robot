@@ -15,7 +15,7 @@ project:
 
 defaults:
   velocity_scaling: 0.5
-  acceleration_scaling: 0.5
+  acceleration_scaling: 0.3
   planner:
     pipeline: "pilz"
     planner_id: "PTP"
@@ -24,9 +24,9 @@ waypoints:
   home:
     joints: [0, 0, 0, 0, 0, 0]
   position_1:
-    joints: [0.5, 0.3, -0.5, 0, 0, 0]
+    joints: [-0.0205, 0.8813, -1.1910, 0.4838, 0, 2.1735]
   position_2:
-    joints: [-0.5, 0.3, -0.5, 0, 0, 0]
+    joints: [-0.0205, 0.6093, 0.1375, -1.1884, 0, -0.7873]
 
 sequence:
   # Initial configuration

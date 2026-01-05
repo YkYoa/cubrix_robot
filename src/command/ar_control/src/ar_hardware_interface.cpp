@@ -150,6 +150,15 @@ namespace ar_control
                 RCLCPP_WARN(rclcpp::get_logger("Ar"), "Some slaves did not reach OPERATIONAL state in time");
             }
 
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Resetting DS402 drive states...");
+            if (ighManager->initializePdoDomain() != 0)
+            {
+                RCLCPP_WARN(rclcpp::get_logger("Ar"), "Failed to initialize PDO domain");
+            }
+            
+            ighManager->waitForCycles(25);
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "DS402 reset commands transmitted");
+
             RCLCPP_INFO(rclcpp::get_logger("Ar"), "IGH EtherCAT master initialized successfully");
         }
 #endif
@@ -198,19 +207,18 @@ namespace ar_control
 
     void ArHardwareInterface::shutdown()
     {
-        for (auto drive : drives)
+        RCLCPP_INFO(rclcpp::get_logger("Ar"), "Disabling all drives before shutdown...");
+        for (auto& drive : drives)
         {
             if (drive.second)
             {
-                delete drive.second;
+                drive.second->shutdown();  // Send disable commands to drives
             }
         }
-        if (portManager)
-        {
-            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Shutting down SOEM manager");
-            delete portManager;
-            portManager = nullptr;
-        }
+
+        RCLCPP_INFO(rclcpp::get_logger("Ar"), "Waiting for disable commands to transmit...");
+        usleep(500000);  // 500ms delay
+
 #ifndef NO_ETHERCAT
         if (ighManager)
         {
@@ -220,6 +228,23 @@ namespace ar_control
             ighManager = nullptr;
         }
 #endif
+
+        for (auto drive : drives)
+        {
+            if (drive.second)
+            {
+                delete drive.second;
+            }
+        }
+        drives.clear();
+
+        if (portManager)
+        {
+            RCLCPP_INFO(rclcpp::get_logger("Ar"), "Shutting down SOEM manager");
+            delete portManager;
+            portManager = nullptr;
+        }
+
         if (control_server_thread)
             control_server_thread->join();
 

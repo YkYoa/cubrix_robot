@@ -52,6 +52,7 @@ class IghManager : public EthercatMasterInterface
 
         int activateMaster();
         int registerDomain();
+        int initializePdoDomain();
         int waitForOpMode();
         
         // SDO access methods
@@ -66,10 +67,14 @@ class IghManager : public EthercatMasterInterface
         
         // PDO access methods (Interface implementation)
         virtual void write(int slave_no, uint8_t channel, uint8_t value) override;
+        virtual void writeBuffer(int slave_no, const uint8_t* buffer, int size) override;
         virtual uint8_t readInput(int slave_no, uint8_t channel) const override;
         virtual uint8_t readOutput(int slave_no, uint8_t channel) const override;
         virtual int getInputBits(int slave_no) const override;
         virtual int getOutputBits(int slave_no) const override;
+        
+        void waitForCycles(int num_cycles);
+        uint32_t getCycleCounter() const { return cycle_counter_; }
 
         int fd;
         
@@ -80,6 +85,7 @@ class IghManager : public EthercatMasterInterface
         bool stop_flag_;
         pthread_t cyclic_thread_;
         int num_slaves_;
+        volatile uint32_t cycle_counter_;
         
         pthread_cond_t& cond_;
         pthread_mutex_t& cond_lock_;

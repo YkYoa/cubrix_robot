@@ -12,6 +12,11 @@
 #include <ar_projects/project_manager.h>
 #include <ar_projects/yaml_parser.h>
 #include <ar_projects/xml_generator.h>
+#include <ar_projects/yaml_generator.h>
+#include <ar_projects/motion_types/move_joint.h>
+#include <ar_projects/motion_types/delay_motion.h>
+#include <ar_projects/motion_types/set_planner.h>
+#include <ar_projects/motion_types/set_velocity.h>
 
 namespace ar_ui
 {
@@ -23,6 +28,8 @@ BTManagerWindow::BTManagerWindow(QWidget* parent)
   , groot_process_(nullptr)
   , server_process_(nullptr)
   , server_ready_(false)
+  , current_loop_(0)
+  , target_loops_(1)
 {
   setWindowTitle("BehaviorTree Manager");
   setMinimumSize(1400, 900);  // Much larger window
@@ -132,22 +139,47 @@ void BTManagerWindow::setRosNode(rclcpp::Node::SharedPtr node)
         appendLog(status_msg, "#9cdcfe");
         
         if (msg->data.find("SUCCESS") != std::string::npos) {
-          status_label_->setText("✓ Execution Completed");
-          status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
-          run_btn_->setEnabled(true);
-          stop_btn_->setEnabled(false);
-          statusBar()->showMessage("Execution completed successfully");
+          current_loop_++;
+          
+          // Check if we need to loop again
+          if (loop_checkbox_->isChecked() && current_loop_ < target_loops_) {
+            appendLog(QString("Loop %1/%2 completed, starting next...").arg(current_loop_).arg(target_loops_), "#dcdcaa");
+            status_label_->setText(QString("🔄 Loop %1/%2").arg(current_loop_ + 1).arg(target_loops_));
+            status_label_->setStyleSheet("color: #569cd6; font-size: 14px; font-weight: bold;");
+            
+            // Execute again after a brief delay
+            QTimer::singleShot(500, this, [this]() {
+              if (!current_xml_file_.isEmpty()) {
+                executeTreeFile(current_xml_file_);
+              }
+            });
+          } else {
+            QString completed_msg = loop_checkbox_->isChecked() 
+              ? QString("✓ All %1 loops completed").arg(target_loops_)
+              : "✓ Execution Completed";
+            status_label_->setText(completed_msg);
+            status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
+            run_btn_->setEnabled(true);
+            stop_btn_->setEnabled(false);
+            current_loop_ = 0;
+            statusBar()->showMessage("Execution completed successfully");
+          }
         } else if (msg->data.find("FAILURE") != std::string::npos) {
-          status_label_->setText("✗ Execution Failed");
+          QString fail_msg = loop_checkbox_->isChecked()
+            ? QString("✗ Failed at loop %1/%2").arg(current_loop_ + 1).arg(target_loops_)
+            : "✗ Execution Failed";
+          status_label_->setText(fail_msg);
           status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
           run_btn_->setEnabled(true);
           stop_btn_->setEnabled(false);
+          current_loop_ = 0;
           statusBar()->showMessage("Execution failed");
         } else if (msg->data.find("STOPPED") != std::string::npos) {
           status_label_->setText("■ Stopped");
           status_label_->setStyleSheet("color: #dcdcaa; font-size: 14px; font-weight: bold;");
           run_btn_->setEnabled(true);
           stop_btn_->setEnabled(false);
+          current_loop_ = 0;
           statusBar()->showMessage("Execution stopped");
         } else if (msg->data.find("READY") != std::string::npos) {
           server_ready_ = true;
@@ -161,6 +193,17 @@ void BTManagerWindow::setRosNode(rclcpp::Node::SharedPtr node)
         }
       }, Qt::QueuedConnection);
     });
+  
+  // Subscribe to joint states
+  joint_states_sub_ = node_->create_subscription<sensor_msgs::msg::JointState>(
+    "/joint_states", 10,
+    [this](const sensor_msgs::msg::JointState::SharedPtr msg) {
+      latest_joint_state_ = *msg;
+    });
+  
+  // Initialize TF2 buffer and listener
+  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(node_->get_clock());
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
   
   // ROS spin timer
   ros_timer_ = new QTimer(this);
@@ -237,22 +280,37 @@ void BTManagerWindow::setupUi()
   combo_row->addWidget(refresh_btn_);
   project_layout->addLayout(combo_row);
   
-  project_info_list_ = new QListWidget(this);
-  project_layout->addWidget(project_info_list_);
+  sequence_list_ = new QListWidget(this);
+  sequence_list_->setStyleSheet(
+    "QListWidget { background-color: #2d2d2d; border: 1px solid #3c3c3c; }"
+    "QListWidget::item { border-bottom: 1px solid #3e3e3e; padding: 0px; }"
+    "QListWidget::item:selected { background-color: #383838; }"
+  );
+  project_layout->addWidget(sequence_list_);
   
-  QPushButton* generate_btn = new QPushButton("📄 Generate XML", this);
-  connect(generate_btn, &QPushButton::clicked, this, &BTManagerWindow::onGenerateXml);
+  QPushButton* generate_btn = new QPushButton("📄 Generate YAML", this);
+  connect(generate_btn, &QPushButton::clicked, this, &BTManagerWindow::onGenerateYaml);
   project_layout->addWidget(generate_btn);
-  
+
+  QPushButton* reload_btn = new QPushButton("🔄 Reload YAML", this);
+  reload_btn->setStyleSheet("background-color: #2d7d46;");
+  connect(reload_btn, &QPushButton::clicked, this, &BTManagerWindow::onReloadYaml);
+  project_layout->addWidget(reload_btn);
+
+  QPushButton* get_state_btn = new QPushButton("🤖 Get Robot State", this);
+  get_state_btn->setStyleSheet("background-color: #6b5b95;");
+  connect(get_state_btn, &QPushButton::clicked, this, &BTManagerWindow::onGetRobotState);
+  project_layout->addWidget(get_state_btn);
+
   main_layout->addWidget(project_group_);
   
-  // Center panel - XML Editor
-  xml_group_ = new QGroupBox("BehaviorTree XML", this);
+  // Center panel - YAML Editor
+  xml_group_ = new QGroupBox("Project YAML", this);
   QVBoxLayout* xml_layout = new QVBoxLayout(xml_group_);
   
   xml_editor_ = new QTextEdit(this);
   xml_editor_->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-  xml_editor_->setPlaceholderText("Generated XML will appear here...\n\nSelect a project and click 'Generate XML' to start.");
+  xml_editor_->setPlaceholderText("Generated YAML will appear here...\n\nSelect a project and click 'Generate YAML' to start.");
   xml_layout->addWidget(xml_editor_);
   
   main_layout->addWidget(xml_group_, 1);
@@ -286,16 +344,61 @@ void BTManagerWindow::setupUi()
   groot_btn_->setMinimumHeight(40);
   exec_layout->addWidget(groot_btn_);
   
+  // Loop control row
+  QHBoxLayout* loop_row = new QHBoxLayout();
+  loop_checkbox_ = new QCheckBox("🔄 Loop Sequence", this);
+  loop_checkbox_->setStyleSheet("color: #ffffff; font-size: 12px;");
+  loop_count_spinbox_ = new QSpinBox(this);
+  loop_count_spinbox_->setRange(1, 1000);
+  loop_count_spinbox_->setValue(1);
+  loop_count_spinbox_->setPrefix("Count: ");
+  loop_count_spinbox_->setStyleSheet(
+    "QSpinBox { background-color: #2d2d2d; color: #ffffff; border: 1px solid #3c3c3c; "
+    "border-radius: 3px; padding: 4px; font-size: 12px; min-width: 80px; }"
+    "QSpinBox::up-button, QSpinBox::down-button { width: 20px; }"
+  );
+  loop_count_spinbox_->setEnabled(false);
+  
+  connect(loop_checkbox_, &QCheckBox::toggled, this, [this](bool checked) {
+    loop_count_spinbox_->setEnabled(checked);
+    if (checked) {
+      target_loops_ = loop_count_spinbox_->value();
+    } else {
+      target_loops_ = 1;
+    }
+  });
+  
+  connect(loop_count_spinbox_, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int value) {
+    target_loops_ = value;
+  });
+  
+  loop_row->addWidget(loop_checkbox_);
+  loop_row->addWidget(loop_count_spinbox_);
+  loop_row->addStretch();
+  exec_layout->addLayout(loop_row);
+  
+  QHBoxLayout* log_header_row = new QHBoxLayout();
   QLabel* log_label = new QLabel("Execution Log:", this);
   log_label->setStyleSheet("font-size: 13px; font-weight: bold; margin-top: 10px;");
-  exec_layout->addWidget(log_label);
-  
+  log_header_row->addWidget(log_label);
+  log_header_row->addStretch();
+  QPushButton* clear_log_btn = new QPushButton("🗑 Clear", this);
+  clear_log_btn->setStyleSheet("background-color: #555; padding: 5px 10px; font-size: 11px;");
+  connect(clear_log_btn, &QPushButton::clicked, this, &BTManagerWindow::onClearLog);
+  log_header_row->addWidget(clear_log_btn);
+  exec_layout->addLayout(log_header_row);
+
   log_text_ = new QTextEdit(this);
   log_text_->setReadOnly(true);
   QFont log_font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
   log_font.setPointSize(10);  // Larger font for readability
   log_text_->setFont(log_font);
-  log_text_->setStyleSheet("background-color: #300a24; color: #ffffff; border: 2px solid #4c2639; padding: 8px;");
+  log_text_->setStyleSheet(
+    "background-color: #300a24; color: #ffffff; border: 2px solid #4c2639; padding: 8px;"
+    "QScrollBar:vertical { background: #1e1e1e; width: 12px; }"
+    "QScrollBar::handle:vertical { background: #555; min-height: 20px; border-radius: 6px; }"
+    "QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }"
+  );
   log_text_->setMinimumHeight(500);  // Very tall log area
   exec_layout->addWidget(log_text_, 1);  // Stretch to fill
   
@@ -341,7 +444,7 @@ void BTManagerWindow::onRefreshProjects()
 
 void BTManagerWindow::onProjectSelected(int index)
 {
-  project_info_list_->clear();
+  sequence_list_->clear();
   
   if (index > 0) {
     current_project_path_ = project_combo_->currentData().toString();
@@ -351,14 +454,104 @@ void BTManagerWindow::onProjectSelected(int index)
       ar_projects::YamlParser parser;
       auto config = parser.parse(current_project_path_.toStdString());
       
-      project_info_list_->addItem(QString("Name: %1").arg(QString::fromStdString(config.name)));
-      project_info_list_->addItem(QString("Motions: %1").arg(config.motions.size()));
-      project_info_list_->addItem(QString("Waypoints: %1").arg(config.waypoints.size()));
-      project_info_list_->addItem(QString("Velocity: %1").arg(config.velocity_scaling));
-      project_info_list_->addItem(QString("Acceleration: %1").arg(config.acceleration_scaling));
+      int step_count = 1;
+      for (const auto& motion : config.motions) {
+        QWidget* widget = new QWidget();
+        QHBoxLayout* layout = new QHBoxLayout(widget);
+        layout->setContentsMargins(10, 10, 10, 10);
+        
+        // Timeline Section (Left)
+        QVBoxLayout* timeline_layout = new QVBoxLayout();
+        QLabel* step_num = new QLabel(QString("%1").arg(step_count++, 2, 10, QChar('0')));
+        step_num->setStyleSheet("color: #606060; font-family: monospace; font-weight: bold; font-size: 14px;");
+        timeline_layout->addWidget(step_num);
+        timeline_layout->addStretch();
+        layout->addLayout(timeline_layout);
+        
+        // Content Section (Right)
+        QVBoxLayout* content_layout = new QVBoxLayout();
+        
+        // Header: Type Badge + Name
+        QHBoxLayout* header = new QHBoxLayout();
+        QString type_str = QString::fromStdString(motion->getType());
+        QLabel* type_badge = new QLabel(type_str);
+        
+        QString badge_color = "#0e639c"; // Blue (default/move)
+        if (type_str == "delay") badge_color = "#dcdcaa"; // Yellow
+        else if (type_str.startsWith("set_")) badge_color = "#c586c0"; // Purple
+        else if (type_str == "gripper") badge_color = "#ce9178"; // Orange
+        
+        type_badge->setStyleSheet(QString("background-color: %1; color: white; border-radius: 3px; padding: 2px 6px; font-weight: bold; font-size: 10px;").arg(badge_color));
+        QLabel* name_label = new QLabel(QString::fromStdString(motion->getName()));
+        name_label->setStyleSheet("color: white; font-weight: bold; font-size: 13px;");
+        
+        header->addWidget(type_badge);
+        header->addWidget(name_label);
+        header->addStretch();
+        content_layout->addLayout(header);
+        
+        // Details
+        QString details_txt = "";
+        std::string type = motion->getType();
+        
+        if (type == "move_joint") {
+          auto move = std::dynamic_pointer_cast<ar_projects::MoveJoint>(motion);
+          if (move) {
+            if (!move->getWaypoint().empty()) {
+              details_txt = QString("Goal: <span style='color: #4ec9b0;'>%1</span>")
+                .arg(QString::fromStdString(move->getWaypoint()));
+            } else {
+              details_txt = "Goal: <span style='color: #dcdcaa;'>Custom Joints</span>";
+            }
+          }
+        } else if (type == "delay") {
+          auto delay = std::dynamic_pointer_cast<ar_projects::DelayMotion>(motion);
+          if (delay) {
+            details_txt = QString("Duration: <span style='color: #dcdcaa;'>%1 ms</span>")
+              .arg(delay->getDurationMs());
+          }
+        } else if (type == "set_planner") {
+          auto planner = std::dynamic_pointer_cast<ar_projects::SetPlannerMotion>(motion);
+          if (planner) {
+            details_txt = QString("Pipeline: <span style='color: #569cd6;'>%1</span>, ID: <span style='color: #4ec9b0;'>%2</span>")
+              .arg(QString::fromStdString(planner->getPipeline()))
+              .arg(QString::fromStdString(planner->getPlannerId()));
+          }
+        } else if (type == "set_velocity") {
+          auto vel = std::dynamic_pointer_cast<ar_projects::SetVelocityMotion>(motion);
+          if (vel) {
+            details_txt = QString("Factor: <span style='color: #569cd6;'>%1</span>")
+              .arg(vel->getFactor());
+          }
+        } else if (type == "set_acceleration") {
+          auto acc = std::dynamic_pointer_cast<ar_projects::SetAccelerationMotion>(motion);
+          if (acc) {
+            details_txt = QString("Factor: <span style='color: #569cd6;'>%1</span>")
+              .arg(acc->getFactor());
+          }
+        } else if (type == "set_tool") {
+          details_txt = "Action: <span style='color: #ce9178;'>Set Tool State</span>";
+        } else {
+          details_txt = "<span style='color: #808080;'>Generic Motion Step</span>";
+        }
+        
+        QLabel* details = new QLabel(details_txt);
+        details->setTextFormat(Qt::RichText);
+        details->setStyleSheet("font-size: 12px; margin-top: 4px;");
+        content_layout->addWidget(details);
+        
+        layout->addLayout(content_layout);
+        layout->addStretch();
+        
+        // Add to list
+        QListWidgetItem* item = new QListWidgetItem(sequence_list_);
+        item->setSizeHint(widget->sizeHint());
+        sequence_list_->setItemWidget(item, widget);
+      }
       
     } catch (const std::exception& e) {
-      project_info_list_->addItem(QString("Error: %1").arg(e.what()));
+      QListWidgetItem* item = new QListWidgetItem("Error loading project", sequence_list_);
+      item->setForeground(QBrush(QColor("#f14c4c")));
     }
   }
 }
@@ -405,6 +598,42 @@ void BTManagerWindow::onGenerateXml()
     statusBar()->showMessage("XML generated: " + xml_path);
   } else {
     QMessageBox::critical(this, "Error", "Failed to generate XML.");
+  }
+}
+
+void BTManagerWindow::onGenerateYaml()
+{
+  if (current_project_path_.isEmpty()) {
+    QMessageBox::warning(this, "No Project", "Please select a project first.");
+    return;
+  }
+  
+  try {
+    ar_projects::YamlParser parser;
+    auto config = parser.parse(current_project_path_.toStdString());
+    
+    ar_projects::YamlGenerator generator;
+    std::string yaml = generator.generate(config);
+    
+    // Display in editor
+    xml_editor_->setPlainText(QString::fromStdString(yaml));
+    
+    // Save to file
+    QString output_path = "/tmp/ar_project_" + 
+      QString::fromStdString(config.name) + ".yaml";
+    
+    QFile file(output_path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      QTextStream out(&file);
+      out << QString::fromStdString(yaml);
+      file.close();
+      
+      appendLog("Generated YAML: " + output_path, "#4ec9b0");
+      statusBar()->showMessage("YAML generated: " + output_path);
+    }
+  } catch (const std::exception& e) {
+    appendLog(QString("YAML generation error: %1").arg(e.what()), "#f14c4c");
+    QMessageBox::critical(this, "Error", QString("Failed to generate YAML: %1").arg(e.what()));
   }
 }
 
@@ -515,10 +744,18 @@ void BTManagerWindow::executeTreeFile(const QString& tree_file)
   
   run_btn_->setEnabled(false);
   stop_btn_->setEnabled(true);
-  status_label_->setText("⏳ Running...");
+  
+  if (loop_checkbox_->isChecked() && target_loops_ > 1) {
+    status_label_->setText(QString("⏳ Loop %1/%2").arg(current_loop_ + 1).arg(target_loops_));
+  } else {
+    status_label_->setText("⏳ Running...");
+  }
   status_label_->setStyleSheet("color: #569cd6; font-size: 14px; font-weight: bold;");
   
-  appendLog("Executing: " + QFileInfo(tree_file).fileName(), "#4ec9b0");
+  QString log_msg = loop_checkbox_->isChecked() && target_loops_ > 1
+    ? QString("Executing: %1 (Loop %2/%3)").arg(QFileInfo(tree_file).fileName()).arg(current_loop_ + 1).arg(target_loops_)
+    : "Executing: " + QFileInfo(tree_file).fileName();
+  appendLog(log_msg, "#4ec9b0");
   statusBar()->showMessage("Executing behavior tree...");
 }
 
@@ -533,6 +770,7 @@ void BTManagerWindow::onStopProject()
   run_btn_->setEnabled(true);
   stop_btn_->setEnabled(false);
   pending_tree_file_.clear();
+  current_loop_ = 0;  // Reset loop counter on stop
   
   appendLog("Stop requested", "#dcdcaa");
   statusBar()->showMessage("Execution stopped");
@@ -573,9 +811,91 @@ void BTManagerWindow::onSaveXml()
   }
 }
 
+void BTManagerWindow::onReloadYaml()
+{
+  if (current_project_path_.isEmpty()) {
+    QMessageBox::warning(this, "No Project", "Please select a project first.");
+    return;
+  }
+  
+  // Re-trigger onProjectSelected to refresh the sequence view
+  int index = project_combo_->currentIndex();
+  onProjectSelected(index);
+  
+  appendLog("Reloaded YAML: " + current_project_path_, "#4ec9b0");
+  statusBar()->showMessage("YAML reloaded");
+}
+
 void BTManagerWindow::onClearLog()
 {
   log_text_->clear();
+}
+
+void BTManagerWindow::onGetRobotState()
+{
+  if (latest_joint_state_.name.empty()) {
+    QMessageBox::warning(this, "No Data", "No joint state data received yet.\nMake sure /joint_states topic is being published.");
+    return;
+  }
+  
+  // ===== YAML Waypoint Format Output =====
+  QString yaml_output = "<pre style='color: #ffffff; background-color: #1e1e1e; padding: 10px; border-radius: 5px;'>";
+  yaml_output += "<span style='color: #ce9178;'>current_state:</span>\n";
+  yaml_output += "  <span style='color: #9cdcfe;'>joints:</span> [";
+  
+  for (size_t i = 0; i < latest_joint_state_.position.size(); ++i) {
+    yaml_output += QString::number(latest_joint_state_.position[i], 'f', 4);
+    if (i < latest_joint_state_.position.size() - 1) yaml_output += ", ";
+  }
+  yaml_output += "]\n";
+  yaml_output += "</pre>";
+  
+  log_text_->append(yaml_output);
+  
+  // ===== End Effector Pose (TF2 Lookup) =====
+  try {
+    // Try common end effector frame names
+    // Try common end effector frame names (your robot uses Arm_eelink and Base)
+    std::vector<std::string> ee_frames = {"Arm_eelink", "Arm_endlink", "tool0", "ee_link", "end_effector", "link_6", "gripper"};
+    std::string base_frame = "Base";
+    
+    geometry_msgs::msg::TransformStamped transform;
+    bool found = false;
+    std::string used_frame;
+    
+    for (const auto& ee_frame : ee_frames) {
+      if (tf_buffer_->canTransform(base_frame, ee_frame, tf2::TimePointZero, tf2::durationFromSec(0.1))) {
+        transform = tf_buffer_->lookupTransform(base_frame, ee_frame, tf2::TimePointZero);
+        found = true;
+        used_frame = ee_frame;
+        break;
+      }
+    }
+    
+    if (found) {
+      QString pose_output = "<pre style='color: #ffffff; background-color: #1e1e1e; padding: 10px; border-radius: 5px;'>";
+      pose_output += "<span style='color: #569cd6;'># End Effector Pose (" + QString::fromStdString(used_frame) + "):</span>\n";
+      pose_output += QString("<span style='color: #ce9178;'>position:</span>\n");
+      pose_output += QString("  <span style='color: #9cdcfe;'>x:</span> %1\n").arg(transform.transform.translation.x, 0, 'f', 6);
+      pose_output += QString("  <span style='color: #9cdcfe;'>y:</span> %1\n").arg(transform.transform.translation.y, 0, 'f', 6);
+      pose_output += QString("  <span style='color: #9cdcfe;'>z:</span> %1\n").arg(transform.transform.translation.z, 0, 'f', 6);
+      pose_output += QString("<span style='color: #ce9178;'>orientation:</span>\n");
+      pose_output += QString("  <span style='color: #9cdcfe;'>qx:</span> %1\n").arg(transform.transform.rotation.x, 0, 'f', 6);
+      pose_output += QString("  <span style='color: #9cdcfe;'>qy:</span> %1\n").arg(transform.transform.rotation.y, 0, 'f', 6);
+      pose_output += QString("  <span style='color: #9cdcfe;'>qz:</span> %1\n").arg(transform.transform.rotation.z, 0, 'f', 6);
+      pose_output += QString("  <span style='color: #9cdcfe;'>qw:</span> %1\n").arg(transform.transform.rotation.w, 0, 'f', 6);
+      pose_output += "</pre>";
+      
+      log_text_->append(pose_output);
+    } else {
+      appendLog("End effector TF not found (tried: tool0, ee_link, end_effector, link_6, gripper)", "#dcdcaa");
+    }
+  } catch (const tf2::TransformException& e) {
+    appendLog(QString("TF Error: %1").arg(e.what()), "#f14c4c");
+  }
+  
+  appendLog("Retrieved robot state (" + QString::number(latest_joint_state_.name.size()) + " joints)", "#9cdcfe");
+  statusBar()->showMessage("Robot state retrieved");
 }
 
 void BTManagerWindow::onAbout()

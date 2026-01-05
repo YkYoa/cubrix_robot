@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <mutex>
 #include "ar_scene/ar_mesh_server.h"
 
 namespace ar_scene
@@ -17,8 +18,41 @@ class SceneManager
 public:
   using SharedPtr = std::shared_ptr<SceneManager>;
 
-  explicit SceneManager(const rclcpp::Node::SharedPtr& node);
+  /**
+   * @brief Initialize the singleton instance
+   * @param node ROS2 node for logging
+   */
+  static void initialize(const rclcpp::Node::SharedPtr& node);
+
+  /**
+   * @brief Get the singleton instance
+   * @return Reference to SceneManager instance
+   * @throws std::runtime_error if not initialized
+   */
+  static SceneManager& getInstance();
+
+  /**
+   * @brief Check if singleton is initialized
+   */
+  static bool isInitialized();
+
   ~SceneManager();
+
+  // Disable copy
+  SceneManager(const SceneManager&) = delete;
+  SceneManager& operator=(const SceneManager&) = delete;
+
+  /**
+   * @brief Load and register all meshes from ar_moveit_config/meshes/obj/
+   * @return true if successful
+   */
+  bool loadMeshesFromConfig();
+
+  /**
+   * @brief Get list of registered mesh names
+   * @return Vector of mesh names
+   */
+  std::vector<std::string> getRegisteredMeshes() const;
 
   /**
    * @brief Add a mesh object to the planning scene
@@ -49,6 +83,11 @@ public:
   std::shared_ptr<MeshServer> getMeshServer() const { return mesh_server_; }
 
 private:
+  explicit SceneManager(const rclcpp::Node::SharedPtr& node);
+
+  static std::unique_ptr<SceneManager> instance_;
+  static std::mutex mutex_;
+
   rclcpp::Node::SharedPtr node_;
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   std::shared_ptr<MeshServer> mesh_server_;
@@ -58,3 +97,4 @@ private:
 } // namespace ar_scene
 
 #endif // AR_SCENE__AR_SCENE_MANAGER_H_
+

@@ -31,6 +31,7 @@ endif()
 
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(moveit_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 add_library(ar_scene SHARED
   src/ar_mesh_server.cpp
@@ -52,6 +53,36 @@ ament_target_dependencies(ar_scene
 
 install(DIRECTORY include/
   DESTINATION include/${PROJECT_NAME}
+)
+
+# Install library
+install(TARGETS ar_scene
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Mesh sequence example executable
+add_executable(mesh_sequence_example src/mesh_sequence_example.cpp)
+target_link_libraries(mesh_sequence_example ar_scene)
+ament_target_dependencies(mesh_sequence_example
+  rclcpp
+  geometry_msgs
+)
+
+install(TARGETS mesh_sequence_example
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Export dependencies for downstream packages
+ament_export_include_directories(include)
+ament_export_libraries(ar_scene)
+ament_export_dependencies(
+  rclcpp
+  ament_index_cpp
+  moveit_ros_planning_interface
+  moveit_msgs
+  ar_msgs
 )
 
 ament_package()

@@ -201,3 +201,13 @@ ar_ui/
 **Execution fails**
 - Check BT Server logs in terminal
 - Verify joint values match robot DOF
+
+## Quick kill for ROS processes
+
+If a launch gets stuck, add this alias to your shell (e.g., `~/.bashrc`) to stop bringup/MoveIt/RViz in one shot:
+
+```bash
+alias ros_kill_all="pkill -f 'ar_control.*launch|move_group|rviz2|bt_manager|param_editor'"
+```
+
+Then run `source ~/.bashrc` (or start a new shell) and call `ros_kill_all`.

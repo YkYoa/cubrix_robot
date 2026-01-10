@@ -46,6 +46,18 @@ namespace ar_control
             RCLCPP_ERROR(ar_hardware_interface_node_->get_logger(), "Failed to parse URDF model.");
         }
 
+        param_sub_ = ar_hardware_interface_node_->create_subscription<std_msgs::msg::String>(
+            "/ar_params/loaded",
+            rclcpp::QoS(10).transient_local(),
+            [this](const std_msgs::msg::String::SharedPtr msg) {
+                ui_params_yaml_ = msg->data;
+                ui_params_received_ = true;
+                RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"),
+                    "Received parameters from UI (%zu bytes)", msg->data.size());
+            });
+
+        waitForUiParams();
+        
         readConfigFromYaml();
 
         RCLCPP_INFO(rclcpp::get_logger("Ar"), "[Ar Hardware Interface] Initializing ETHERCAT manager, drives and joints");
@@ -251,16 +263,59 @@ namespace ar_control
         RCLCPP_INFO(rclcpp::get_logger("\nArHardwareInterface"), "Shut down complete.");
     }
 
+    void ArHardwareInterface::waitForUiParams()
+    {
+        RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"),
+            COLOR_DARKYELLOW "Waiting for UI parameters (3s timeout)..." COLOR_RESET);
+        
+        auto start_time = std::chrono::steady_clock::now();
+        auto timeout = std::chrono::seconds(3);
+        
+        while (!ui_params_received_ && 
+               (std::chrono::steady_clock::now() - start_time) < timeout)
+        {
+            rclcpp::spin_some(ar_hardware_interface_node_);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        
+        if (ui_params_received_) {
+            RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"),
+                COLOR_DARKYELLOW "Using parameters from UI" COLOR_RESET);
+        } else {
+            RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"),
+                COLOR_DARKYELLOW "UI timeout - using default ar_drive.yaml" COLOR_RESET);
+        }
+    }
+
     void ArHardwareInterface::readConfigFromYaml()
     {
-        std::string config_path = ar_common::getConfigPath();
-        RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), COLOR_DARKYELLOW "Drive config path: %s" COLOR_RESET, config_path.c_str());
-
-        YAML::Node config = ar_common::readYamlFile(config_path);
+        YAML::Node config;
+        
+        if (ui_params_received_ && !ui_params_yaml_.empty())
+        {
+            RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), 
+                COLOR_DARKYELLOW "Loading parameters from UI" COLOR_RESET);
+            try {
+                config = YAML::Load(ui_params_yaml_);
+            } catch (const std::exception& e) {
+                RCLCPP_ERROR(rclcpp::get_logger("ArHardwareInterface"),
+                    "Failed to parse UI YAML: %s - falling back to file", e.what());
+                config = YAML::Node();
+            }
+        }
+        
         if (config.IsNull())
         {
-            RCLCPP_ERROR(rclcpp::get_logger("ArHardwareInterface"), "Failed to load YAML configuration file");
-            return;
+            std::string config_path = ar_common::getConfigPath();
+            RCLCPP_INFO(rclcpp::get_logger("ArHardwareInterface"), 
+                COLOR_DARKYELLOW "Drive config path: %s" COLOR_RESET, config_path.c_str());
+
+            config = ar_common::readYamlFile(config_path);
+            if (config.IsNull())
+            {
+                RCLCPP_ERROR(rclcpp::get_logger("ArHardwareInterface"), "Failed to load YAML configuration file");
+                return;
+            }
         }
         YAML::Node port_ids = config["port_ids"];
         YAML::Node drives = config["drives"];

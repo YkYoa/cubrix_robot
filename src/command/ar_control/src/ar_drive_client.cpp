@@ -235,24 +235,11 @@ namespace ar_control
     readInputs(input);
     fflush(stdout);
 
-    // Log initial state
-    printf("[resetFaultDualJoint] Initial state:\n");
-    printf("  Axis[0]: err=0x%04x stat=0x%04x mode=%d pos=%d\n",
-           input->axis[0].error_code, input->axis[0].status_word,
-           input->axis[0].mode_of_operation_display, input->axis[0].actual_position);
-    printf("  Axis[1]: err=0x%04x stat=0x%04x mode=%d pos=%d\n",
-           input->axis[1].error_code, input->axis[1].status_word,
-           input->axis[1].mode_of_operation_display, input->axis[1].actual_position);
-
     bool axis0_fault = (input->axis[0].error_code == 0);
     bool axis1_fault = (input->axis[1].error_code == 0);
     if (axis0_fault && axis1_fault)
-    {
-      printf("[resetFaultDualJoint] No faults detected, skipping reset\n");
       return;
-    }
 
-    printf("[resetFaultDualJoint] Sending fault reset (0x80) to both axes...\n");
     for (int i = 0; i < LEADSHINE_DRIVER_MAX_JOINT_COUNT; i++)
     {
       output->axis[i].control_word = 0x80; // fault reset
@@ -267,10 +254,8 @@ namespace ar_control
       axis0_fault = (input->axis[0].error_code == 0);
       axis1_fault = (input->axis[1].error_code == 0);
       if (axis0_fault && axis1_fault)
-      {
-        printf("[resetFaultDualJoint] All faults cleared after %d iterations\n", loop);
         break;
-      }
+      
       if (loop % 10 == 0)
       {
         printf("[resetFaultDualJoint] loop %d: axis0 err=0x%04x stat=0x%04x mode=%d pos=%08x | axis1 err=0x%04x stat=0x%04x mode=%d pos=%08x\n",
@@ -293,13 +278,12 @@ namespace ar_control
       }
     }
     
-    // Final check
+    // Warn if faults still present
     readInputs(input);
     if (input->axis[0].error_code != 0 || input->axis[1].error_code != 0)
     {
-      printf("[resetFaultDualJoint] WARNING: Faults still present after reset:\n");
-      printf("  Axis[0]: err=0x%04x\n", input->axis[0].error_code);
-      printf("  Axis[1]: err=0x%04x\n", input->axis[1].error_code);
+      printf("[resetFaultDualJoint] WARNING: Faults still present - Axis[0]: 0x%04x, Axis[1]: 0x%04x\n",
+             input->axis[0].error_code, input->axis[1].error_code);
     }
   }
 

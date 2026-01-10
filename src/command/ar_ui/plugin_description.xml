@@ -7,4 +7,12 @@
       Edit XML behavior trees, load project configurations, and monitor execution status.
     </description>
   </class>
+  <class name="ar_ui/ParamEditorPanel"
+         type="ar_ui::ParamEditorPanel"
+         base_class_type="rviz_common::Panel">
+    <description>
+      Hardware Parameter Editor Panel.
+      Edit drive parameters (gear ratio, encoder res, etc.) and trigger system bringup.
+    </description>
+  </class>
 </library>

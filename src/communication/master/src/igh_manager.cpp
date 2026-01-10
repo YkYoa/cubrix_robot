@@ -59,8 +59,6 @@ void IghManager::getAllSlavesInfo()
         num_slaves = max_slave_num_;
     }
 
-    printf("Detected %d slaves on the bus\n", num_slaves);
-
     for (int i = 0; i < num_slaves; i++)
     {
         ec_slave_info_t slave_info;
@@ -71,9 +69,6 @@ void IghManager::getAllSlavesInfo()
             slave_[i].slave_info_.vendor_id = slave_info.vendor_id;
             slave_[i].slave_info_.product_code = slave_info.product_code;
             strncpy(slave_[i].slave_info_.name, slave_info.name, sizeof(slave_[i].slave_info_.name) - 1);
-
-            printf("Slave %d: %s (Vendor: 0x%08x, Product: 0x%08x)\n",
-                   i, slave_info.name, slave_info.vendor_id, slave_info.product_code);
         }
         else
         {
@@ -81,7 +76,7 @@ void IghManager::getAllSlavesInfo()
         }
     }
 
-    printf("Configured slave info for %d slaves\n", num_slaves);
+    printf("[IGH] Detected %d EtherCAT slaves\n", num_slaves);
     num_slaves_ = num_slaves;
 }
 
@@ -91,10 +86,6 @@ int IghManager::configSlaves()
 
     for (int i = 0; i < actual_slaves; i++)
     {
-        printf("Configuring slave %d: alias=%d, pos=%d, vendor=0x%08x, product=0x%08x\n",
-               i, slave_[i].slave_info_.alias, slave_[i].slave_info_.position,
-               slave_[i].slave_info_.vendor_id, slave_[i].slave_info_.product_code);
-
         slave_[i].slave_config_ = ecrt_master_slave_config(g_master,
                                                            slave_[i].slave_info_.alias,
                                                            slave_[i].slave_info_.position,
@@ -188,12 +179,10 @@ int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
     if (slave_name.find("CS3E") != std::string::npos)
     {
         sync_info = cs3e_syncs;
-        printf("Configuring CS3E PDOs for slave %d\n", position);
     }
     else if (slave_name.find("2CL3") != std::string::npos)
     {
         sync_info = d403t_syncs;
-        printf("Configuring 2CL3 PDOs for slave %d\n", position);
     }
     else
     {
@@ -224,20 +213,9 @@ int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
         slave.offset_.touch_probe_1_positive_value = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60BA, 0x00, g_master_domain, NULL);
         slave.offset_.digital_input = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, 0x60FD, 0x00, g_master_domain, NULL);
 
-        printf("Slave %d CS3E PDO offsets registered: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
-               position,
-               slave.offset_.control_word,
-               slave.offset_.target_pos,
-               slave.offset_.error_code,
-               slave.offset_.status_word,
-               slave.offset_.mode_of_operation_display,
-               slave.offset_.actual_pos);
-
         // Store base offsets (first entry of each PDO type)
         slave.base_output_offset_ = slave.offset_.control_word;
         slave.base_input_offset_ = slave.offset_.error_code;
-
-        printf("Successfully registered CS3E PDO entries for slave %d\n", position);
     }
     // Register PDO entries for 2CL3
     else if (slave_name.find("2CL3") != std::string::npos)
@@ -265,22 +243,6 @@ int IghManager::mapDefaultPDOs(IghSlave &slave, int position)
         slave.offset_.touch_probe_status_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TOUCH_PROBE_STATUS_2, g_master_domain, NULL);
         slave.offset_.touch_probe_1_positive_value_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, TOUCH_PROBE_1_POSITIVE_VALUE_2, g_master_domain, NULL);
         slave.offset_.digital_input_2 = ecrt_slave_config_reg_pdo_entry(slave.slave_config_, DIGITAL_INPUTS_2, g_master_domain, NULL);
-
-        printf("Successfully registered 2CL3 PDO entries for slave %d\n", position);
-        printf("  Axis1 offsets: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
-               slave.offset_.control_word,
-               slave.offset_.target_pos,
-               slave.offset_.error_code,
-               slave.offset_.status_word,
-               slave.offset_.mode_of_operation_display,
-               slave.offset_.actual_pos);
-        printf("  Axis2 offsets: ctrl=%u, tpos=%u, err=%u, stat=%u, mode=%u, apos=%u\n",
-               slave.offset_.control_word_2,
-               slave.offset_.target_pos_2,
-               slave.offset_.error_code_2,
-               slave.offset_.status_word_2,
-               slave.offset_.mode_of_operation_display_2,
-               slave.offset_.actual_pos_2);
 
         // Store base offsets (first entry of each PDO type)
         slave.base_output_offset_ = slave.offset_.control_word;
@@ -326,65 +288,31 @@ int IghManager::registerDomain()
 
 int IghManager::initializePdoDomain()
 {
-    printf("[IGH] Initializing PDO domain and resetting DS402 drive states...\n");
-    
     int actual_slaves = num_slaves_;
     
-    // Step 1: Zero all output PDO memory
+    // Zero all output PDO memory and write 0x0000 to control words
     for (int i = 0; i < actual_slaves; i++)
     {
         if (slave_[i].slave_pdo_domain_)
         {
             int output_bytes = getOutputBits(i) / 8;
             memset(slave_[i].slave_pdo_domain_ + slave_[i].base_output_offset_, 0, output_bytes);
-            printf("[IGH] Slave %d: zeroed %d output bytes at offset %u\n", 
-                   i, output_bytes, slave_[i].base_output_offset_);
-        }
-    }
-    
-    // Step 2: Write explicit "Disable Voltage" command (0x0000) to all control words
-    // This is critical for DS402 state machine reset
-    printf("[IGH] Sending Disable Voltage (0x0000) to all drives...\n");
-    for (int i = 0; i < actual_slaves; i++)
-    {
-        if (slave_[i].slave_pdo_domain_)
-        {
-            uint8_t* domain = slave_[i].slave_pdo_domain_;
             
-            // Write 0x0000 to control word (2 bytes, little-endian)
+            uint8_t* domain = slave_[i].slave_pdo_domain_;
             domain[slave_[i].offset_.control_word] = 0x00;
             domain[slave_[i].offset_.control_word + 1] = 0x00;
             
-            // For dual-axis drives, also write to second control word
+            // For dual-axis drives, write to second control word
             std::string slave_name(slave_[i].slave_info_.name);
             if (slave_name.find("2CL3") != std::string::npos)
             {
                 domain[slave_[i].offset_.control_word_2] = 0x00;
                 domain[slave_[i].offset_.control_word_2 + 1] = 0x00;
-                printf("[IGH] Slave %d (dual-axis): wrote 0x0000 to both control words\n", i);
-            }
-            else
-            {
-                printf("[IGH] Slave %d: wrote 0x0000 to control word\n", i);
             }
         }
     }
     
-    // Step 3: Verify the writes by reading back
-    printf("[IGH] Verifying PDO domain writes...\n");
-    for (int i = 0; i < actual_slaves; i++)
-    {
-        if (slave_[i].slave_pdo_domain_)
-        {
-            uint8_t* domain = slave_[i].slave_pdo_domain_;
-            uint16_t cw = domain[slave_[i].offset_.control_word] | 
-                         (domain[slave_[i].offset_.control_word + 1] << 8);
-            printf("[IGH] Slave %d: Control word readback = 0x%04X (offset=%u)\n",
-                   i, cw, slave_[i].offset_.control_word);
-        }
-    }
-    
-    printf("[IGH] PDO domain initialized - drives will receive DS402 reset on next cycles\n");
+    printf("[IGH] PDO domain initialized - DS402 reset ready\n");
     return 0;
 }
 
@@ -806,25 +734,10 @@ void IghManager::writeBuffer(int slave_no, const uint8_t* buffer, int size)
     if (domain && buffer)
     {
         unsigned int base_offset = slave_[slave_no].base_output_offset_;
-        
-        // Debug: Log control word writes for slaves 1 and 2 (the problematic middle drives)
-        static int log_counter = 0;
-        if ((slave_no == 1 || slave_no == 2) && log_counter++ < 5 && size >= 2)
-        {
-            uint16_t control_word = buffer[0] | (buffer[1] << 8);
-            printf("[IGH DEBUG] Slave %d: Writing control word 0x%04X to offset %u (base=%u)\n",
-                   slave_no, control_word, base_offset, base_offset);
-        }
-        
         for (int i = 0; i < size; ++i)
         {
             domain[base_offset + i] = buffer[i];
         }
-    }
-    else
-    {
-        printf("[IGH ERROR] Slave %d: domain=%p, buffer=%p - cannot write!\n",
-               slave_no, (void*)domain, (void*)buffer);
     }
 }
 

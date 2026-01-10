@@ -162,81 +162,80 @@ namespace master
     }
 
     void IghErrorHandler::handleNonOperationalSlave(int slave_pos, const ec_slave_config_state_t &slave_state)
+{
+    auto &error_state = slave_states_[slave_pos];
+    const char *slave_name = manager_->slave_[slave_pos].slave_info_.name;
+
+    // Only log actual problems, not normal state transitions during initialization
+    if (slave_state.al_state != error_state.last_al_state)
     {
-        auto &error_state = slave_states_[slave_pos];
-        const char *slave_name = manager_->slave_[slave_pos].slave_info_.name;
-
-        if (slave_state.al_state != error_state.last_al_state)
+        // Only log drops to INIT (real problem) or if error count is high (stuck)
+        if (slave_state.al_state == EC_AL_STATE_INIT && error_state.error_count > 0)
         {
-            if (slave_state.al_state != EC_AL_STATE_PREOP || error_state.error_count > 0)
-            {
-                printf(COLOR_YELLOW "[IGH Error Handler] Slave %d (%s) state: 0x%02X -> 0x%02X\n" COLOR_RESET,
-                       slave_pos, slave_name, error_state.last_al_state, slave_state.al_state);
-            }
-            error_state.last_al_state = slave_state.al_state;
-            error_state.error_count++;
-        }
-
-        switch (slave_state.al_state)
-        {
-        case EC_AL_STATE_INIT:
             if (!error_state.is_lost)
             {
-                printf(COLOR_RED "[IGH Error Handler] Slave %d (%s) dropped to INIT\n" COLOR_RESET,
+                printf(COLOR_YELLOW "[IGH Error Handler] Slave %d (%s) communication lost\n" COLOR_RESET,
                        slave_pos, slave_name);
                 error_state.is_lost = true;
-                error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
             }
-            break;
-
-        case EC_AL_STATE_PREOP:
-            if (error_state.error_count > 5)
-            {
-                requestSlaveState(slave_pos, EC_AL_STATE_OP);
-            }
-            break;
-
-        case EC_AL_STATE_SAFEOP:
-            if (slave_state.al_state & EC_STATE_ERROR)
-            {
-                printf(COLOR_RED "[IGH Error Handler] Slave %d (%s) in SAFE_OP + ERROR\n" COLOR_RESET,
-                       slave_pos, slave_name);
-            }
-            else
-            {
-                requestSlaveState(slave_pos, EC_AL_STATE_OP);
-            }
-            break;
-
-        default:
-            if (!error_state.is_lost && slave_state.al_state == 0)
-            {
-                printf(COLOR_RED "[IGH Error Handler] Slave %d (%s) lost (AL state = 0)\n" COLOR_RESET,
-                       slave_pos, slave_name);
-                error_state.is_lost = true;
-                error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
-            }
-            break;
         }
+        error_state.last_al_state = slave_state.al_state;
+        error_state.error_count++;
+    }
 
-        if (error_state.is_lost)
+    switch (slave_state.al_state)
+    {
+    case EC_AL_STATE_INIT:
+        if (!error_state.is_lost)
         {
-            if (error_state.recovery_delay_count > 0)
-            {
-                error_state.recovery_delay_count--;
-                if (error_state.recovery_delay_count == RECOVERY_DELAY_CYCLES - 1)
-                {
-                    printf(COLOR_GREEN "[IGH Error Handler] Will attempt recovery for slave %d in %dms...\n" COLOR_RESET,
-                           slave_pos, RECOVERY_DELAY_CYCLES * CHECK_INTERVAL_US / 1000);
-                }
-            }
-            else
-            {
-                recoverSlave(slave_pos);
-                error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
-            }
+            error_state.is_lost = true;
+            error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
+        }
+        break;
+
+    case EC_AL_STATE_PREOP:
+        if (error_state.error_count > 10)  // Only request OP if stuck in PREOP
+        {
+            requestSlaveState(slave_pos, EC_AL_STATE_OP);
+        }
+        break;
+
+    case EC_AL_STATE_SAFEOP:
+        if (slave_state.al_state & EC_STATE_ERROR)
+        {
+            printf(COLOR_RED "[IGH Error Handler] Slave %d (%s) in SAFE_OP + ERROR\n" COLOR_RESET,
+                   slave_pos, slave_name);
+        }
+        else if (error_state.error_count > 5)  // Only request OP if stuck in SAFEOP
+        {
+            requestSlaveState(slave_pos, EC_AL_STATE_OP);
+        }
+        break;
+
+    default:
+        if (!error_state.is_lost && slave_state.al_state == 0)
+        {
+            printf(COLOR_RED "[IGH Error Handler] Slave %d (%s) lost (AL state = 0)\n" COLOR_RESET,
+                   slave_pos, slave_name);
+            error_state.is_lost = true;
+            error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
+        }
+        break;
+    }
+
+    if (error_state.is_lost)
+    {
+        if (error_state.recovery_delay_count > 0)
+        {
+            error_state.recovery_delay_count--;
+        }
+        else
+        {
+            recoverSlave(slave_pos);
+            error_state.recovery_delay_count = RECOVERY_DELAY_CYCLES;
         }
     }
+}
 
     bool IghErrorHandler::recoverSlave(int slave_pos)
     {
@@ -246,17 +245,10 @@ namespace master
     }
 
     void IghErrorHandler::requestSlaveState(int slave_pos, ec_al_state_t target_state)
-    {        
-        const char* state_name = "UNKNOWN";
-        switch (target_state) {
-            case EC_AL_STATE_INIT: state_name = "INIT"; break;
-            case EC_AL_STATE_PREOP: state_name = "PRE-OP"; break;
-            case EC_AL_STATE_SAFEOP: state_name = "SAFE-OP"; break;
-            case EC_AL_STATE_OP: state_name = "OP"; break;
-        }
-        
-        printf("[IGH Error Handler] Requesting state %s for slave %d (%s)\n",
-               state_name, slave_pos, manager_->slave_[slave_pos].slave_info_.name);
-    }
+{
+    // Note: IGH EtherCAT master handles state transitions automatically.
+    // This function is primarily for logging and tracking recovery attempts.
+    // The master will try to bring slaves to OP through the cyclic communication.
+}
 
 } // namespace master

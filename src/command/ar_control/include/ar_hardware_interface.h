@@ -10,6 +10,7 @@
 #include <ar_control_server.h>
 #include "yaml-cpp/yaml.h"
 #include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <urdf/model.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
@@ -56,7 +57,12 @@ namespace ar_control
 
 		void InitializeDrives(std::vector<ArDriveControl *> &drives);
 		void readConfigFromYaml();
+		void waitForUiParams();
 		void launchControlServer();
+
+		rclcpp::Subscription<std_msgs::msg::String>::SharedPtr param_sub_; ///< Subscriber for UI params
+		std::string ui_params_yaml_;  ///< YAML string from UI
+		bool ui_params_received_ = false;  ///< Flag if UI params received
 
 		int no_of_port_connected_ = 0; ///< Number of connected ports
 

@@ -38,7 +38,7 @@ Arm_controller:
             goal: 0.01
           Arm_joint3:
             trajectory: 0.35
-            goal: 0.01
+            goal: 0.05  # Increased from 0.01 to accommodate mechanical backlash (~2.86°)
           Arm_joint4:
             trajectory: 0.35
             goal: 0.01

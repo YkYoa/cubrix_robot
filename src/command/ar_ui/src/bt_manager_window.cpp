@@ -155,8 +155,8 @@ void BTManagerWindow::setRosNode(rclcpp::Node::SharedPtr node)
             });
           } else {
             QString completed_msg = loop_checkbox_->isChecked() 
-              ? QString("✓ All %1 loops completed").arg(target_loops_)
-              : "✓ Execution Completed";
+              ? QString("All %1 loops completed").arg(target_loops_)
+              : "Execution Completed";
             status_label_->setText(completed_msg);
             status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
             run_btn_->setEnabled(true);

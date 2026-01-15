@@ -331,7 +331,7 @@ cd ~/ar_ws/src
 doxygen Doxyfile
 ```
 
-### 📖 Viewing the Documentation
+### Viewing the Documentation
 
 After generating the documentation, you can view it in several ways:
 
@@ -393,7 +393,7 @@ The documentation includes:
 - **Navigation**: Easy navigation between related components
 - **Modules**: Organized by Command & Control, Communication, and Utilities
 
-### 📖 Documentation Structure
+### Documentation Structure
 
 The documentation is organized into three main modules:
 
@@ -407,7 +407,7 @@ Each module contains detailed documentation for:
 - File structure and organization
 - Usage examples and code snippets
 
-### 🚀 Automated Documentation Build
+### Automated Documentation Build
 
 This repository uses **GitHub Actions** to automatically build and deploy Doxygen documentation, avoiding the need to commit 1000+ generated HTML files.
 
@@ -455,14 +455,6 @@ After the first workflow run completes:
 
 - **GitHub Pages URL**: `https://[username].github.io/[repo-name]/`
 - **Download Artifacts**: Go to **Actions** tab → Latest workflow run → Download artifacts
-
-#### Benefits
-
-✅ **Clean Repository**: No 1000+ generated files cluttering git history  
-✅ **Automatic Updates**: Docs rebuild automatically on code changes  
-✅ **Always Up-to-Date**: Latest documentation always available  
-✅ **Free Hosting**: GitHub Pages provides free hosting  
-✅ **Downloadable**: Artifacts available for offline viewing  
 
 #### Workflow Triggers
 
@@ -525,11 +517,6 @@ sudo apt install ros-humble-behaviortree-cpp-v3
 - Verify `planning_group` parameter
 - Check BT Server logs in terminal
 
-**Documentation not updating?**
-- Check the **Actions** tab for workflow status
-- Ensure GitHub Pages is enabled with "GitHub Actions" as source
-- Verify `.github/workflows/docs.yml` exists and is committed
-
 ### Quick Kill for ROS Processes
 
 If a launch gets stuck, add this alias to your shell (e.g., `~/.bashrc`):
@@ -550,7 +537,3 @@ Then run `source ~/.bashrc` (or start a new shell) and call `ros_kill_all`.
 - [ROS2 Humble Documentation](https://docs.ros.org/en/humble/)
 
 ---
-
-## License
-
-[Add your license information here]

@@ -167,7 +167,12 @@ public:
 // NOTE: AlwaysSuccess and AlwaysFailure are built-in to BehaviorTree.CPP v3
 // No need to define them here - use the built-in versions
 
-// Register all AR BT condition nodes with factory
+/**
+ * @brief Register all AR BT condition nodes with the factory
+ * @param factory BehaviorTree factory to register nodes with
+ * @param node ROS2 node for logging
+ * @param planning_interface Planning interface for state queries
+ */
 void registerARBTConditionNodes(BT::BehaviorTreeFactory& factory,
                                  rclcpp::Node::SharedPtr node,
                                  std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);

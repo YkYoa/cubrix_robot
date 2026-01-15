@@ -1,0 +1,158 @@
+/**
+ * @mainpage AR4 ROBOT Documentation
+ * 
+ * @section intro_sec Introduction
+ * 
+ * Complete documentation for the AR4 Robot Control System. This workspace contains
+ * all packages for robot control, communication, and utilities.
+ * 
+ * @section modules_sec Modules
+ * 
+ * @subsection command_sec Command & Control
+ * 
+ * High-level robot control and motion planning packages:
+ * 
+ * - @ref ar_bt_page "Behavior Tree Integration" - BehaviorTree.CPP integration for task sequencing
+ * - @ref ar_control_page "Robot Control" - Core robot control, hardware interface, and drive control
+ * - @ref ar_motion_planner_page "Motion Planner" - Motion planning functionality
+ * - @ref ar_planning_interface_page "Planning Interface" - MoveIt planning interface wrapper
+ * - @ref ar_projects_page "Project Manager" - YAML-based motion sequence generator
+ * - @ref ar_scene_page "Scene Manager" - 3D scene and mesh management
+ * - @ref ar_ui_page "User Interface" - Qt-based UI panels and windows
+ * 
+ * @subsection communication_sec Communication
+ * 
+ * Low-level communication and EtherCAT packages:
+ * 
+ * - @ref ar_comm_page "Communication Library" - ROS2 communication utilities
+ * - @ref ar_serial_page "Serial Communication" - Serial port communication
+ * - @ref devices_page "Device Management" - Device client/server
+ * - @ref master_page "EtherCAT Master" - EtherCAT master and IGH integration
+ * 
+ * @subsection utilities_sec Utilities
+ * 
+ * Common utilities and helper libraries:
+ * 
+ * - @ref ar_common_page "Common Definitions" - Common data structures and definitions
+ * - @ref ar_computation_page "Computation" - Mathematical computations and conversions
+ * - @ref ar_utils_page "Utilities" - Logging, serialization, and helper functions
+ * 
+ * @section getting_started Getting Started
+ * 
+ * For quick start guides, see the README files in individual packages:
+ * - @ref ar_bt_page
+ * - @ref ar_projects_page
+ * - @ref ar_ui_page
+ * 
+ * @section architecture Architecture Overview
+ * 
+ * The system is organized in layers:
+ * 
+ * 1. **Hardware Layer**: EtherCAT communication (master package)
+ * 2. **Control Layer**: Drive control and hardware interface (ar_control)
+ * 3. **Planning Layer**: Motion planning and execution (ar_motion_planner, ar_planning_interface)
+ * 4. **Task Layer**: Behavior trees and project management (ar_bt, ar_projects)
+ * 5. **UI Layer**: User interfaces (ar_ui)
+ * 
+ * @author AR Development Team
+ * @date 2026
+ */
+
+/**
+ * @defgroup ar_bt_page Behavior Tree Integration
+ * @brief BehaviorTree.CPP integration for robot task sequencing
+ * 
+ * Provides action and condition nodes for robot control, BT executor and server nodes.
+ * Supports Groot2 visual editing.
+ */
+
+/**
+ * @defgroup ar_control_page Robot Control
+ * @brief Core robot control system
+ * 
+ * Hardware interface, drive control, joint control, and ROS2 control integration.
+ */
+
+/**
+ * @defgroup ar_motion_planner_page Motion Planner
+ * @brief Motion planning functionality
+ * 
+ * High-level motion planning interface.
+ */
+
+/**
+ * @defgroup ar_planning_interface_page Planning Interface
+ * @brief MoveIt planning interface wrapper
+ * 
+ * Wrapper around MoveIt planning interface for easier integration.
+ */
+
+/**
+ * @defgroup ar_projects_page Project Manager
+ * @brief YAML-based motion sequence generator
+ * 
+ * Generates BehaviorTree XML from YAML project configurations.
+ */
+
+/**
+ * @defgroup ar_scene_page Scene Manager
+ * @brief 3D scene and mesh management
+ * 
+ * Manages 3D meshes and scene information.
+ */
+
+/**
+ * @defgroup ar_ui_page User Interface
+ * @brief Qt-based UI components
+ * 
+ * RViz panels and standalone windows for robot control and parameter editing.
+ */
+
+/**
+ * @defgroup ar_comm_page Communication Library
+ * @brief ROS2 communication utilities
+ * 
+ * Base classes for topic communication and UI integration.
+ */
+
+/**
+ * @defgroup ar_serial_page Serial Communication
+ * @brief Serial port communication
+ * 
+ * Serial port interface for device communication.
+ */
+
+/**
+ * @defgroup devices_page Device Management
+ * @brief Device client/server
+ * 
+ * Client/server architecture for device management.
+ */
+
+/**
+ * @defgroup master_page EtherCAT Master
+ * @brief EtherCAT master and IGH integration
+ * 
+ * EtherCAT master implementation using IGH EtherCAT library.
+ */
+
+/**
+ * @defgroup ar_common_page Common Definitions
+ * @brief Common data structures and definitions
+ * 
+ * Shared definitions for joints, links, poses, and planners.
+ */
+
+/**
+ * @defgroup ar_computation_page Computation
+ * @brief Mathematical computations and conversions
+ * 
+ * Mathematical utilities, conversions, and data objects.
+ */
+
+/**
+ * @defgroup ar_utils_page Utilities
+ * @brief Logging, serialization, and helper functions
+ * 
+ * Common utilities for logging, serialization, and general helpers.
+ */

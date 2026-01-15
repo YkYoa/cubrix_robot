@@ -16,26 +16,36 @@
  *  \class   Timing
  *  \brief   Contains Timing measurement related functions.
  */
+/**
+ * @brief Timing measurement utility class
+ * 
+ * Provides functionality to measure and log timing information
+ * for performance analysis and loop timing verification.
+ */
 class Timing{
     public:
-      std::chrono::high_resolution_clock::time_point timer_start_;
-      std::chrono::high_resolution_clock::time_point last_start_time_;
-      std::chrono::duration<long,std::micro> time_span_;
-      std::vector<long> timing_info_ = std::vector<long>(NUMBER_OF_SAMPLES);
-      uint32_t counter_ = 0;
+      std::chrono::high_resolution_clock::time_point timer_start_; ///< Start time point
+      std::chrono::high_resolution_clock::time_point last_start_time_; ///< Last start time
+      std::chrono::duration<long,std::micro> time_span_; ///< Time span measurement
+      std::vector<long> timing_info_ = std::vector<long>(NUMBER_OF_SAMPLES); ///< Timing data storage
+      uint32_t counter_ = 0; ///< Sample counter
+      
   /**
-   * @brief Gets the current time and assings to timer_start_ member.
+   * @brief Get current time and assign to timer_start_ member
    */
   void GetTime();
+  
   /**
-   * @brief Measures time difference from last call to function GetTime() 
-   * and writes is to time_span member
+   * @brief Measure time difference from last GetTime() call
    * 
+   * Calculates the time difference and stores it in time_span member.
    */
   void MeasureTimeDifference();
+  
   /**
-   * @brief Outputs timing information to loop_timing_info.txt file.
+   * @brief Output timing information to file
    * 
+   * Writes collected timing data to loop_timing_info.txt file.
    */
   void OutInfoToFile();
 };

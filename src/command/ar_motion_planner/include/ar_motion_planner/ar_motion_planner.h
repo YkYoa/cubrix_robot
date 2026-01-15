@@ -13,23 +13,61 @@
 namespace ar_motion_planner
 {
 
+/**
+ * @brief ROS2 node for motion planning service
+ * 
+ * Provides a service interface for motion planning requests.
+ * Wraps the ArPlanningInterface to expose planning functionality via ROS2 services.
+ */
 class MotionPlanner : public rclcpp::Node
 {
 public:
+  /**
+   * @brief Constructor
+   */
   MotionPlanner();
+  
+  /**
+   * @brief Destructor
+   */
   ~MotionPlanner();
 
 private:
+  /**
+   * @brief Initialize ROS2 parameters
+   * 
+   * Loads planning group, pipeline, planner ID, and scaling factors from parameters.
+   */
   void initializeParameters();
+  
+  /**
+   * @brief Initialize ROS2 services
+   * 
+   * Creates the motion planning service server.
+   */
   void initializeServices();
+  
+  /**
+   * @brief Spin thread for executor
+   * 
+   * Runs the executor in a separate thread to handle service callbacks.
+   */
   void spinThread();
   
-  // Service callbacks
+  /**
+   * @brief Handle motion planning service requests
+   * @param request Planning request containing target pose/joints
+   * @param response Planning response containing the plan
+   */
   void planCallback(
     const std::shared_ptr<moveit_msgs::srv::GetMotionPlan::Request> request,
     std::shared_ptr<moveit_msgs::srv::GetMotionPlan::Response> response);
   
-  // Parameter callback
+  /**
+   * @brief Handle parameter change requests
+   * @param parameters Vector of parameters to set
+   * @return Result indicating success or failure
+   */
   rcl_interfaces::msg::SetParametersResult parametersCallback(
     const std::vector<rclcpp::Parameter>& parameters);
 

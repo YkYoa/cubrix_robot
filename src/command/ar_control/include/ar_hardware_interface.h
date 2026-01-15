@@ -25,17 +25,60 @@
 
 namespace ar_control
 {
+	/**
+	 * @brief Hardware interface for robot control
+	 * 
+	 * Modular hardware interface that handles drives while ArDriveControl manages joints.
+	 * Everything is configured via ar_drive_config.h. Supports both simulation and
+	 * real hardware with EtherCAT communication.
+	 */
 	class ArHardwareInterface
 	{
 	public:
+		/**
+		 * @brief Constructor
+		 * @param comm_mutex Vector of mutexes for communication threads
+		 * @param cond Condition variable for thread synchronization
+		 * @param cond_lock Mutex for condition variable
+		 * @param robotDesc Robot description (URDF path or name)
+		 * @param bQuit Reference to quit flag
+		 * @param isSimulation Enable simulation mode (default: false)
+		 * @param isUi Enable UI mode (default: false)
+		 * @param isEcat Enable EtherCAT communication (default: true)
+		 */
 		ArHardwareInterface(std::vector<std::shared_ptr<boost::mutex>> comm_mutex, pthread_cond_t &cond, pthread_mutex_t &cond_lock,
 							std::string robotDesc, bool &bQuit, bool isSimulation = false, bool isUi = false, bool isEcat = true);
+		
+		/**
+		 * @brief Destructor
+		 */
 		~ArHardwareInterface();
 
+		/**
+		 * @brief Shutdown the hardware interface
+		 * 
+		 * Stops all drives, disables motors, and cleans up resources.
+		 */
 		void shutdown();
+		
+		/**
+		 * @brief Read current joint states from hardware
+		 * 
+		 * Reads encoder values and converts them to joint positions/velocities.
+		 */
 		void read();
+		
+		/**
+		 * @brief Write joint commands to hardware
+		 * 
+		 * Converts joint commands to drive pulses and sends them to the hardware.
+		 */
 		void write();
 
+		/**
+		 * @brief Get all drive controllers
+		 * @return Map of drive ID to ArDriveControl pointers
+		 */
 		std::map<int, ArDriveControl *> getDrives();
 
 		bool is_simulation; ///< Flag to indicate if the hardware is simulated
@@ -55,9 +98,31 @@ namespace ar_control
 
 		std::shared_ptr<rclcpp::Node> ar_hardware_interface_node_; ///< Node for the hardware interface
 
+		/**
+		 * @brief Initialize all drive controllers
+		 * @param drives Vector of drive control pointers to initialize
+		 */
 		void InitializeDrives(std::vector<ArDriveControl *> &drives);
+		
+		/**
+		 * @brief Read drive configuration from YAML file
+		 * 
+		 * Loads drive parameters, joint mappings, and communication settings.
+		 */
 		void readConfigFromYaml();
+		
+		/**
+		 * @brief Wait for UI parameters to be received
+		 * 
+		 * Blocks until UI sends parameter configuration via ROS2 topic.
+		 */
 		void waitForUiParams();
+		
+		/**
+		 * @brief Launch the control server in a separate thread
+		 * 
+		 * Starts the ArControlServer to handle action requests.
+		 */
 		void launchControlServer();
 
 		rclcpp::Subscription<std_msgs::msg::String>::SharedPtr param_sub_; ///< Subscriber for UI params

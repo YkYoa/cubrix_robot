@@ -19,11 +19,22 @@ namespace ar_bt
 class ARBTActionNode : public BT::StatefulActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param node ROS2 node for logging and publishing
+   * @param planning_interface Planning interface for motion control
+   */
   ARBTActionNode(const std::string& name, const BT::NodeConfiguration& config,
                  rclcpp::Node::SharedPtr node,
                  std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
 protected:
+  /**
+   * @brief Publish execution status to ROS2 topic
+   * @param status Status message string
+   */
   void publishStatus(const std::string& status);
   
   rclcpp::Node::SharedPtr node_;
@@ -41,13 +52,38 @@ protected:
 class PlanToJoint : public ARBTActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param node ROS2 node
+   * @param planning_interface Planning interface
+   */
   PlanToJoint(const std::string& name, const BT::NodeConfiguration& config,
               rclcpp::Node::SharedPtr node,
               std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Called when node starts execution
+   * @return Node status
+   */
   BT::NodeStatus onStart() override;
+  
+  /**
+   * @brief Called while node is running
+   * @return Node status
+   */
   BT::NodeStatus onRunning() override;
+  
+  /**
+   * @brief Called when node is halted
+   */
   void onHalted() override;
 
 private:
@@ -65,13 +101,38 @@ private:
 class PlanToPose : public ARBTActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param node ROS2 node
+   * @param planning_interface Planning interface
+   */
   PlanToPose(const std::string& name, const BT::NodeConfiguration& config,
              rclcpp::Node::SharedPtr node,
              std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Called when node starts execution
+   * @return Node status
+   */
   BT::NodeStatus onStart() override;
+  
+  /**
+   * @brief Called while node is running
+   * @return Node status
+   */
   BT::NodeStatus onRunning() override;
+  
+  /**
+   * @brief Called when node is halted
+   */
   void onHalted() override;
 
 private:
@@ -89,13 +150,38 @@ private:
 class ExecutePlan : public ARBTActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param node ROS2 node
+   * @param planning_interface Planning interface
+   */
   ExecutePlan(const std::string& name, const BT::NodeConfiguration& config,
               rclcpp::Node::SharedPtr node,
               std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Called when node starts execution
+   * @return Node status
+   */
   BT::NodeStatus onStart() override;
+  
+  /**
+   * @brief Called while node is running
+   * @return Node status
+   */
   BT::NodeStatus onRunning() override;
+  
+  /**
+   * @brief Called when node is halted
+   */
   void onHalted() override;
 
 private:
@@ -110,13 +196,38 @@ private:
 class MoveToJoint : public ARBTActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param node ROS2 node
+   * @param planning_interface Planning interface
+   */
   MoveToJoint(const std::string& name, const BT::NodeConfiguration& config,
               rclcpp::Node::SharedPtr node,
               std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Called when node starts execution
+   * @return Node status
+   */
   BT::NodeStatus onStart() override;
+  
+  /**
+   * @brief Called while node is running
+   * @return Node status
+   */
   BT::NodeStatus onRunning() override;
+  
+  /**
+   * @brief Called when node is halted
+   */
   void onHalted() override;
 
 private:
@@ -132,10 +243,25 @@ private:
 class SetPlanner : public BT::SyncActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param planning_interface Planning interface
+   */
   SetPlanner(const std::string& name, const BT::NodeConfiguration& config,
              std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Execute the node (synchronous)
+   * @return Node status
+   */
   BT::NodeStatus tick() override;
 
 private:
@@ -150,10 +276,25 @@ private:
 class SetBlendRadius : public BT::SyncActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param planning_interface Planning interface
+   */
   SetBlendRadius(const std::string& name, const BT::NodeConfiguration& config,
                  std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Execute the node (synchronous)
+   * @return Node status
+   */
   BT::NodeStatus tick() override;
 
 private:
@@ -168,10 +309,25 @@ private:
 class SetVelocityScaling : public BT::SyncActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param planning_interface Planning interface
+   */
   SetVelocityScaling(const std::string& name, const BT::NodeConfiguration& config,
                      std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Execute the node (synchronous)
+   * @return Node status
+   */
   BT::NodeStatus tick() override;
 
 private:
@@ -186,17 +342,37 @@ private:
 class SetAccelerationScaling : public BT::SyncActionNode
 {
 public:
+  /**
+   * @brief Constructor
+   * @param name Node name
+   * @param config BT node configuration
+   * @param planning_interface Planning interface
+   */
   SetAccelerationScaling(const std::string& name, const BT::NodeConfiguration& config,
                          std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);
 
+  /**
+   * @brief Define input/output ports for this node
+   * @return Ports list
+   */
   static BT::PortsList providedPorts();
+  
+  /**
+   * @brief Execute the node (synchronous)
+   * @return Node status
+   */
   BT::NodeStatus tick() override;
 
 private:
   std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface_;
 };
 
-// Register all AR BT nodes with factory
+/**
+ * @brief Register all AR BT action nodes with the factory
+ * @param factory BehaviorTree factory to register nodes with
+ * @param node ROS2 node for logging
+ * @param planning_interface Planning interface for motion control
+ */
 void registerARBTNodes(BT::BehaviorTreeFactory& factory,
                        rclcpp::Node::SharedPtr node,
                        std::shared_ptr<ar_planning_interface::ArPlanningInterface> planning_interface);

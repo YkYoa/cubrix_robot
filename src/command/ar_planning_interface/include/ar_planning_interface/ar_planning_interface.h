@@ -13,12 +13,27 @@
 namespace ar_planning_interface
 {
 
+/**
+ * @brief Wrapper around MoveIt planning interface for easier integration
+ * 
+ * Provides a simplified interface to MoveIt's MoveGroupInterface with
+ * support for planning, execution, and visualization.
+ */
 class ArPlanningInterface
 {
 public:
   using SharedPtr = std::shared_ptr<ArPlanningInterface>;
 
+  /**
+   * @brief Constructor
+   * @param node ROS2 node for logging and callbacks
+   * @param group_name Planning group name (default: "Arm")
+   */
   explicit ArPlanningInterface(const rclcpp::Node::SharedPtr& node, const std::string& group_name = "Arm");
+  
+  /**
+   * @brief Destructor
+   */
   ~ArPlanningInterface();
 
   /**

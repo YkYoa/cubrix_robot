@@ -33,36 +33,90 @@ using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface
 
 namespace ar_control
 {
+    /**
+     * @brief ROS2 Control hardware interface implementation
+     * 
+     * Implements the hardware_interface::SystemInterface for ROS2 Control.
+     * Manages the lifecycle of the hardware interface and provides read/write
+     * operations for joint state and command interfaces.
+     */
     class ArSystemHardware : public hardware_interface::SystemInterface
     {
     public:
         RCLCPP_SHARED_PTR_DEFINITIONS(ArSystemHardware);
 
+        /**
+         * @brief Initialize the hardware interface
+         * @param info Hardware information from URDF
+         * @return CallbackReturn indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
 
+        /**
+         * @brief Configure the hardware interface
+         * @param previous_state Previous lifecycle state
+         * @return CallbackReturn indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         CallbackReturn on_configure(const rclcpp_lifecycle::State &previous_state) override;
 
+        /**
+         * @brief Export state interfaces (joint positions, velocities)
+         * @return Vector of state interfaces
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
+        /**
+         * @brief Export command interfaces (joint position/velocity commands)
+         * @return Vector of command interfaces
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
 
+        /**
+         * @brief Activate the hardware interface
+         * @param previous_state Previous lifecycle state
+         * @return CallbackReturn indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         CallbackReturn on_activate(const rclcpp_lifecycle::State &previous_state) override;
 
+        /**
+         * @brief Deactivate the hardware interface
+         * @param previous_state Previous lifecycle state
+         * @return CallbackReturn indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         CallbackReturn on_deactivate(const rclcpp_lifecycle::State &previous_state) override;
 
+        /**
+         * @brief Read current joint states from hardware
+         * @param time Current time
+         * @param period Time period since last read
+         * @return Return type indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
+        /**
+         * @brief Write joint commands to hardware
+         * @param time Current time
+         * @param period Time period since last write
+         * @return Return type indicating success or failure
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+        
+        /**
+         * @brief Destructor
+         */
         ~ArSystemHardware() override;
 
+        /**
+         * @brief Shutdown the hardware interface
+         */
         ROS2_CONTROL_DEMO_HARDWARE_PUBLIC
         void shutdown();
 

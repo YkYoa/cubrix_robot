@@ -30,17 +30,38 @@ namespace ar_ui
 
 /**
  * @brief Worker for ROS 2 operations to keep GUI responsive
+ * 
+ * Runs ROS2 spinning in a separate thread to prevent GUI blocking.
  */
 class RosWorker : public QObject
 {
   Q_OBJECT
 public:
+  /**
+   * @brief Constructor
+   * @param node ROS2 node to use
+   */
   explicit RosWorker(rclcpp::Node::SharedPtr node);
+  
+  /**
+   * @brief Stop the worker thread
+   */
   void stop();
 public Q_SLOTS:
+  /**
+   * @brief Spin ROS2 events (runs in thread)
+   */
   void spin();
+  
+  /**
+   * @brief Publish parameters to hardware interface
+   * @param yaml YAML parameter string
+   */
   void publishParams(const QString& yaml);
 signals:
+  /**
+   * @brief Emitted when worker finishes
+   */
   void finished();
 private:
   rclcpp::Node::SharedPtr node_;
@@ -56,31 +77,121 @@ class ParamEditorWindow : public QMainWindow
   Q_OBJECT
 
 public:
+  /**
+   * @brief Constructor
+   * @param parent Parent widget
+   */
   explicit ParamEditorWindow(QWidget* parent = nullptr);
+  
+  /**
+   * @brief Destructor
+   */
   ~ParamEditorWindow() override;
 
 public Q_SLOTS:
+  /**
+   * @brief Load parameters to hardware interface
+   */
   void onLoadParams();
+  
+  /**
+   * @brief Run robot bringup (real hardware)
+   */
   void onRunRobot();
+  
+  /**
+   * @brief Run robot bringup (simulation)
+   */
   void onRunSimulation();
+  
+  /**
+   * @brief Reload parameters from YAML file
+   */
   void onReloadFromFile();
+  
+  /**
+   * @brief Launch MoveIt
+   */
   void onLaunchMoveIt();
+  
+  /**
+   * @brief Launch RViz
+   */
   void onLaunchRViz();
 
 Q_SIGNALS:
+  /**
+   * @brief Signal to request parameter publishing
+   * @param yaml YAML parameter string
+   */
   void publishRequested(const QString& yaml);
 
 private:
+  /**
+   * @brief Setup UI widgets and layout
+   */
   void setupUi();
+  
+  /**
+   * @brief Setup ROS2 node and worker thread
+   */
   void setupRos();
+  
+  /**
+   * @brief Load YAML configuration into UI widgets
+   */
   void loadYamlToUi();
+  
+  /**
+   * @brief Append message to log with color
+   * @param msg Message to append
+   * @param color HTML color (default: "#d4d4d4")
+   */
   void appendLog(const QString& msg, const QString& color = "#d4d4d4");
+  
+  /**
+   * @brief Buffer log message for later display
+   * @param target Target text edit widget
+   * @param msg Message to buffer
+   */
   void bufferLog(QTextEdit* target, const QString& msg);
+  
+  /**
+   * @brief Generate YAML from UI widget values
+   * @return YAML string
+   */
   QString generateYamlFromUi();
+  
+  /**
+   * @brief Save YAML content to file
+   * @param yaml_content YAML content to save
+   */
   void saveYamlToFile(const QString& yaml_content);
+  
+  /**
+   * @brief Check if a process is running
+   * @param pattern Process name pattern to search for
+   * @return true if process is running
+   */
   bool isProcessRunning(const QString& pattern) const;
+  
+  /**
+   * @brief Validate port IDs for real robot configuration
+   * @param error_msg Output error message if validation fails
+   * @return true if valid
+   */
   bool validatePortIdsForRealRobot(QString& error_msg) const;
+  
+  /**
+   * @brief Validate dual-axis driver configuration
+   * @param error_msg Output error message if validation fails
+   * @return true if valid
+   */
   bool validateDualAxisDrivers(QString& error_msg) const;
+  
+  /**
+   * @brief Kill all ROS processes (bringup, MoveIt, RViz)
+   */
   void killAllRosProcesses();
 
   // ROS 2 Infrastructure
@@ -133,7 +244,14 @@ private:
   bool bringup_complete_;
   
 private Q_SLOTS:
+  /**
+   * @brief Flush buffered log messages to display
+   */
   void onFlushLogs();
+  
+  /**
+   * @brief Stop all running processes
+   */
   void onStopProcess();
 };
 

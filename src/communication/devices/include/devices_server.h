@@ -8,13 +8,34 @@
 #include <mutex>
 #include <string>
 
+/**
+ * @brief UART server for device communication
+ * 
+ * ROS2 node that reads from serial port and publishes device data
+ * (e.g., joystick input) as ROS2 messages.
+ */
 class UARTServer : public rclcpp::Node {
 public:
+    /**
+     * @brief Constructor
+     */
     UARTServer();
+    
+    /**
+     * @brief Destructor
+     */
     ~UARTServer();
 
 private:
+    /**
+     * @brief Timer callback for periodic operations
+     */
     void timer_callback();
+    
+    /**
+     * @brief Process received serial data
+     * @param data_line Line of data from serial port
+     */
     void process_serial_data(const std::string& data_line);
 
     Serial serial_;

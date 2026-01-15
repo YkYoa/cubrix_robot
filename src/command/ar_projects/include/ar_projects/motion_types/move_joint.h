@@ -22,15 +22,47 @@ namespace ar_projects
 class MoveJoint : public BaseMotion
 {
 public:
+  /**
+   * @brief Constructor
+   */
   MoveJoint();
   
+  /**
+   * @brief Convert to BehaviorTree XML
+   * @param indent Indentation level
+   * @return XML string
+   */
   std::string toXml(int indent = 0) const override;
+  
+  /**
+   * @brief Parse from YAML node
+   * @param node YAML node containing move_joint configuration
+   * @return true if parsing succeeded
+   */
   bool fromYaml(const YAML::Node& node) override;
 
+  /**
+   * @brief Set target joint values directly
+   * @param joints Vector of joint values
+   */
   void setJoints(const std::vector<double>& joints) { joints_ = joints; }
+  
+  /**
+   * @brief Set waypoint name (will be resolved later)
+   * @param waypoint Waypoint name
+   */
   void setWaypoint(const std::string& waypoint) { waypoint_ = waypoint; }
   
+  /**
+   * @brief Get target joint values
+   * @return Reference to joint values vector
+   */
   const std::vector<double>& getJoints() const { return joints_; }
+  
+  /**
+   * @brief Get waypoint name
+   * @return Waypoint name string
+   */
   const std::string& getWaypoint() const { return waypoint_; }
 
   /**

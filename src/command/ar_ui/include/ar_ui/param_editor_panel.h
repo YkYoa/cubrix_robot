@@ -56,24 +56,83 @@ class ParamEditorPanel : public rviz_common::Panel
   Q_OBJECT
 
 public:
+  /**
+   * @brief Constructor
+   * @param parent Parent widget
+   */
   explicit ParamEditorPanel(QWidget* parent = nullptr);
+  
+  /**
+   * @brief Destructor
+   */
   ~ParamEditorPanel() override;
 
+  /**
+   * @brief Initialize the panel (RViz interface)
+   */
   void onInitialize() override;
+  
+  /**
+   * @brief Save panel configuration
+   * @param config RViz config to save to
+   */
   void save(rviz_common::Config config) const override;
+  
+  /**
+   * @brief Load panel configuration
+   * @param config RViz config to load from
+   */
   void load(const rviz_common::Config& config) override;
 
 public Q_SLOTS:
+  /**
+   * @brief Load parameters to hardware interface
+   */
   void onLoadParams();
+  
+  /**
+   * @brief Run robot bringup (real hardware)
+   */
   void onRunRobot();
+  
+  /**
+   * @brief Run robot bringup (simulation)
+   */
   void onRunSimulation();
+  
+  /**
+   * @brief Reload parameters from YAML file
+   */
   void onReloadFromFile();
 
 private:
+  /**
+   * @brief Setup UI widgets
+   */
   void setupUi();
+  
+  /**
+   * @brief Load YAML configuration into UI widgets
+   */
   void loadYamlToUi();
+  
+  /**
+   * @brief Append message to log with color
+   * @param msg Message to append
+   * @param color HTML color (default: "#d4d4d4")
+   */
   void appendLog(const QString& msg, const QString& color = "#d4d4d4");
+  
+  /**
+   * @brief Generate YAML from UI widget values
+   * @return YAML string
+   */
   QString generateYamlFromUi();
+  
+  /**
+   * @brief Save YAML content to file
+   * @param yaml_content YAML content to save
+   */
   void saveYamlToFile(const QString& yaml_content);
 
   // ROS 2

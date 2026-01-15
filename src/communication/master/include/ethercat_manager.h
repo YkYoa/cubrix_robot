@@ -113,29 +113,107 @@ namespace master
         bool process_data = false;
     };
 
+    /**
+     * @brief Interface for EtherCAT master communication
+     * 
+     * Abstract interface for reading/writing to EtherCAT slaves.
+     * Implemented by EthercatManager (SOEM) and IghManager (IGH).
+     */
     class EthercatMasterInterface
     {
     public:
         virtual ~EthercatMasterInterface() = default;
         
+        /**
+         * @brief Write a single byte to slave output
+         * @param slave_no Slave number (1-based)
+         * @param channel Byte offset in output IOMap
+         * @param value Byte value to write
+         */
         virtual void write(int slave_no, uint8_t channel, uint8_t value) = 0;
+        
+        /**
+         * @brief Write a buffer to slave output
+         * @param slave_no Slave number (1-based)
+         * @param buffer Buffer to write
+         * @param size Buffer size in bytes
+         */
         virtual void writeBuffer(int slave_no, const uint8_t* buffer, int size) = 0;
+        
+        /**
+         * @brief Read a single byte from slave input
+         * @param slave_no Slave number (1-based)
+         * @param channel Byte offset in input IOMap
+         * @return Byte value read
+         */
         virtual uint8_t readInput(int slave_no, uint8_t channel) const = 0;
+        
+        /**
+         * @brief Read a single byte from slave output
+         * @param slave_no Slave number (1-based)
+         * @param channel Byte offset in output IOMap
+         * @return Byte value read
+         */
         virtual uint8_t readOutput(int slave_no, uint8_t channel) const = 0;
+        
+        /**
+         * @brief Get input bits for a slave
+         * @param slave_no Slave number (1-based)
+         * @return Input bits value
+         */
         virtual int getInputBits(int slave_no) const = 0;
+        
+        /**
+         * @brief Get output bits for a slave
+         * @param slave_no Slave number (1-based)
+         * @return Output bits value
+         */
         virtual int getOutputBits(int slave_no) const = 0;
         
+        /**
+         * @brief Wait for specified number of EtherCAT cycles
+         * @param num_cycles Number of cycles to wait
+         */
         virtual void waitForCycles(int num_cycles) = 0;
     };
 
+    /**
+     * @brief SOEM-based EtherCAT manager
+     * 
+     * Manages EtherCAT communication using the SOEM library.
+     * Handles slave configuration, PDO mapping, and cyclic data exchange.
+     */
     class EthercatManager : public EthercatMasterInterface
     {
     public:
+        /**
+         * @brief Constructor
+         * @param portId EtherCAT port ID
+         * @param robotDesc Robot description
+         * @param cond Condition variable for synchronization
+         * @param cond_lock Mutex for condition variable
+         * @param mutex Communication mutex
+         */
         EthercatManager(uint8_t portId, std::string robotDesc, pthread_cond_t &cond
                 , pthread_mutex_t &cond_lock, boost::mutex &mutex);
+        
+        /**
+         * @brief Destructor
+         */
         ~EthercatManager();
 
+        /**
+         * @brief Initialize EtherCAT master
+         * @param bQuit Reference to quit flag
+         * @param slaveIds Vector of expected slave IDs
+         * @return true if initialization succeeded
+         */
         bool initialize(bool &bQuit, std::vector<int> slaveIds);
+        
+        /**
+         * @brief Destroy and cleanup EtherCAT manager
+         * @return true if cleanup succeeded
+         */
         bool destroyEthercatManager();
 
         /**
@@ -207,21 +285,71 @@ namespace master
          */
         void getStatus(int slave_no, std::string &name, int &eep_man, int &eep_id, int &eep_rev, int &obits, int &ibits, int &state, int &pdelay, int &hasdc, int &activeports, int &configadr) const;
         
+        /**
+         * @brief Get input bits for a slave (interface implementation)
+         * @param slave_no Slave number (1-based)
+         * @return Input bits value
+         */
         int getInputBits(int slave_no) const;
+        
+        /**
+         * @brief Get output bits for a slave (interface implementation)
+         * @param slave_no Slave number (1-based)
+         * @return Output bits value
+         */
         int getOutputBits(int slave_no) const;
 
+        /**
+         * @brief Get driver information for a slave
+         * @param slave_no Slave number (1-based)
+         * @return Driver information structure
+         */
         DriverInfo getDriverInfo(int slave_no) const;
 
     
     private:
-        SOEM soem;
+        SOEM soem; ///< SOEM library instance
 
+        /**
+         * @brief Initialize SOEM library
+         * @param bQuit Reference to quit flag
+         * @param slaveIds Vector of expected slave IDs
+         * @return true if initialization succeeded
+         */
         bool initSoem(bool& bQuit, std::vector<int> slaveIds);
 
+        /**
+         * @brief Configure PDO process data for a slave
+         * @param slave_num Slave number
+         */
         void configPDOProcess(int slave_num);
+        
+        /**
+         * @brief Read slave configuration from YAML file
+         * @param slave_no Slave number
+         * @return true if read successfully
+         */
         bool readFromYamlFile(int slave_no);
+        
+        /**
+         * @brief Configure PDO for profile position mode
+         * @param slave_num Slave number
+         * @param leadshine_param_ptr Leadshine parameters pointer
+         */
         void configPDOProfilePosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
+        
+        /**
+         * @brief Configure PDO for cyclic position mode
+         * @param slave_num Slave number
+         * @param leadshine_param_ptr Leadshine parameters pointer
+         */
         void configPDOCyclicPosition(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
+        
+        /**
+         * @brief Configure PDO for dual-axis cyclic mode
+         * @param slave_num Slave number
+         * @param leadshine_param_ptr Leadshine parameters pointer
+         */
         void configPDODualCyclic(int slave_num, std::shared_ptr<LeadshineParameters> leadshine_param_ptr);
 
         

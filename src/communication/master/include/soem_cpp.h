@@ -23,9 +23,18 @@ namespace master
 /** delay in us for eeprom ready loop */
 #define EC_LOCALDELAY 200
 
+	/**
+	 * @brief C++ wrapper for SOEM (Simple Open EtherCAT Master) library
+	 * 
+	 * Provides object-oriented interface to SOEM functions for EtherCAT
+	 * master operations including configuration, PDO mapping, and cyclic communication.
+	 */
 	class SOEM
 	{
 	public:
+		/**
+		 * @brief Constructor
+		 */
 		SOEM();
 
 		// ec config

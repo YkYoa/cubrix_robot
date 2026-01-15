@@ -81,37 +81,145 @@ namespace ar_control
         RxPDO axis[LEADSHINE_DRIVER_MAX_JOINT_COUNT];
     };
 
+    /**
+     * @brief Client interface for EtherCAT drive communication
+     * 
+     * Handles low-level communication with drive controllers via EtherCAT.
+     * Supports single and dual-axis drives with cyclic and profile position modes.
+     */
     class ArDriveClient
     {
     public:
+        /**
+         * @brief Constructor
+         * @param manager Reference to EtherCAT master interface
+         * @param slaveId EtherCAT slave ID for this drive
+         */
         ArDriveClient(master::EthercatMasterInterface &manager, int slaveId);
+        
+        /**
+         * @brief Destructor
+         */
         ~ArDriveClient();
 
+        /**
+         * @brief Read input data from single-axis drive
+         * @param input Pointer to input structure to fill
+         */
         void readInputs(SingleJointCyclicInput *input);
+        
+        /**
+         * @brief Read output data from single-axis drive
+         * @param output Pointer to output structure to fill
+         */
         void readOutputs(SingleJointCyclicOutput *output);
+        
+        /**
+         * @brief Write output data to single-axis drive
+         * @param output Pointer to output structure containing commands
+         */
         void writeOutputs(SingleJointCyclicOutput *output);
 
+        /**
+         * @brief Read input data from dual-axis drive
+         * @param input Pointer to input structure to fill
+         */
         void readInputs(DualJointCyclicInput *input);
+        
+        /**
+         * @brief Read output data from dual-axis drive
+         * @param output Pointer to output structure to fill
+         */
         void readOutputs(DualJointCyclicOutput *output);
+        
+        /**
+         * @brief Write output data to dual-axis drive
+         * @param output Pointer to output structure containing commands
+         */
         void writeOutputs(DualJointCyclicOutput *output);
 
+        /**
+         * @brief Read input data from dual-axis profile drive
+         * @param input Pointer to input structure to fill
+         */
         void readInputs(DualJointProFileInput *input);
+        
+        /**
+         * @brief Read output data from dual-axis profile drive
+         * @param output Pointer to output structure to fill
+         */
         void readOutputs(DualJointProFileOutput *output);
+        
+        /**
+         * @brief Write output data to dual-axis profile drive
+         * @param output Pointer to output structure containing commands
+         */
         void writeOutputs(DualJointProFileOutput *output);
 
+        /**
+         * @brief Reset fault on single-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void resetFaultSingleJoint(T *input, U *output);
+        
+        /**
+         * @brief Reset fault on dual-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void resetFaultDualJoint(T *input, U *output);
+        
+        /**
+         * @brief Enable motors on dual-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void dualMotorOn(T *input, U *output);
+        
+        /**
+         * @brief Enable motor on single-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void singleMotorOn(T *input, U *output);
+        
+        /**
+         * @brief Disable motors on dual-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void dualMotorOff(T *input, U *output);
+        
+        /**
+         * @brief Disable motor on single-axis drive
+         * @tparam T Input data type
+         * @tparam U Output data type
+         * @param input Input structure
+         * @param output Output structure to modify
+         */
         template <typename T, typename U>
         void singleMotorOff(T *input, U *output);
 
+        /**
+         * @brief Get the EtherCAT master interface
+         * @return Reference to the master interface
+         */
         inline master::EthercatMasterInterface &getManager()
         {
             return manager_;
@@ -120,8 +228,13 @@ namespace ar_control
         std::shared_ptr<master::DriverInfo> driver_info_;
 
     private:
-        master::EthercatMasterInterface &manager_;
-        // Private members and methods
+        master::EthercatMasterInterface &manager_; ///< Reference to EtherCAT master
+        
+        /**
+         * @brief Handle drive errors
+         * @tparam T Input data type
+         * @param input Input structure containing error information
+         */
         template <typename T>
         void ErrorHandling(const T *input);
 

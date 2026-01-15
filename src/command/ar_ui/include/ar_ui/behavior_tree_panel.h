@@ -31,33 +31,119 @@ class BehaviorTreePanel : public rviz_common::Panel
   Q_OBJECT
 
 public:
+  /**
+   * @brief Constructor
+   * @param parent Parent widget
+   */
   explicit BehaviorTreePanel(QWidget* parent = nullptr);
+  
+  /**
+   * @brief Destructor
+   */
   ~BehaviorTreePanel() override;
 
+  /**
+   * @brief Initialize the panel (RViz interface)
+   */
   void onInitialize() override;
+  
+  /**
+   * @brief Save panel configuration
+   * @param config RViz config to save to
+   */
   void save(rviz_common::Config config) const override;
+  
+  /**
+   * @brief Load panel configuration
+   * @param config RViz config to load from
+   */
   void load(const rviz_common::Config& config) override;
 
 public Q_SLOTS:
+  /**
+   * @brief Refresh project list from disk
+   */
   void onRefreshProjects();
+  
+  /**
+   * @brief Handle project selection
+   * @param index Selected project index
+   */
   void onProjectSelected(int index);
+  
+  /**
+   * @brief Generate XML from selected project
+   */
   void onGenerateXml();
+  
+  /**
+   * @brief Open current tree in Groot2
+   */
   void onOpenInGroot();
+  
+  /**
+   * @brief Run the selected project
+   */
   void onRunProject();
+  
+  /**
+   * @brief Stop current execution
+   */
   void onStop();
+  
+  /**
+   * @brief Open BT Manager standalone window
+   */
   void onOpenManager();
 
 private Q_SLOTS:
+  /**
+   * @brief Handle BT server started
+   */
   void onServerStarted();
+  
+  /**
+   * @brief Handle BT server error
+   */
   void onServerError();
+  
+  /**
+   * @brief Handle BT server output
+   */
   void onServerOutput();
 
 private:
+  /**
+   * @brief Setup UI widgets
+   */
   void setupUi();
+  
+  /**
+   * @brief Update project list from disk
+   */
   void updateProjectList();
+  
+  /**
+   * @brief Execute a BehaviorTree XML file
+   * @param tree_file Path to XML file
+   */
   void executeTreeFile(const QString& tree_file);
+  
+  /**
+   * @brief Generate XML from project YAML
+   * @param project_path Path to project YAML file
+   * @return Generated XML string
+   */
   QString generateProjectXml(const QString& project_path);
+  
+  /**
+   * @brief Ensure BT server is running
+   */
   void ensureServerRunning();
+  
+  /**
+   * @brief Start BT server process
+   */
   void startServer();
 
   // ROS 2 node

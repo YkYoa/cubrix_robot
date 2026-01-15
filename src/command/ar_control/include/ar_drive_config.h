@@ -4,23 +4,40 @@
 #include <vector>
 #include <urdf/model.h>
 
+/**
+ * @brief Port number enumeration
+ */
 enum PortNumber
 {
-    DISCONNECTED = -1,
-    NO_COMM = 0,
-    PORT_SOEM = 1,
-    PORT_CAN = 2
+    DISCONNECTED = -1, ///< Port is disconnected
+    NO_COMM = 0,       ///< No communication
+    PORT_SOEM = 1,     ///< SOEM EtherCAT port
+    PORT_CAN = 2       ///< CAN bus port
 };
 
+/**
+ * @brief Control mode enumeration
+ */
 enum ControlModes
 {
-    ProfilePosition,
-    CyclicSynchronousPosition,
+    ProfilePosition,              ///< Profile position mode
+    CyclicSynchronousPosition,    ///< Cyclic synchronous position mode
 };
 
+/**
+ * @brief Joint parameter configuration
+ * 
+ * Contains all parameters needed to configure a single joint
+ * including gear ratio, encoder settings, and limits.
+ */
 class JointParameter
 {
 public:
+    /**
+     * @brief Default constructor
+     * 
+     * Initializes all parameters to default values.
+     */
     JointParameter()
     {
         gear_ratio = 0;
@@ -38,9 +55,20 @@ public:
     std::shared_ptr<urdf::JointLimits> joint_limits; ///< Joint limits for the joint get from URDF through luanch file
 };
 
+/**
+ * @brief Drive parameter configuration
+ * 
+ * Contains all parameters needed to configure a drive controller
+ * including slave ID, port configuration, and associated joints.
+ */
 class DriveParameter
 {
 public:
+    /**
+     * @brief Default constructor
+     * 
+     * Initializes all parameters to default values.
+     */
     DriveParameter()
     {
         slave_id = -1;
@@ -57,9 +85,14 @@ public:
     std::map<std::string, int> joint_name_to_id;
 };
 
+/**
+ * @brief Container for all drive configurations
+ * 
+ * Holds all drive parameters and joint names for the robot system.
+ */
 class ArDrives
 {
 public:
-    std::vector<DriveParameter> drive_parameters;
-    std::vector<std::string> joint_names;
+    std::vector<DriveParameter> drive_parameters; ///< Vector of drive parameter configurations
+    std::vector<std::string> joint_names;          ///< Vector of joint names
 };

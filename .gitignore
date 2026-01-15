@@ -2,3 +2,10 @@ log/
 install/
 build/ 
 Groot2-v1.6.1-linux-installer.run
+
+# Doxygen generated documentation (built by CI/CD)
+src/docs/html/
+src/docs/latex/
+src/docs/man/
+src/docs/rtf/
+src/docs/xml/

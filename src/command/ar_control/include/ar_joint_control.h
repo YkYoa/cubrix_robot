@@ -6,10 +6,24 @@
 
 namespace ar_control
 {
+    /**
+     * @brief Control interface for a single joint
+     * 
+     * Manages joint parameters, limits, and state information.
+     * Used by ArDriveControl to control individual joints on a drive.
+     */
     class ArJointControl
     {
     public:
+        /**
+         * @brief Constructor
+         * @param jointName Name of the joint
+         */
         ArJointControl(std::string jointName);
+        
+        /**
+         * @brief Destructor
+         */
         ~ArJointControl() {};
 
         // void getInputActualValueToStatus(std::string &jointName, std::string &hardwareId,

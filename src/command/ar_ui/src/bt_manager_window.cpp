@@ -8,11 +8,15 @@
 #include <QUrl>
 #include <QFontDatabase>
 #include <QRegularExpression>
+#include <thread>
 
 #include <ar_projects/project_manager.h>
 #include <ar_projects/yaml_parser.h>
 #include <ar_projects/xml_generator.h>
 #include <ar_projects/yaml_generator.h>
+#include <ar_projects/tasks/task_base.h>
+#include <ar_projects/tasks/draw_rectangle.h>
+#include <ar_projects/motion_executor.h>
 #include <ar_projects/motion_types/move_joint.h>
 #include <ar_projects/motion_types/delay_motion.h>
 #include <ar_projects/motion_types/set_planner.h>
@@ -344,6 +348,20 @@ void BTManagerWindow::setupUi()
   groot_btn_->setMinimumHeight(40);
   exec_layout->addWidget(groot_btn_);
   
+  // Task execution section
+  task_info_label_ = new QLabel("No task configured", this);
+  task_info_label_->setStyleSheet("color: #808080; font-size: 12px; padding: 5px;");
+  task_info_label_->setAlignment(Qt::AlignCenter);
+  exec_layout->addWidget(task_info_label_);
+  
+  run_task_btn_ = new QPushButton("⚡ Run Task", this);
+  run_task_btn_->setStyleSheet("background-color: #ff9800; font-size: 13px;");
+  run_task_btn_->setMinimumHeight(40);
+  run_task_btn_->setEnabled(false);
+  run_task_btn_->setToolTip("Execute the code-based task defined in this project");
+  connect(run_task_btn_, &QPushButton::clicked, this, &BTManagerWindow::onRunTask);
+  exec_layout->addWidget(run_task_btn_);
+  
   // Loop control row
   QHBoxLayout* loop_row = new QHBoxLayout();
   loop_checkbox_ = new QCheckBox("🔄 Loop Sequence", this);
@@ -445,6 +463,10 @@ void BTManagerWindow::onRefreshProjects()
 void BTManagerWindow::onProjectSelected(int index)
 {
   sequence_list_->clear();
+  current_task_name_.clear();
+  task_info_label_->setText("No task configured");
+  task_info_label_->setStyleSheet("color: #808080; font-size: 12px; padding: 5px;");
+  run_task_btn_->setEnabled(false);
   
   if (index > 0) {
     current_project_path_ = project_combo_->currentData().toString();
@@ -453,6 +475,15 @@ void BTManagerWindow::onProjectSelected(int index)
     try {
       ar_projects::YamlParser parser;
       auto config = parser.parse(current_project_path_.toStdString());
+      
+      // Check if project has a code-based task
+      if (config.hasTask()) {
+        current_task_name_ = QString::fromStdString(config.task_name);
+        task_info_label_->setText("⚡ Task: " + current_task_name_);
+        task_info_label_->setStyleSheet("color: #ff9800; font-size: 12px; font-weight: bold; padding: 5px;");
+        run_task_btn_->setEnabled(true);
+        appendLog("Project has code-based task: " + current_task_name_, "#ff9800");
+      }
       
       int step_count = 1;
       for (const auto& motion : config.motions) {
@@ -941,4 +972,78 @@ void BTManagerWindow::appendLog(const QString& msg, const QString& color)
   log_text_->append(html);
 }
 
+void BTManagerWindow::onRunTask()
+{
+  if (current_task_name_.isEmpty()) {
+    QMessageBox::warning(this, "No Task", "This project has no code-based task configured.");
+    return;
+  }
+
+  if (!node_) {
+    QMessageBox::warning(this, "Not Connected", "ROS2 node not initialized.");
+    return;
+  }
+
+  appendLog("Starting task: " + current_task_name_, "#ff9800");
+  status_label_->setText("⏳ Running Task...");
+  status_label_->setStyleSheet("color: #ff9800; font-size: 14px; font-weight: bold;");
+  run_task_btn_->setEnabled(false);
+
+  // Parse project config to get task params and waypoints
+  ar_projects::YamlParser parser;
+  auto config = parser.parse(current_project_path_.toStdString());
+
+  // Create task from registry
+  auto task = ar_projects::TaskRegistry::instance().create(current_task_name_.toStdString());
+  if (!task) {
+    appendLog("ERROR: Task not found in registry: " + current_task_name_, "#f14c4c");
+    status_label_->setText("✗ Task Not Found");
+    status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
+    run_task_btn_->setEnabled(true);
+    return;
+  }
+
+  // Configure task with params
+  if (!task->configure(config.task_params)) {
+    appendLog("ERROR: Failed to configure task", "#f14c4c");
+    status_label_->setText("✗ Configuration Failed");
+    status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
+    run_task_btn_->setEnabled(true);
+    return;
+  }
+
+  appendLog("Executing task: " + QString::fromStdString(task->description()), "#9cdcfe");
+
+  // Run task in a background thread so ROS2 can continue spinning
+  // MoveIt2 action clients need the node to spin to receive results
+  std::thread task_thread([this, task, config]() {
+    // Create motion executor in the task thread
+    auto executor = std::make_shared<ar_projects::MotionExecutor>(node_, "Arm");
+    executor->setWaypoints(config.waypoints);
+    executor->setVelocityScaling(config.velocity_scaling);
+    executor->setAccelerationScaling(config.acceleration_scaling);
+
+    bool success = task->execute(*executor);
+
+    // Update UI from main thread using QMetaObject::invokeMethod
+    QMetaObject::invokeMethod(this, [this, success]() {
+      if (success) {
+        appendLog("Task completed successfully!", "#4ec9b0");
+        status_label_->setText("✓ Task Completed");
+        status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
+        statusBar()->showMessage("Task execution completed");
+      } else {
+        appendLog("Task execution failed!", "#f14c4c");
+        status_label_->setText("✗ Task Failed");
+        status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
+        statusBar()->showMessage("Task execution failed");
+      }
+      run_task_btn_->setEnabled(true);
+    }, Qt::QueuedConnection);
+  });
+
+  task_thread.detach();  // Let it run independently
+}
+
 }  // namespace ar_ui
+

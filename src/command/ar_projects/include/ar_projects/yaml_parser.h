@@ -28,11 +28,20 @@ struct ProjectConfig
   // Named waypoints (name -> joint values)
   std::map<std::string, std::vector<double>> waypoints;
   
-  // Motion sequence
+  // Motion sequence (YAML-defined motions)
   std::vector<std::shared_ptr<BaseMotion>> motions;
+  
+  // Code-based task (optional)
+  std::string task_name;              // Task identifier (e.g., "draw_rectangle")
+  YAML::Node task_params;             // Parameters passed to task.configure()
   
   // Optional: extends another project config
   std::string extends;
+  
+  /**
+   * @brief Check if project has a code-based task
+   */
+  bool hasTask() const { return !task_name.empty(); }
 };
 
 /**

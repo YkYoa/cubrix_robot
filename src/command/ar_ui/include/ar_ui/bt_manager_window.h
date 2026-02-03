@@ -132,6 +132,11 @@ private slots:
   void onGetRobotState();
   
   /**
+   * @brief Run code-based task from project
+   */
+  void onRunTask();
+  
+  /**
    * @brief Show about dialog
    */
   void onAbout();
@@ -202,6 +207,8 @@ private:
   QPushButton* run_btn_;
   QPushButton* stop_btn_;
   QPushButton* groot_btn_;
+  QPushButton* run_task_btn_;    // NEW: Run code-based task
+  QLabel* task_info_label_;       // NEW: Show task name
   QCheckBox* loop_checkbox_;
   QSpinBox* loop_count_spinbox_;
   QTextEdit* log_text_;
@@ -223,6 +230,7 @@ private:
   // State
   QString current_xml_file_;
   QString current_project_path_;
+  QString current_task_name_;     // NEW: Current project's task
   QString groot_path_;
   QString pending_tree_file_;
   bool server_ready_;

@@ -22,6 +22,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(ar_projects REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Widgets Core Gui)
@@ -100,6 +101,7 @@ ament_target_dependencies(bt_manager
   tf2_ros
   tf2_geometry_msgs
   ar_projects
+  moveit_ros_planning_interface
 )
 
 # Standalone Parameter Editor Application

@@ -1,0 +1,37 @@
+# Rectangle Drawing Task Demo
+# Demonstrates code-based task with loop logic
+
+project:
+  name: "rectangle_sequence"
+  description: "Draw rectangle using code-based task with loop"
+  
+  # Reference code-based task instead of declarative sequence
+  task: "draw_rectangle"
+  task_params:
+    start_waypoint: "home"    # Start from home position
+    width: 0.2                # Joint offset for X dimension
+    height: 0.15              # Joint offset for Y dimension
+    joint_index_x: 0          # Modify joint 0 for X movement
+    joint_index_y: 1          # Modify joint 1 for Y movement
+    delay_ms: 300             # Wait between corners
+
+defaults:
+  velocity_scaling: 0.3
+  acceleration_scaling: 0.3
+  planner:
+    pipeline: "pilz"
+    planner_id: "PTP"
+
+# Define waypoints (used by the task)
+waypoints:
+  home:
+    joints: [0, 0, 0, 0, 0, 0]
+  corner1:
+    joints: [-0.039260, -0.385902, 0.322523, -0.000053, -0.707069, 0.707144, -0.000033]
+
+# Optional: You can still define a sequence for manual mode
+# The task takes priority if defined
+# sequence:
+#   - type: "move_joint"
+#     waypoint: "home"
+#     name: "Home"

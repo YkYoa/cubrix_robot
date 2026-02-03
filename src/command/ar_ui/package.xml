@@ -16,6 +16,7 @@
   <depend>pluginlib</depend>
   <depend>std_msgs</depend>
   <depend>ar_projects</depend>
+  <depend>moveit_ros_planning_interface</depend>
   <depend>ament_index_cpp</depend>
 
   <build_depend>qtbase5-dev</build_depend>

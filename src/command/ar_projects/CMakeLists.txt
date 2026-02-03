@@ -10,6 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(ament_index_cpp REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 
 # Include directories
 include_directories(include)
@@ -48,6 +49,22 @@ ament_target_dependencies(project_generator
   ament_index_cpp
 )
 
+# Task execution library (motion executor + tasks)
+add_library(project_tasks SHARED
+  src/tasks/task_base.cpp
+  src/tasks/draw_rectangle.cpp
+  src/motion_executor.cpp
+)
+target_include_directories(project_tasks PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(project_tasks project_generator yaml-cpp)
+ament_target_dependencies(project_tasks
+  rclcpp
+  moveit_ros_planning_interface
+)
+
 # Project runner node (combines generate + execute)
 add_executable(project_runner src/project_runner_node.cpp)
 target_link_libraries(project_runner project_generator)
@@ -60,6 +77,7 @@ ament_target_dependencies(project_runner
 install(TARGETS
   motion_types
   project_generator
+  project_tasks
   EXPORT export_ar_projects
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -88,12 +106,13 @@ install(DIRECTORY config/
 
 # Export targets for downstream packages
 ament_export_include_directories(include)
-ament_export_libraries(motion_types project_generator)
+ament_export_libraries(motion_types project_generator project_tasks)
 ament_export_targets(export_ar_projects HAS_LIBRARY_TARGET)
 ament_export_dependencies(
   rclcpp
   ament_index_cpp
   yaml-cpp
+  moveit_ros_planning_interface
 )
 
 if(BUILD_TESTING)

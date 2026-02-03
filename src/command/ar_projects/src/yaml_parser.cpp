@@ -150,6 +150,14 @@ void YamlParser::parseProject(const YAML::Node& node, ProjectConfig& config)
   if (node["extends"]) {
     config.extends = node["extends"].as<std::string>();
   }
+  
+  // Parse code-based task reference
+  if (node["task"]) {
+    config.task_name = node["task"].as<std::string>();
+  }
+  if (node["task_params"]) {
+    config.task_params = node["task_params"];
+  }
 }
 
 void YamlParser::parseDefaults(const YAML::Node& node, ProjectConfig& config)

@@ -137,6 +137,11 @@ bool ArPlanningInterface::move()
   return false;
 }
 
+void ArPlanningInterface::stop()
+{
+  move_group_->stop();
+}
+
 geometry_msgs::msg::PoseStamped ArPlanningInterface::getCurrentPose()
 {
   return move_group_->getCurrentPose();

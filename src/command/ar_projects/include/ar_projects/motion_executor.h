@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/pose.hpp>
 
 namespace ar_projects
 {
@@ -42,6 +43,47 @@ public:
    * @return true if motion succeeded
    */
   bool moveJoint(const std::vector<double>& joints);
+
+  /**
+   * @brief Move end effector to specified pose
+   * @param eef_pose Target pose for end effector
+   * @param end_effector_link Optional specific end effector link (empty = use default)
+   * @return true if motion succeeded
+   */
+  bool moveJoint(const geometry_msgs::msg::Pose& eef_pose, 
+                 const std::string& end_effector_link = "");
+
+  /**
+   * @brief Move end effector to specified position and orientation
+   * @param x X position in meters
+   * @param y Y position in meters
+   * @param z Z position in meters
+   * @param roll Roll angle in radians
+   * @param pitch Pitch angle in radians
+   * @param yaw Yaw angle in radians
+   * @param end_effector_link Optional specific end effector link (empty = use default)
+   * @return true if motion succeeded
+   */
+  bool moveJoint(double x, double y, double z, 
+                 double roll, double pitch, double yaw,
+                 const std::string& end_effector_link = "");
+
+  /**
+   * @brief Move end effector to specified position (keeping current orientation)
+   * @param x X position in meters
+   * @param y Y position in meters
+   * @param z Z position in meters
+   * @param end_effector_link Optional specific end effector link (empty = use default)
+   * @return true if motion succeeded
+   */
+  bool moveJointPosition(double x, double y, double z,
+                         const std::string& end_effector_link = "");
+
+  /**
+   * @brief Get current end effector pose
+   * @return Current pose of the end effector
+   */
+  geometry_msgs::msg::Pose getCurrentPose() const;
 
   /**
    * @brief Move to named waypoint (requires waypoints map to be set)
@@ -85,6 +127,34 @@ public:
    * @param msg Message to log
    */
   void log(const std::string& msg);
+
+  /**
+   * @brief Enable or disable plan caching
+   * @param enabled True to enable caching
+   */
+  void setPlanCaching(bool enabled);
+
+  /**
+   * @brief Set the directory for plan caching
+   * @param dir Directory path
+   */
+  void setPlanCacheDir(const std::string& dir);
+
+  /**
+   * @brief Clear all cached plans from the configured cache directory
+   */
+  void clearPlanCache();
+
+  /**
+   * @brief Set a callback for logging messages
+   * @param callback Function to call with log messages
+   */
+  void setLogCallback(std::function<void(const std::string&)> callback);
+
+  /**
+   * @brief Stop the current motion immediately
+   */
+  void stop();
 
   /**
    * @brief Check if executor is ready

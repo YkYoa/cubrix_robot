@@ -87,6 +87,11 @@ public:
    * @return true if succeeded
    */
   bool move();
+  
+  /**
+   * @brief Stop the current execution
+   */
+  void stop();
 
   /**
    * @brief Get the current pose of the end effector

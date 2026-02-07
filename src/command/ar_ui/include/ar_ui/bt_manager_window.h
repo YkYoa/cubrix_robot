@@ -29,6 +29,7 @@
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
+#include "ar_projects/motion_executor.h"
 
 namespace ar_ui
 {
@@ -207,8 +208,7 @@ private:
   QPushButton* run_btn_;
   QPushButton* stop_btn_;
   QPushButton* groot_btn_;
-  QPushButton* run_task_btn_;    // NEW: Run code-based task
-  QLabel* task_info_label_;       // NEW: Show task name
+  QLabel* task_info_label_;       // Show task name if configured
   QCheckBox* loop_checkbox_;
   QSpinBox* loop_count_spinbox_;
   QTextEdit* log_text_;
@@ -236,6 +236,8 @@ private:
   bool server_ready_;
   int current_loop_;
   int target_loops_;
+  std::shared_ptr<ar_projects::MotionExecutor> active_executor_;
+  bool stop_requested_;
 };
 
 }  // namespace ar_ui

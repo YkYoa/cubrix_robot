@@ -100,7 +100,7 @@ namespace ar_control
                 joint->pulley_ratio = 60.0 / 15.0;
             }
             else if(jointParam.joint_name == "Arm_joint5"){
-                joint->pulley_ratio = (20 * 5) / 8; // Pulley circumference / linear screw lead
+                joint->pulley_ratio = (20 * 5) / 80;
             }
             else if (jointParam.joint_name == "Arm_joint4")
             {

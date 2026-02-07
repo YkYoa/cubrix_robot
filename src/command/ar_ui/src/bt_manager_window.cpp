@@ -348,23 +348,15 @@ void BTManagerWindow::setupUi()
   groot_btn_->setMinimumHeight(40);
   exec_layout->addWidget(groot_btn_);
   
-  // Task execution section
+  // Task info label (shows if project has a code-based task)
   task_info_label_ = new QLabel("No task configured", this);
   task_info_label_->setStyleSheet("color: #808080; font-size: 12px; padding: 5px;");
   task_info_label_->setAlignment(Qt::AlignCenter);
   exec_layout->addWidget(task_info_label_);
   
-  run_task_btn_ = new QPushButton("⚡ Run Task", this);
-  run_task_btn_->setStyleSheet("background-color: #ff9800; font-size: 13px;");
-  run_task_btn_->setMinimumHeight(40);
-  run_task_btn_->setEnabled(false);
-  run_task_btn_->setToolTip("Execute the code-based task defined in this project");
-  connect(run_task_btn_, &QPushButton::clicked, this, &BTManagerWindow::onRunTask);
-  exec_layout->addWidget(run_task_btn_);
-  
   // Loop control row
   QHBoxLayout* loop_row = new QHBoxLayout();
-  loop_checkbox_ = new QCheckBox("🔄 Loop Sequence", this);
+  loop_checkbox_ = new QCheckBox("🔄 Loop", this);
   loop_checkbox_->setStyleSheet("color: #ffffff; font-size: 12px;");
   loop_count_spinbox_ = new QSpinBox(this);
   loop_count_spinbox_->setRange(1, 1000);
@@ -437,7 +429,19 @@ void BTManagerWindow::updateProjectList()
   project_combo_->addItem("-- Select Project --");
   
   try {
-    ar_projects::ProjectManager manager;
+    std::string home = std::string(getenv("HOME"));
+    std::string source_dir = home + "/ar_ws/src/command/ar_projects/projects";
+    
+    // checks if source directory exists, otherwise defaults to share directory
+    std::string projects_path = std::filesystem::exists(source_dir) ? source_dir : "";
+    
+    if (!projects_path.empty()) {
+        appendLog(QString("Loading projects from: %1").arg(QString::fromStdString(projects_path)), "#dcdcaa");
+    } else {
+        appendLog("Loading projects from system install", "#dcdcaa");
+    }
+
+    ar_projects::ProjectManager manager(projects_path);
     auto projects = manager.listProjects();
     
     for (const auto& project : projects) {
@@ -464,9 +468,9 @@ void BTManagerWindow::onProjectSelected(int index)
 {
   sequence_list_->clear();
   current_task_name_.clear();
+  active_executor_.reset(); // Clear any previous executor reference
   task_info_label_->setText("No task configured");
   task_info_label_->setStyleSheet("color: #808080; font-size: 12px; padding: 5px;");
-  run_task_btn_->setEnabled(false);
   
   if (index > 0) {
     current_project_path_ = project_combo_->currentData().toString();
@@ -481,7 +485,6 @@ void BTManagerWindow::onProjectSelected(int index)
         current_task_name_ = QString::fromStdString(config.task_name);
         task_info_label_->setText("⚡ Task: " + current_task_name_);
         task_info_label_->setStyleSheet("color: #ff9800; font-size: 12px; font-weight: bold; padding: 5px;");
-        run_task_btn_->setEnabled(true);
         appendLog("Project has code-based task: " + current_task_name_, "#ff9800");
       }
       
@@ -731,11 +734,19 @@ void BTManagerWindow::startBtServer()
 
 void BTManagerWindow::onRunProject()
 {
+  if (current_project_path_.isEmpty()) {
+    QMessageBox::warning(this, "No Project", "Please select a project first.");
+    return;
+  }
+
+  // If project has a code-based task, run the task instead of BT
+  if (!current_task_name_.isEmpty()) {
+    onRunTask();
+    return;
+  }
+
+  // Otherwise run BT sequence
   if (current_xml_file_.isEmpty()) {
-    if (current_project_path_.isEmpty()) {
-      QMessageBox::warning(this, "No Project", "Please select a project first.");
-      return;
-    }
     current_xml_file_ = generateProjectXml(current_project_path_);
     if (current_xml_file_.isEmpty()) {
       return;
@@ -793,6 +804,28 @@ void BTManagerWindow::executeTreeFile(const QString& tree_file)
 void BTManagerWindow::onStopProject()
 {
   if (!execution_pub_) return;
+  
+  if (active_executor_) {
+    if (stop_requested_) {
+       // Second click: Force stop
+       active_executor_->stop();
+       appendLog("Force stopping...", "#f14c4c");
+       
+       // Force reset UI state
+       run_btn_->setEnabled(true);
+       stop_btn_->setEnabled(false);
+       current_loop_ = 0;
+       statusBar()->showMessage("Execution force stopped");
+    } else {
+       // First click: Soft stop (finish sequence)
+       stop_requested_ = true;
+       appendLog("Stopping after current sequence... (Click again to force stop)", "#ff9800");
+       statusBar()->showMessage("Stopping after current sequence...");
+       // Do NOT stop executor, let it finish naturally
+       // Do NOT enable run button yet
+    }
+    return;
+  }
   
   std_msgs::msg::String msg;
   msg.data = "STOP";
@@ -984,10 +1017,20 @@ void BTManagerWindow::onRunTask()
     return;
   }
 
-  appendLog("Starting task: " + current_task_name_, "#ff9800");
-  status_label_->setText("⏳ Running Task...");
+  // Show loop info if looping
+  QString task_log = loop_checkbox_->isChecked() && target_loops_ > 1
+    ? QString("Starting task: %1 (Loop %2/%3)").arg(current_task_name_).arg(current_loop_ + 1).arg(target_loops_)
+    : "Starting task: " + current_task_name_;
+  appendLog(task_log, "#ff9800");
+  
+  if (loop_checkbox_->isChecked() && target_loops_ > 1) {
+    status_label_->setText(QString("⏳ Task Loop %1/%2").arg(current_loop_ + 1).arg(target_loops_));
+  } else {
+    status_label_->setText("⏳ Running Task...");
+  }
   status_label_->setStyleSheet("color: #ff9800; font-size: 14px; font-weight: bold;");
-  run_task_btn_->setEnabled(false);
+  run_btn_->setEnabled(false);
+  stop_btn_->setEnabled(true);
 
   // Parse project config to get task params and waypoints
   ar_projects::YamlParser parser;
@@ -999,7 +1042,8 @@ void BTManagerWindow::onRunTask()
     appendLog("ERROR: Task not found in registry: " + current_task_name_, "#f14c4c");
     status_label_->setText("✗ Task Not Found");
     status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
-    run_task_btn_->setEnabled(true);
+    run_btn_->setEnabled(true);
+    stop_btn_->setEnabled(false);
     return;
   }
 
@@ -1008,17 +1052,50 @@ void BTManagerWindow::onRunTask()
     appendLog("ERROR: Failed to configure task", "#f14c4c");
     status_label_->setText("✗ Configuration Failed");
     status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
-    run_task_btn_->setEnabled(true);
+    run_btn_->setEnabled(true);
+    stop_btn_->setEnabled(false);
     return;
   }
 
   appendLog("Executing task: " + QString::fromStdString(task->description()), "#9cdcfe");
 
+  // Capture loop state
+  bool is_looping = loop_checkbox_->isChecked();
+  int loops_target = target_loops_;
+  stop_requested_ = false;
+
   // Run task in a background thread so ROS2 can continue spinning
   // MoveIt2 action clients need the node to spin to receive results
-  std::thread task_thread([this, task, config]() {
+  std::thread task_thread([this, task, config, is_looping, loops_target]() {
     // Create motion executor in the task thread
     auto executor = std::make_shared<ar_projects::MotionExecutor>(node_, "Arm");
+    
+    // Store as active executor for stop functionality
+    // Note: We need a way to pass this back to main thread safely or ensure thread safety
+    // For now, we capture 'this' and assume single task at a time
+    active_executor_ = executor;
+    
+    // Set plan cache directory to ~/ar_plans
+    std::string home_dir = std::string(getenv("HOME"));
+    std::string plans_dir = home_dir + "/ar_plans";
+    executor->setPlanCacheDir(plans_dir);
+    
+    // Create directory if it doesn't exist
+    try {
+      if (!std::filesystem::exists(plans_dir)) {
+        std::filesystem::create_directories(plans_dir);
+      }
+    } catch (const std::exception& e) {
+       appendLog(QString("Error creating plan dir: %1").arg(e.what()), "#f14c4c");
+    }
+    
+    // Connect logger to UI
+    executor->setLogCallback([this](const std::string& msg) {
+      QMetaObject::invokeMethod(this, [this, msg]() {
+        appendLog(QString::fromStdString(msg), "#9cdcfe");
+      }, Qt::QueuedConnection);
+    });
+
     executor->setWaypoints(config.waypoints);
     executor->setVelocityScaling(config.velocity_scaling);
     executor->setAccelerationScaling(config.acceleration_scaling);
@@ -1026,19 +1103,63 @@ void BTManagerWindow::onRunTask()
     bool success = task->execute(*executor);
 
     // Update UI from main thread using QMetaObject::invokeMethod
-    QMetaObject::invokeMethod(this, [this, success]() {
+    QMetaObject::invokeMethod(this, [this, success, is_looping, loops_target]() {
       if (success) {
-        appendLog("Task completed successfully!", "#4ec9b0");
-        status_label_->setText("✓ Task Completed");
-        status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
-        statusBar()->showMessage("Task execution completed");
+        current_loop_++;
+        
+        // Check for stop request
+        if (stop_requested_) {
+            appendLog("Sequence finished successfully (Stopped by user).", "#dcdcaa");
+            status_label_->setText("✓ Stopped");
+            status_label_->setStyleSheet("color: #dcdcaa; font-size: 14px; font-weight: bold;");
+            
+            run_btn_->setEnabled(true);
+            stop_btn_->setEnabled(false);
+            current_loop_ = 0;
+            stop_requested_ = false;
+            return;
+        }
+        
+        // Check if we need to loop again
+        if (is_looping && current_loop_ < loops_target) {
+          appendLog(QString("Loop %1/%2 completed, starting next...").arg(current_loop_).arg(loops_target), "#dcdcaa");
+          status_label_->setText(QString("🔄 Loop %1/%2").arg(current_loop_ + 1).arg(loops_target));
+          status_label_->setStyleSheet("color: #569cd6; font-size: 14px; font-weight: bold;");
+          
+          // Execute again after a brief delay
+          QTimer::singleShot(500, this, [this]() {
+            onRunTask();
+          });
+        } else {
+          QString completed_msg = is_looping && loops_target > 1
+            ? QString("All %1 loops completed").arg(loops_target)
+            : "✓ Task Completed";
+          appendLog("Task completed successfully!", "#4ec9b0");
+          status_label_->setText(completed_msg);
+          status_label_->setStyleSheet("color: #4ec9b0; font-size: 14px; font-weight: bold;");
+          statusBar()->showMessage("Task execution completed");
+          run_btn_->setEnabled(true);
+          stop_btn_->setEnabled(false);
+          current_loop_ = 0;
+        }
       } else {
+        QString fail_msg = is_looping && loops_target > 1
+          ? QString("✗ Failed at loop %1/%2").arg(current_loop_ + 1).arg(loops_target)
+          : "✗ Task Failed";
         appendLog("Task execution failed!", "#f14c4c");
-        status_label_->setText("✗ Task Failed");
+        status_label_->setText(fail_msg);
         status_label_->setStyleSheet("color: #f14c4c; font-size: 14px; font-weight: bold;");
         statusBar()->showMessage("Task execution failed");
+        run_btn_->setEnabled(true);
+        stop_btn_->setEnabled(false);
+        current_loop_ = 0;
+        stop_requested_ = false;
       }
-      run_task_btn_->setEnabled(true);
+      
+      // Cleanup executor reference if task is done/failed/stopped (and not looping)
+      if (!is_looping || current_loop_ >= loops_target || stop_requested_ || !success) {
+           active_executor_.reset();
+      }
     }, Qt::QueuedConnection);
   });
 

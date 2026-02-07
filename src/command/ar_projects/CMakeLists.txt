@@ -11,6 +11,8 @@ find_package(rclcpp REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
+find_package(ar_planning_interface REQUIRED)
+find_package(ar_common REQUIRED)
 
 # Include directories
 include_directories(include)
@@ -63,6 +65,8 @@ target_link_libraries(project_tasks project_generator yaml-cpp)
 ament_target_dependencies(project_tasks
   rclcpp
   moveit_ros_planning_interface
+  ar_planning_interface
+  ar_common
 )
 
 # Project runner node (combines generate + execute)
@@ -113,6 +117,8 @@ ament_export_dependencies(
   ament_index_cpp
   yaml-cpp
   moveit_ros_planning_interface
+  ar_planning_interface
+  ar_common
 )
 
 if(BUILD_TESTING)
